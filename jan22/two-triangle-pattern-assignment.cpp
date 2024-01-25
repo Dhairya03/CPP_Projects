@@ -1,6 +1,6 @@
 #include <iostream>
 #include <limits>
-void printCommonPattern(int column)
+void printLeftCommonPattern(int column)
 {
     if (column % 2 == 0)
         std::cout << "1";
@@ -8,7 +8,7 @@ void printCommonPattern(int column)
         std::cout << "0";
 }
 
-void printAnotherCommonPattern(int column)
+void printRightCommonPattern(int column)
 {
     if ((column) % 2 == 0)
         std::cout << "0";
@@ -24,7 +24,7 @@ void printEvenPattern(int inputNumber)
         {
             if (column <= row || column >= 2 * inputNumber - row)
             {
-                printCommonPattern(column);
+                printLeftCommonPattern(column);
             }
             else
                 std::cout << " ";
@@ -34,7 +34,7 @@ void printEvenPattern(int inputNumber)
         {
             if (column <= row || column >= 2 * inputNumber - row)
             {
-                printCommonPattern(column - row);
+                printLeftCommonPattern(column - row);
             }
             else
                 std::cout << " ";
@@ -47,7 +47,7 @@ void printEvenPattern(int inputNumber)
         {
             if (column <= 2 * inputNumber - row || column >= row)
             {
-                printCommonPattern(column);
+                printLeftCommonPattern(column);
             }
             else
                 std::cout << " ";
@@ -57,7 +57,7 @@ void printEvenPattern(int inputNumber)
         {
             if (column <= 2 * inputNumber - row || column >= row)
             {
-                printCommonPattern(column - row);
+                printLeftCommonPattern(column - row);
             }
             else
                 std::cout << " ";
@@ -74,7 +74,7 @@ void printOddPattern(int inputNumber)
         {
             if (column <= row || column >= 2 * inputNumber + 1 - row)
             {
-                printCommonPattern(column);
+                printLeftCommonPattern(column);
             }
             else
                 std::cout << " ";
@@ -84,7 +84,7 @@ void printOddPattern(int inputNumber)
         {
             if (column <= row || column >= 2 * inputNumber + 1 - row)
             {
-                printAnotherCommonPattern(column - row);
+                printRightCommonPattern(column - row);
             }
             else
                 std::cout << " ";
@@ -97,7 +97,7 @@ void printOddPattern(int inputNumber)
         {
             if (column <= 2 * inputNumber - row || column > row)
             {
-                printCommonPattern(column);
+                printLeftCommonPattern(column);
             }
             else
                 std::cout << " ";
@@ -107,7 +107,7 @@ void printOddPattern(int inputNumber)
         {
             if (column <= 2 * inputNumber - row || column > row)
             {
-                printAnotherCommonPattern(column - row);
+                printRightCommonPattern(column - row);
             }
             else
                 std::cout << " ";
@@ -127,31 +127,59 @@ void printPattern(int inputNumber)
         printOddPattern(inputNumber);
     }
 }
+
+bool checkInteger(std::string inputNumber)
+{
+    int inputInteger = 0;
+    int index = 0;
+    if (inputNumber[index] = '-')
+        index++;
+    while (inputNumber[index] >= '0' && inputNumber[index] <= '9')
+    {
+        inputInteger = inputInteger * 10 + (inputNumber[index] - '0');
+        index++;
+    }
+    if (inputNumber[index] != '\0')
+        return false;
+    else
+        return true;
+}
+
 int main()
 {
-    int inputNumber = -1;
+    std::string inputNumber;
     std::cout << "Enter an integer" << std::endl;
-    while (true)
+    while (true && inputNumber != "EXIT")
     {
         std::cin >> inputNumber;
-        if (std::cin.fail())
+        if (!checkInteger(inputNumber))
         {
-            std::cout << inputNumber;
+            if (inputNumber == "EXIT")
+            {
+                std::cout << "EXITING" << std::endl;
+                return 0;
+            }
             if (std::cin.eof())
             {
                 exit(0);
             }
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-        if (inputNumber < 0 || inputNumber >= INT16_MAX)
-        {
-            std::cout << "Invalid input!!!.Please try again.Enter " << std::endl;
+            std::cout << "Error:Not a valid integer!!!Enter valid integer!!!.Please try again.ENter EXIT to exit" << std::endl;
         }
         else
         {
-            printPattern(inputNumber);
+            int inputInteger = std::stoi(inputNumber);
+            std::cout << inputInteger << std::endl;
+            if(inputInteger<0 || inputInteger>INT16_MAX){
+                std::cout<<"Error:Invalid input!! Enter positive integer!!.Please try again. Enter EXIT to exit"<<std::endl;
+            }
+            else{
+            printPattern(inputInteger);
             return 0;
+            }
+            
         }
     }
 }
+
