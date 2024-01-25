@@ -170,16 +170,15 @@ int main()
         else
         {
             int inputInteger = std::stoi(inputNumber);
-            std::cout << inputInteger << std::endl;
-            if(inputInteger<0 || inputInteger>INT16_MAX){
-                std::cout<<"Error:Invalid input!! Enter positive integer!!.Please try again. Enter EXIT to exit"<<std::endl;
+            if (inputInteger < 0 || inputInteger > INT16_MAX)
+            {
+                std::cout << "Error:Invalid input!! Enter positive integer!!.Please try again. Enter EXIT to exit" << std::endl;
             }
-            else{
-            printPattern(inputInteger);
-            return 0;
+            else
+            {
+                printPattern(inputInteger);
+                return 0;
             }
-            
         }
     }
 }
-
