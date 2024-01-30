@@ -1,8 +1,8 @@
 #include <iostream>
 
-void Log(const char* message);
+//void Log(const char* message);
 
 int main(){
-    Log("Hello World!!!");
+    std::cout<<"Hello World!!!"<<std::endl;
     return 0;
 }
