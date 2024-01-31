@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
-#include "header.h"
+#include "mathFunctions.h"
+
 int calculate(double &inputNumberOne, double &inputNumberTwo, char operation)
 {
     switch (operation)
@@ -115,10 +116,10 @@ int getInput(double &inputNumberOne, double &inputNumberTwo, char &operation)
     }
     return flag;
 }
-void print(double num1, double num2, char op)
+void print(double inputNumberOne, double inputNumberTwo, char operation)
 {
     std::cout << "Mathematical expression is:" << std::endl;
-    std::cout << num1 << " " << op << " " << num2 << std::endl;
+    std::cout << inputNumberOne << " " << operation << " " << inputNumberTwo << std::endl;
 }
 int main()
 {
@@ -138,5 +139,3 @@ int main()
     } while (choice == 'y');
     return 0;
 }
-
-
