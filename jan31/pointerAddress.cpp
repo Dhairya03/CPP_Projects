@@ -15,6 +15,16 @@ int main(){
     std::cout<<"value of i"<<i<<" "<<*s<<" "<<*(&i)<<std::endl;
     std::cout<<"value of s"<<s<<std::endl;
 
+    int arr[5]={1,2,4,4,5};
+    std::cout<<arr<<std::endl;
+std::cout<<*arr<<std::endl;
+std::cout<<arr+2<<std::endl;
+std::cout<<*(arr+2)<<std::endl;
+std::cout<<*(arr)+2<<std::endl;
 
+// std::cout<<arr<<std::endl;
+// std::cout<<arr<<std::endl;
+// std::cout<<arr<<std::endl;
+// std::cout<<arr<<std::endl;
     return 0;
 }
