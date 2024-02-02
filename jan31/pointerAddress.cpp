@@ -12,7 +12,7 @@ int main(){
     std::cout<<"Adress of i"<<&i<<" "<<s<<" "<<*p<<std::endl;
     std::cout<<"Adress of s"<<&s<<std::endl;
     //value can be fetched by these ways.
-    std::cout<<"value of i"<<i<<" "<<*s<<" "<<*(&i)<<std::endl;
+    std::cout<<"value of i"<<i<<" "<<*s<<" "<<*(&i)<<" "<<**p<<" "<<**(&s)<<std::endl;
     std::cout<<"value of s"<<s<<std::endl;
 
     int arr[5]={1,2,4,4,5};
