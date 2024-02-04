@@ -1,0 +1,1 @@
+int calculate(double inputNumberOne, double inputNumberTwo, char operation);
