@@ -4,31 +4,31 @@
 
 int getNumericInput(double &inputNumber, std::string &inputString)
 {
-    int flag = 1;
+    int validBit = 1;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cout << "Enter input number :" << std::endl;
     std::getline(std::cin, inputString);
     if (isEmptyString(inputString))
     {
         std::cout << "Undefined expression!! Enter valid number!!!" << std::endl;
-        flag = 0;
+        validBit = 0;
     }
     else if (!isValidInputNumber(inputString))
     {
         std::cout << "Invalid input number!!!Please try again." << std::endl;
-        flag = 0;
+        validBit = 0;
     }
     else
     {
         inputNumber = std::stof(inputString);
     }
-    return flag;
+    return validBit;
 }
 
 int getInput(double &inputNumberOne, double &inputNumberTwo, char &operation)
 {
     std::string inputStringOne, inputStringTwo;
-    int flag = 0;
+    int validBit = 0;
     while (true)
     {
         if (!getNumericInput(inputNumberOne, inputStringOne))
@@ -40,10 +40,10 @@ int getInput(double &inputNumberOne, double &inputNumberTwo, char &operation)
             std::cout << "Invalid Operator!!! Please try again!!!" << std::endl;
             break;
         }
-        flag = getNumericInput(inputNumberTwo, inputStringTwo);
+        validBit = getNumericInput(inputNumberTwo, inputStringTwo);
         break;
     }
-    return flag;
+    return validBit;
 }
 
 void print(double inputNumberOne, double inputNumberTwo, char operation)
