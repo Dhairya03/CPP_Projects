@@ -48,13 +48,9 @@ Thumbs.db
 *.mov
 *.wmv
 
-*
-!*.*
-!*/
 *.so
 *.o
 *.i
 *.s
 *.a
 *.out
-
