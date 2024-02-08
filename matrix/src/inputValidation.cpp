@@ -2,7 +2,7 @@
 #include <limits>
 #include "inputValidation.h"
 
-bool isValidIntegerInput(int inputNumber)
+bool isValidInteger(int inputNumber)
 {
     if (std::cin.fail() || std::cin.peek() != '\n')
     {
@@ -15,7 +15,7 @@ bool isValidIntegerInput(int inputNumber)
         return true;
 }
 
-bool isValidDoubleInput(double inputNumber)
+bool isValidDouble(double inputNumber)
 {
     if (std::cin.fail() || std::cin.peek() != '\n')
     {
@@ -30,5 +30,5 @@ bool isValidDoubleInput(double inputNumber)
 
 bool isValidSize(int size)
 {
-    return (!isValidIntegerInput(size) || size <= 0) ? false : true;
+    return (!isValidInteger(size) || size <= 0) ? false : true;
 }

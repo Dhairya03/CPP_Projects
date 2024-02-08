@@ -1,57 +1,8 @@
 #include <iostream>
 #include <limits>
-#include "matrixAddition.h"
-#include "matrixMultiplication.h"
+#include "matrixArithmeticOperation.h"
 #include "inputValidation.h"
-
-double **createMatrix(double **inputMatrix, int size)
-{
-    inputMatrix = new double *[size];
-    for (int index = 0; index < size; index++)
-    {
-        inputMatrix[index] = new double[size];
-    }
-    std::cout << "Matrix created successfully" << std::endl;
-    return inputMatrix;
-}
-
-int getInput(double **inputMatrix, int size)
-{
-    if (inputMatrix == NULL)
-    {
-        std::cout << "No matrix found Please try again." << std::endl;
-    }
-    else
-    {
-        std::cout << "Enter elements of matrix" << std::endl;
-        for (int row = 0; row < size; row++)
-        {
-            for (int column = 0; column < size; column++)
-            {
-                std::cin >> *(*(inputMatrix + row) + column);
-                if (!isValidDoubleInput(*(*(inputMatrix + row) + column)))
-                {
-                    // std::cout<<"Invalid Input. Please try again."<<std::endl;
-                    return 1;
-                }
-            }
-        }
-    }
-    return 0;
-}
-
-void printMatrix(double **matrix, int size)
-{
-    std::cout << "Elements of matrix are" << std::endl;
-    for (int row = 0; row < size; row++)
-    {
-        for (int column = 0; column < size; column++)
-        {
-            std::cout << matrix[row][column] << " ";
-        }
-        std::cout << std::endl;
-    }
-}
+#include "matrixProcessingOperation.h"
 
 int main()
 {
@@ -59,50 +10,63 @@ int main()
     std::cout << "Enter the size of matrix" << std::endl;
     std::cin >> size;
 
-    if(isValidSize(size))
+    char choice;
+
+    if (isValidSize(size))
     {
-        double **matrixOne = NULL, **matrixTwo = NULL, **outputMatrix = NULL;
-
-        matrixOne = createMatrix(matrixOne, size);
-        matrixTwo = createMatrix(matrixTwo, size);
-        outputMatrix = createMatrix(outputMatrix, size);
-
-        if (getInput(matrixOne, size))
+        do
         {
-            std::cout << "Not a valid input for the matrix!!" << std::endl;
-            return 1;
-        }
-        if (getInput(matrixTwo, size))
-        {
-            std::cout << "Not a valid input for the matrix!!" << std::endl;
-            return 1;
-        }
+            double **matrixOne = NULL, **matrixTwo = NULL, **outputMatrix = NULL;
 
-        printMatrix(matrixOne, size);
-        printMatrix(matrixTwo, size);
+            matrixOne = createMatrix(matrixOne, size);
+            matrixTwo = createMatrix(matrixTwo, size);
+            outputMatrix = createMatrix(outputMatrix, size);
 
-        if (addMatrices(matrixOne, matrixTwo, size, outputMatrix) != NULL)
-        {
-            std::cout << "Addition of matrices" << std::endl;
+            if (getInput(matrixOne, size))
+            {
+                std::cout << "Not a valid input for the matrix!!" << std::endl;
+                break;
+            }
+            if (getInput(matrixTwo, size))
+            {
+                std::cout << "Not a valid input for the matrix!!" << std::endl;
+                break;
+            }
 
-            printMatrix(outputMatrix, size);
-        }
+            printMatrix(matrixOne, size);
+            printMatrix(matrixTwo, size);
 
-        if (multiplyMatrices(matrixOne, matrixTwo, size, outputMatrix) != NULL)
-        {
-            std::cout << "Multiplication of matrices" << std::endl;
+            if (addMatrices(matrixOne, matrixTwo, size, outputMatrix) != NULL)
+            {
+                std::cout << "Addition of matrices" << std::endl;
 
-            printMatrix(outputMatrix, size);
-        }
+                printMatrix(outputMatrix, size);
+            }
 
-        for (int index = 0; index < size; index++)
-        {
-            delete[] matrixOne[index];
-            delete[] matrixTwo[index];
-        }
+            if (multiplyMatrices(matrixOne, matrixTwo, size, outputMatrix) != NULL)
+            {
+                std::cout << "Multiplication of matrices" << std::endl;
 
-        delete[] matrixOne;
-        delete[] matrixTwo;
+                printMatrix(outputMatrix, size);
+            }
+
+            for (int index = 0; index < size; index++)
+            {
+                delete[] matrixOne[index];
+                delete[] matrixTwo[index];
+                delete[] outputMatrix[index];
+            }
+
+            delete[] matrixOne;
+            matrixOne = NULL;
+            delete[] matrixTwo;
+            matrixTwo = NULL;
+            delete[] outputMatrix;
+            outputMatrix = NULL;
+            std::cout << "Do you want to continue.\n Press y to continue" << std::endl;
+            std::cin >> choice;
+        } while (choice == 'y');
+        return 1;
     }
     else
     {
