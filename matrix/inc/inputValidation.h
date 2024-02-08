@@ -8,5 +8,3 @@ bool isValidDouble(double inputNumber);
 bool isValidSize(int size);
 
 #endif
-
-

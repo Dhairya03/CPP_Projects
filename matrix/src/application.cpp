@@ -7,45 +7,55 @@
 int main()
 {
     int size;
-    std::cout << "Enter the size of matrix" << std::endl;
-    std::cin >> size;
-
     char choice;
+    double **matrixOne = NULL, **matrixTwo = NULL, **outputMatrix = NULL;
 
-    if (isValidSize(size))
+    do
     {
-        do
-        {
-            double **matrixOne = NULL, **matrixTwo = NULL, **outputMatrix = NULL;
+        std::cout << "Enter the size of matrix" << std::endl;
+        std::cin >> size;
 
-            matrixOne = createMatrix(matrixOne, size);
-            matrixTwo = createMatrix(matrixTwo, size);
-            outputMatrix = createMatrix(outputMatrix, size);
+        if (isValidSize(size))
+        {
+            if (createMatrix(matrixOne, size) != NULL)
+            {
+                matrixOne = createMatrix(matrixOne, size);
+                std::cout << "Matrix One created successfully" << std::endl;
+            }
+
+            if (createMatrix(matrixTwo, size) != NULL)
+            {
+                matrixTwo = createMatrix(matrixTwo, size);
+                std::cout << "Matrix Two created successfully" << std::endl;
+            }
 
             if (getInput(matrixOne, size))
             {
                 std::cout << "Not a valid input for the matrix!!" << std::endl;
-                break;
             }
+            
             if (getInput(matrixTwo, size))
             {
                 std::cout << "Not a valid input for the matrix!!" << std::endl;
-                break;
             }
 
             printMatrix(matrixOne, size);
             printMatrix(matrixTwo, size);
 
+            std::cout << "Addition of matrices" << std::endl;
+
             if (addMatrices(matrixOne, matrixTwo, size, outputMatrix) != NULL)
             {
-                std::cout << "Addition of matrices" << std::endl;
+                outputMatrix = addMatrices(matrixOne, matrixTwo, size, outputMatrix);
 
                 printMatrix(outputMatrix, size);
             }
 
+            std::cout << "Multiplication of matrices" << std::endl;
+
             if (multiplyMatrices(matrixOne, matrixTwo, size, outputMatrix) != NULL)
             {
-                std::cout << "Multiplication of matrices" << std::endl;
+                outputMatrix = multiplyMatrices(matrixOne, matrixTwo, size, outputMatrix);
 
                 printMatrix(outputMatrix, size);
             }
@@ -63,14 +73,13 @@ int main()
             matrixTwo = NULL;
             delete[] outputMatrix;
             outputMatrix = NULL;
-            std::cout << "Do you want to continue.\n Press y to continue" << std::endl;
-            std::cin >> choice;
-        } while (choice == 'y');
-        return 1;
-    }
-    else
-    {
-        std::cout << "Enter valid size of the array.PLease try again." << std::endl;
-    }
+        }
+        else
+        {
+            std::cout << "Not a valid size of the array." << std::endl;
+        }
+        std::cout << "Do you want to continue.\nPress y to continue" << std::endl;
+        std::cin >> choice;
+    } while (choice == 'y');
     return 0;
 }

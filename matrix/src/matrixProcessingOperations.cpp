@@ -9,15 +9,16 @@ double **createMatrix(double **inputMatrix, int size)
     {
         inputMatrix[index] = new double[size];
     }
-    std::cout << "Matrix created successfully" << std::endl;
     return inputMatrix;
 }
 
 int getInput(double **inputMatrix, int size)
 {
+    int toReturn=0;
     if (inputMatrix == NULL)
     {
-        std::cout << "No matrix found Please try again." << std::endl;
+        toReturn=1;
+        std::cout << "No matrix found..." << std::endl;
     }
     else
     {
@@ -26,16 +27,19 @@ int getInput(double **inputMatrix, int size)
         {
             for (int column = 0; column < size; column++)
             {
+                while(true){
                 std::cin >> *(*(inputMatrix + row) + column);
                 if (!isValidDouble(*(*(inputMatrix + row) + column)))
                 {
                     std::cout<<"Invalid Input. Please try again."<<std::endl;
-                    return 1;
+                    toReturn=1;
+                    break;
+                }
                 }
             }
         }
     }
-    return 0;
+    return toReturn;
 }
 
 void printMatrix(double **matrix, int size)

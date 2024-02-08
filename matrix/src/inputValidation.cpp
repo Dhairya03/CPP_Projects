@@ -4,28 +4,32 @@
 
 bool isValidInteger(int inputNumber)
 {
+    bool toReturn = true;
     if (std::cin.fail() || std::cin.peek() != '\n')
     {
-        std::cout << "Invalid Input..PLease try again.." << std::endl;
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return false;
+        toReturn = false;
     }
     else
-        return true;
+        toReturn = true;
+
+    return toReturn;
 }
 
 bool isValidDouble(double inputNumber)
 {
+    bool toReturn = true;
     if (std::cin.fail() || std::cin.peek() != '\n')
     {
-        std::cout << "Invalid Input..PLease try again.." << std::endl;
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return false;
+        toReturn = false;
     }
     else
-        return true;
+        toReturn = true;
+        
+    return toReturn;
 }
 
 bool isValidSize(int size)
