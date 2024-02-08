@@ -33,7 +33,7 @@ int main()
             {
                 std::cout << "Not a valid input for the matrix!!" << std::endl;
             }
-            
+
             if (getInput(matrixTwo, size))
             {
                 std::cout << "Not a valid input for the matrix!!" << std::endl;
@@ -44,18 +44,18 @@ int main()
 
             std::cout << "Addition of matrices" << std::endl;
 
-            if (addMatrices(matrixOne, matrixTwo, size, outputMatrix) != NULL)
+            if (addMatrices(matrixOne, matrixTwo, size) != NULL)
             {
-                outputMatrix = addMatrices(matrixOne, matrixTwo, size, outputMatrix);
+                outputMatrix = addMatrices(matrixOne, matrixTwo, size);
 
                 printMatrix(outputMatrix, size);
             }
 
             std::cout << "Multiplication of matrices" << std::endl;
 
-            if (multiplyMatrices(matrixOne, matrixTwo, size, outputMatrix) != NULL)
+            if (multiplyMatrices(matrixOne, matrixTwo, size) != NULL)
             {
-                outputMatrix = multiplyMatrices(matrixOne, matrixTwo, size, outputMatrix);
+                outputMatrix = multiplyMatrices(matrixOne, matrixTwo, size);
 
                 printMatrix(outputMatrix, size);
             }

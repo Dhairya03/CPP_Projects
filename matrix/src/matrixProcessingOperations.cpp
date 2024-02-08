@@ -33,8 +33,8 @@ int getInput(double **inputMatrix, int size)
                 {
                     std::cout<<"Invalid Input. Please try again."<<std::endl;
                     toReturn=1;
-                    break;
                 }
+                else break;
                 }
             }
         }

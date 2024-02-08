@@ -1,9 +1,9 @@
 #include "matrixProcessingOperation.h"
 #include "matrixArithmeticOperation.h"
 
-double **addMatrices(double **matrixOne, double **matrixTwo, int size, double **outputMatrix)
+double **addMatrices(double **matrixOne, double **matrixTwo, int size)
 {
-    outputMatrix = createMatrix(outputMatrix, size);
+    double **outputMatrix = createMatrix(outputMatrix, size);
     for (int row = 0; row < size; row++)
     {
         for (int column = 0; column < size; column++)
@@ -15,9 +15,9 @@ double **addMatrices(double **matrixOne, double **matrixTwo, int size, double **
     return outputMatrix;
 }
 
-double **multiplyMatrices(double **matrixOne, double **matrixTwo, int size, double **outputMatrix)
+double **multiplyMatrices(double **matrixOne, double **matrixTwo, int size)
 {
-    outputMatrix = createMatrix(outputMatrix, size);
+    double **outputMatrix = createMatrix(outputMatrix, size);
     for (int row = 0; row < size; row++)
     {
         for (int column = 0; column < size; column++)
