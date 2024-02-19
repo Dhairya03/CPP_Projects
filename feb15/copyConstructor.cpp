@@ -5,10 +5,12 @@ class Base{
     public:
     Base(){
         x=1;y=1;
+        print();
         std::cout<<"Default constructor"<<std::endl;
     }
     int setX(int value){
         x=value;
+        print();
         return x;
     }
     Base(Base& b){

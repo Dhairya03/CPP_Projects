@@ -20,7 +20,7 @@ struct Child:public Base{
 };
 int main(){
     Child c;
-    std::cout<<"base struict"<<std::endl;
+    std::cout<<"base struct"<<std::endl;
     Base b;
     std::cout<<"end base"<<std::endl;
     return 0;

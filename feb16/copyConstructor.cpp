@@ -1,6 +1,7 @@
 #include<iostream>
 
 class Base{
+    int x;
     public:
     Base(){
         std::cout<<"Default"<<std::endl;
@@ -13,6 +14,13 @@ class Base{
         std::cout<<"Inside add"<<std::endl;
         return b;
     }
+    Base operator+(Base b){
+        std::cout<<"operator"<<std::endl;
+        Base res;
+        res.x=x+b.x;
+        std::cout<<"added"<<std::endl;
+        return res;
+    }
 
 };
 
@@ -23,5 +31,7 @@ Base b2=b1;
 std::cout<<"calling add fucntion"<<std::endl;
 b1.add(b2);
 std::cout<<"Called"<<std::endl;
+Base b3=b1+b2;
+std::cout<<"Temp"<<std::endl;
 
 }
