@@ -3,13 +3,14 @@
 class Transaction;
 class Admin;
 class AccountHolder;
+// Admin adminData{0};
 
 class Bank
 {
 protected:
     std::vector<AccountHolder> accountHolderData;
     std::vector<Transaction> transactionDetails;
-
+    Admin adminData;
 public:
 };
 
@@ -23,7 +24,13 @@ public:
     std::string transactionType;
 
     Transaction(int accNum, int transId, double transAmount, double netBal, std::string transType)
-        : accountNumber(accNum), transactionId(transId), transactionAmount(transAmount), netBalance(netBal), transactionType(transType) {}
+    {
+        accountNumber = accNum;
+        transactionId = transId;
+        transactionAmount = transAmount;
+        netBalance = netBal;
+        transactionType = transType;
+    }
 };
 
 class AccountHolder : public Bank
@@ -75,10 +82,38 @@ public:
             closeAccount();
             break;
         case 8:
+        {
+            seeUserList();
+            seeParticularUser();
             break;
+        }
         default:
             std::cout << "You have selected invalid Operation to perform." << std::endl;
             break;
+        }
+    }
+
+    void seeUserList()
+    {
+        std::cout << "User List is" << std::endl;
+        for (auto &account : accountHolderData)
+        {
+            std::cout << account.accountNumber << " " << account.holderName << " " << account.totalBalance << std::endl;
+        }
+    }
+
+    void seeParticularUser()
+    {
+        int accountNumber;
+        std::cout << "Enter account Number of which you want to see details" << std::endl;
+        std::cin >> accountNumber;
+        std::cout << "Requested User is" << std::endl;
+        for (auto &account : accountHolderData)
+        {
+            if (accountNumber == account.accountNumber)
+            {
+                std::cout << account.accountNumber << " " << account.holderName << " " << account.holderAddress << " " << account.holderContact << " " << account.totalBalance << std::endl;
+            }
         }
     }
 
@@ -248,7 +283,7 @@ public:
             if (account.accountNumber == accountNumber)
             {
                 found = true;
-                account.accountNumber = NULL;
+                // accountHolderData.erase(account);
                 std::cout << "Account Closed Successfully" << std::endl;
                 break;
             }
@@ -269,6 +304,32 @@ public:
 public:
     Admin()
     {
+
+        adminId = 101;
+        adminPassword = 123456;
+    }
+
+    int adminLogin()
+    {
+        std::cout << "Enter your Login Id" << std::endl;
+        std::cin >> adminId;
+        if (adminId == adminData.adminId)
+        {
+            std::cout << "Enter you password" << std::endl;
+            std::cin >> adminPassword;
+            if (adminPassword == adminData.adminPassword)
+            {
+                std::cout << "Successfully login" << std::endl;
+            }
+            else
+            {
+                std::cout << "Wrong Password!!" << std::endl;
+            }
+        }
+        else
+        {
+            std::cout << "Wrong login id!!" << std::endl;
+        }
     }
 
     void showOperationChoices()
@@ -546,7 +607,7 @@ int main()
                 {
                     user1.showOperationChoices();
                     user1.performOperation(input.getOperatorChoice());
-                    std::cout << "Want to log out.\nPress q to quit.\nPress c to continue" << std::endl;
+                    std::cout << "Want to exit.\nPress q to quit.\nPress c to continue" << std::endl;
                     std::cin >> input.continueChoice;
                 } while (input.continueChoice == 'c');
             }
@@ -555,6 +616,9 @@ int main()
                 Admin admin;
                 do
                 {
+                    std::cout << "++++++";
+                    admin.adminLogin();
+                    std::cout << "--------";
                     admin.showOperationChoices();
                     admin.performOperation(input.getOperatorChoice());
                     std::cout << "Want to log out.\nPress q to quit.\nPress c to continue" << std::endl;
