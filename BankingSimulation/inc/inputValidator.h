@@ -1,0 +1,24 @@
+#ifndef INPUTVALIDATOR_H
+#define INPUTVALIDATOR_H
+
+#include <iostream>
+
+class InputValidator
+{
+
+public:
+    int userChoice{};
+    int operationChoice{};
+    char continueChoice{};
+    InputValidator()
+    {
+    }
+
+    int getUserChoice();
+
+    int getOperatorChoice();
+
+    bool isValidUserChoice();
+};
+
+#endif
