@@ -61,11 +61,11 @@ int Admin::createAccount(Bank &bankData)
     std::cout << "Contact" << std::endl;
     std::cin >> newAccount.holderContact;
 
-    newAccount.accountNumber += bankData.accountHolderData.size() + 1;
+    newAccount.accountNumber += accountHolderData.size() + 1;
     
     newAccount.totalBalance = 0;
 
-    bankData.accountHolderData.push_back(newAccount);
+    accountHolderData.push_back(newAccount);
 
     std::cout << "Account created successfully." << std::endl;
     std::cout << "Your account number is " << newAccount.accountNumber << std::endl;
@@ -146,7 +146,7 @@ void Admin::seeUserList(Bank &bankData)
               << " "
               << "Toatl balance" << std::endl;
 
-    for (auto &account : bankData.accountHolderData)
+    for (auto &account : accountHolderData)
     {
         std::cout << account.accountNumber << " " << account.holderName << " " << account.totalBalance << std::endl;
     }
@@ -176,7 +176,7 @@ void Admin::seeParticularUser(Bank &bankData)
               << " "
               << "Total balance " << std::endl;
 
-    for (auto &account : bankData.accountHolderData)
+    for (auto &account : accountHolderData)
     {
         if (accountNumber == account.accountNumber)
         {
@@ -202,13 +202,13 @@ int Admin::closeAccount(Bank &bankData)
 
     bool found = false;
     int index = 0;
-    for (auto &account : bankData.accountHolderData)
+    for (auto &account : accountHolderData)
     {
         index++;
         if (account.accountNumber == accountNumber)
         {
             found = true;
-            bankData.accountHolderData.erase(bankData.accountHolderData.begin() + index - 1);
+            accountHolderData.erase(accountHolderData.begin() + index - 1);
             std::cout << "Account closed successfully" << std::endl;
             break;
         }

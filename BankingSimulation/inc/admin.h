@@ -7,15 +7,16 @@
 
 class Admin : public Bank
 {
-public:
+private:
     int adminId{};
     int adminPassword{};
-    bool isLoggedIn{false};
 
 public:
+    bool isLoggedIn{false};
+    
     Admin();
 
-    Admin(int,int);
+    Admin(int, int);
 
     void adminLogin();
 
@@ -23,7 +24,7 @@ public:
 
     void showOperationChoices();
 
-    void performOperation(int operationChoice, Bank&b);
+    void performOperation(int operationChoice, Bank &b);
 
     void seeUserList(Bank &b);
 
@@ -32,7 +33,6 @@ public:
     int closeAccount(Bank &b);
 
     void logout();
-
 };
 
 #endif

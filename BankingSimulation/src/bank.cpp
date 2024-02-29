@@ -23,7 +23,7 @@ int Bank::withdrawMoney(Bank &bankData)
     }
 
     bool found = false;
-    for (auto &account : bankData.accountHolderData)
+    for (auto &account : accountHolderData)
     {
         if (account.accountNumber == withdrawAccountNumber)
         {
@@ -41,7 +41,7 @@ int Bank::withdrawMoney(Bank &bankData)
             if (withdrawAmount <= account.totalBalance)
             {
                 account.totalBalance -= withdrawAmount;
-                bankData.transactionDetails.push_back(Transaction(account.accountNumber, bankData.transactionDetails.size() + 1, withdrawAmount, account.totalBalance, "Withdraw"));
+                transactionDetails.push_back(Transaction(account.accountNumber, transactionDetails.size() + 1, withdrawAmount, account.totalBalance, "Withdraw"));
 
                 std::cout << "Withdrawal successful. Updated Balance: " << account.totalBalance << std::endl;
             }
@@ -76,7 +76,7 @@ int Bank::depositMoney(Bank &bankData)
     }
 
     bool found = false;
-    for (auto &account : bankData.accountHolderData)
+    for (auto &account : accountHolderData)
     {
         if (account.accountNumber == depositAccountNumber)
         {
@@ -92,7 +92,7 @@ int Bank::depositMoney(Bank &bankData)
             }
 
             account.totalBalance += depositAmount;
-            bankData.transactionDetails.push_back(Transaction(account.accountNumber, bankData.transactionDetails.size() + 1, depositAmount, account.totalBalance, "Deposit"));
+            transactionDetails.push_back(Transaction(account.accountNumber, transactionDetails.size() + 1, depositAmount, account.totalBalance, "Deposit"));
 
             std::cout << "Deposit successful. Updated Balance: " << account.totalBalance << std::endl;
 
@@ -122,7 +122,7 @@ int Bank::getMiniBankStatement(Bank &bankData)
 
     std::cout << "Mini Bank Statement for Account Number " << accountNumber << ":" << std::endl;
     int count = 0;
-    for (auto &transaction : bankData.transactionDetails)
+    for (auto &transaction : transactionDetails)
     {
         if (transaction.accountNumber == accountNumber)
         {
@@ -135,6 +135,8 @@ int Bank::getMiniBankStatement(Bank &bankData)
         if (count >= 5)
             break;
     }
+    if (count == 0)
+        std::cout << "No transactions found for the account number " << accountNumber << std::endl;
     return 0;
 }
 
@@ -149,20 +151,24 @@ int Bank::getBankStatement(Bank &bankData)
         if (input.isValidInput(accountNumber))
             break;
         else
-            std::cout << "You have entered invalid ammount.\nEnter valid amount" << std::endl;
+            std::cout << "You have entered invalid account number.\nEnter valid account number" << std::endl;
     }
 
     std::cout << "Bank Statement for Account Number " << accountNumber << ":" << std::endl;
-    for (auto &transaction : bankData.transactionDetails)
+    bool found = false;
+    for (auto &transaction : transactionDetails)
     {
         if (transaction.accountNumber == accountNumber)
         {
+            found = true;
             std::cout << "Transaction ID: " << transaction.transactionId << std::endl;
             std::cout << "Transaction Amount: " << transaction.transactionAmount << std::endl;
             std::cout << "Transaction Type:" << transaction.transactionType << std::endl;
             std::cout << "Net Balance: " << transaction.netBalance << std::endl;
         }
     }
+    if (!found)
+        std::cout << "No transaction for the account Number " << accountNumber << std::endl;
     return 0;
 }
 
@@ -177,11 +183,11 @@ int Bank::showBalance(Bank &bankData)
         if (input.isValidInput(accountNumber))
             break;
         else
-            std::cout << "You have entered invalid ammount.\nEnter valid amount" << std::endl;
+            std::cout << "You have entered invalid account number.\nEnter valid account number" << std::endl;
     }
 
     bool found = false;
-    for (auto &account : bankData.accountHolderData)
+    for (auto &account : accountHolderData)
     {
         if (account.accountNumber == accountNumber)
         {

@@ -46,37 +46,6 @@ void AccountHolder::performOperation(int operationChoice, Bank &bankData)
     }
 }
 
-int AccountHolder::closeAccount(Bank &bankData)
-{
-    InputValidator input;
-    int accountNumber;
-    while (true)
-    {
-        std::cout << "Enter Account Number to close: ";
-        std::cin >> accountNumber;
-        if (input.isValidInput(accountNumber))
-            break;
-        else
-            continue;
-    }
-
-    bool found = false;
-    for (auto &account : accountHolderData)
-    {
-        if (account.accountNumber == accountNumber)
-        {
-            found = true;
-            // accountHolderData.erase(account);
-            std::cout << "Account Closed Successfully" << std::endl;
-            break;
-        }
-    }
-    if (!found)
-    {
-        std::cout << "Account not found." << std::endl;
-    }
-    return 0;
-}
 bool AccountHolder::logout()
 {
     InputValidator input;

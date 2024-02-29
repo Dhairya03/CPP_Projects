@@ -7,7 +7,7 @@
 
 class Bank
 {
-public:
+protected:
     std::vector<Account> accountHolderData;
     std::vector<Transaction> transactionDetails;
 
