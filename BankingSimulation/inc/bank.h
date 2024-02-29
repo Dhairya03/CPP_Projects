@@ -7,11 +7,10 @@
 
 class Bank
 {
-protected:
+public:
     std::vector<Account> accountHolderData;
     std::vector<Transaction> transactionDetails;
 
-public:
     bool adminLogin(int id, int pwd);
 
     int withdrawMoney(Bank &b);

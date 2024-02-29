@@ -23,7 +23,7 @@ int Bank::withdrawMoney(Bank &bankData)
     }
 
     bool found = false;
-    for (auto &account : accountHolderData)
+    for (auto &account : bankData.accountHolderData)
     {
         if (account.accountNumber == withdrawAccountNumber)
         {
@@ -41,7 +41,7 @@ int Bank::withdrawMoney(Bank &bankData)
             if (withdrawAmount <= account.totalBalance)
             {
                 account.totalBalance -= withdrawAmount;
-                transactionDetails.push_back(Transaction(account.accountNumber, transactionDetails.size() + 1, withdrawAmount, account.totalBalance, "Withdraw"));
+                bankData.transactionDetails.push_back(Transaction(account.accountNumber, bankData.transactionDetails.size() + 1, withdrawAmount, account.totalBalance, "Withdraw"));
 
                 std::cout << "Withdrawal successful. Updated Balance: " << account.totalBalance << std::endl;
             }
@@ -76,7 +76,7 @@ int Bank::depositMoney(Bank &bankData)
     }
 
     bool found = false;
-    for (auto &account : accountHolderData)
+    for (auto &account : bankData.accountHolderData)
     {
         if (account.accountNumber == depositAccountNumber)
         {
@@ -92,7 +92,7 @@ int Bank::depositMoney(Bank &bankData)
             }
 
             account.totalBalance += depositAmount;
-            transactionDetails.push_back(Transaction(account.accountNumber, transactionDetails.size() + 1, depositAmount, account.totalBalance, "Deposit"));
+            bankData.transactionDetails.push_back(Transaction(account.accountNumber, bankData.transactionDetails.size() + 1, depositAmount, account.totalBalance, "Deposit"));
 
             std::cout << "Deposit successful. Updated Balance: " << account.totalBalance << std::endl;
 
@@ -122,7 +122,7 @@ int Bank::getMiniBankStatement(Bank &bankData)
 
     std::cout << "Mini Bank Statement for Account Number " << accountNumber << ":" << std::endl;
     int count = 0;
-    for (auto &transaction : transactionDetails)
+    for (auto &transaction : bankData.transactionDetails)
     {
         if (transaction.accountNumber == accountNumber)
         {
@@ -156,7 +156,7 @@ int Bank::getBankStatement(Bank &bankData)
 
     std::cout << "Bank Statement for Account Number " << accountNumber << ":" << std::endl;
     bool found = false;
-    for (auto &transaction : transactionDetails)
+    for (auto &transaction : bankData.transactionDetails)
     {
         if (transaction.accountNumber == accountNumber)
         {
@@ -187,7 +187,7 @@ int Bank::showBalance(Bank &bankData)
     }
 
     bool found = false;
-    for (auto &account : accountHolderData)
+    for (auto &account : bankData.accountHolderData)
     {
         if (account.accountNumber == accountNumber)
         {
