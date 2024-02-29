@@ -18,15 +18,15 @@ public:
 
     void showOperationChoices();
 
-    void performOperation(int operationChoice);
+    void performOperation(int operationChoice,Bank &b);
 
-    void seeUserList();
+    // void seeUserList(Bank &b);
 
-    void seeParticularUser();
+    // void seeParticularUser(Bank &b);
 
     // int createAccount();
 
-    int closeAccount();
+    int closeAccount(Bank &b);
     bool logout();
 };
 

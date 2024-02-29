@@ -1,106 +1,64 @@
 #include "accountHolder.h"
+#include "inputValidator.h"
 
 void AccountHolder::showOperationChoices()
 {
     std::cout << "Select the operation you want to perform" << std::endl;
-    // std::cout << "1.Request to create Account" << std::endl;
     std::cout << "1.Withraw money from Account" << std::endl;
     std::cout << "2.Deposit money in Account" << std::endl;
     std::cout << "3.Get Mini Bank Statement" << std::endl;
     std::cout << "4.Get Bank Statement" << std::endl;
     std::cout << "5.Show Balance" << std::endl;
-    // std::cout << "7.Request to close Account" << std::endl;
     std::cout << "6.EXIT" << std::endl;
 }
 
-void AccountHolder::performOperation(int operationChoice)
+void AccountHolder::performOperation(int operationChoice, Bank &bankData)
 {
     switch (operationChoice)
     {
     case 1:
-        withdrawMoney();
+        withdrawMoney(bankData);
         break;
+
     case 2:
-        depositMoney();
+        depositMoney(bankData);
         break;
+
     case 3:
-        getMiniBankStatement();
+        getMiniBankStatement(bankData);
         break;
+
     case 4:
-        getBankStatement();
+        getBankStatement(bankData);
         break;
+
     case 5:
-        showBalance();
+        showBalance(bankData);
         break;
+
     case 6:
-        
+        logout();
         break;
-        //to test data storage
-    case 8:
-    {
-        seeUserList();
-        seeParticularUser();
-        break;
-    }
+
     default:
         std::cout << "You have selected invalid operation to perform." << std::endl;
         break;
     }
 }
 
-void AccountHolder::seeUserList()
+int AccountHolder::closeAccount(Bank &bankData)
 {
-    std::cout << "User List is" << std::endl;
-    for (auto &account : accountHolderData)
-    {
-        std::cout << account.accountNumber << " " << account.holderName << " " << account.totalBalance << std::endl;
-    }
-}
-
-void AccountHolder::seeParticularUser()
-{
+    InputValidator input;
     int accountNumber;
-    std::cout << "Enter account Number of which you want to see details" << std::endl;
-    std::cin >> accountNumber;
-    std::cout << "Requested User is" << std::endl;
-    for (auto &account : accountHolderData)
+    while (true)
     {
-        if (accountNumber == account.accountNumber)
-        {
-            std::cout << account.accountNumber << " " << account.holderName << " " << account.holderAddress << " " << account.holderContact << " " << account.totalBalance << std::endl;
-        }
+        std::cout << "Enter Account Number to close: ";
+        std::cin >> accountNumber;
+        if (input.isValidInput(accountNumber))
+            break;
+        else
+            continue;
     }
-}
-
-// int AccountHolder::createAccount()
-// {
-//     std::cout << "Enter your Details" << std::endl;
-
-//     std::cout << "Name" << std::endl;
-//     std::cin >> holderName;
-//     std::cout << "Address" << std::endl;
-//     std::cin >> holderAddress;
-//     std::cout << "Contact" << std::endl;
-//     std::cin >> holderContact;
-
-//     Account newAccount;
-//     newAccount.accountNumber = accountNumber + 1;
-//     newAccount.holderName = holderName;
-//     newAccount.holderContact = holderContact;
-//     newAccount.holderAddress = holderAddress;
-//     newAccount.totalBalance = 0;
-
-//     accountHolderData.push_back(newAccount);
-
-//     std::cout << "Account created successfully." << std::endl;
-//     std::cout << "Your account number is " << newAccount.accountNumber << std::endl;
-// }
-
-int AccountHolder::closeAccount()
-{
-    int accountNumber;
-    std::cout << "Enter Account Number to close: ";
-    std::cin >> accountNumber;
 
     bool found = false;
     for (auto &account : accountHolderData)
@@ -119,9 +77,20 @@ int AccountHolder::closeAccount()
     }
     return 0;
 }
-bool AccountHolder::logout(){
-    std::cout << "Want to exit.\nPress q to quit.\nPress c to continue" << std::endl;
-    char continueChoice;
-    std::cin>>continueChoice;
-    return (continueChoice=='c')?true:false;
+bool AccountHolder::logout()
+{
+    InputValidator input;
+    std::cout << "Want to exit.\nPress y for Yes.\nPress n for No" << std::endl;
+    char exitChoice;
+
+    while (true)
+    {
+        std::cin >> exitChoice;
+        if (input.isValidInput(exitChoice))
+            break;
+        else
+            continue;
+    }
+
+    return (exitChoice == 'y') ? true : false;
 }

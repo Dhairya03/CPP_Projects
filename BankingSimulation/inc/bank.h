@@ -7,22 +7,22 @@
 
 class Bank
 {
-protected:
+public:
     std::vector<Account> accountHolderData;
     std::vector<Transaction> transactionDetails;
 
 public:
     bool adminLogin(int id, int pwd);
 
-    int withdrawMoney();
+    int withdrawMoney(Bank &b);
 
-    int depositMoney();
+    int depositMoney(Bank &b);
 
-    int getMiniBankStatement();
+    int getMiniBankStatement(Bank &b);
 
-    int getBankStatement();
+    int getBankStatement(Bank &b);
 
-    int showBalance();
+    int showBalance(Bank &b);
 };
 
 #endif

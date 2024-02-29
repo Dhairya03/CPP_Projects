@@ -16,10 +16,11 @@ int main()
 
     do
     {
-        std::cout << "Want to enter as:\nAdmin " << admin << "\nAccountHolder " << accountHolder << std::endl;
+        std::cout << "Want to enter as:\n"
+                  << admin << ". Admin \n"
+                  << accountHolder << ". AccountHolder " << std::endl;
 
         input.getUserChoice();
-
         if (input.isValidUserChoice())
         {
             if (input.userChoice == accountHolder)
@@ -28,34 +29,34 @@ int main()
                 do
                 {
                     user.showOperationChoices();
-                    user.performOperation(input.getOperatorChoice());
+                    user.performOperation(input.getOperatorChoice(), bankData);
 
-                } while (user.logout());
+                } while (!user.logout());
             }
             else
             {
                 Admin admin;
-                do
+                admin.adminLogin();
+                while (admin.isLoggedIn)
                 {
-                    if (admin.adminLogin())
-                    {
-                        std::cout<<"Successful Login"<<std::endl;
-                        admin.showOperationChoices();
-                        admin.performOperation(input.getOperatorChoice());
-                    }
-                    else
-                    {
-                        std::cout << "Invalid Credentials" << std::endl;
-                    }
-
-                } while (admin.logout());
+                    admin.showOperationChoices();
+                    admin.performOperation(input.getOperatorChoice(), bankData);
+                }
             }
         }
         else
         {
             std::cout << "Invalid Choice" << std::endl;
         }
-        std::cout << "Do you want to close the application.\nPress q to quit \n Press c to continue" << std::endl;
-        std::cin >> input.continueChoice;
-    } while (input.continueChoice == 'c');
+
+        std::cout << "Do you want to close the application.\nPress y for Yes \nPress n for NO" << std::endl;
+        while (true)
+        {
+            std::cin >> input.continueChoice;
+            if (input.isValidInput(input.continueChoice))
+                break;
+            else
+                std::cout << "Enter valid choice.Please try again." << std::endl;
+        }
+    } while (input.continueChoice == 'n');
 }

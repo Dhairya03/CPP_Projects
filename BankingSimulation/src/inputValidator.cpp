@@ -1,29 +1,61 @@
 #include "inputValidator.h"
+#include <limits>
 
 int InputValidator::getUserChoice()
 {
-    std::cin >> userChoice;
+    while(true){
+        std::cin >> userChoice;
+        if(isValidInput(userChoice))break;
+        else std::cout<<"Enter Valid user choice"<<std::endl;
+    }
+    
     return userChoice;
 }
 
 int InputValidator::getOperatorChoice()
 {
-    std::cin >> operationChoice;
+    while(true){
+        std::cin >> operationChoice;
+        if(isValidInput(operationChoice))break;
+        else std::cout<<"Enter Valid user choice"<<std::endl;
+    }
     return operationChoice;
 }
 
 bool InputValidator::isValidUserChoice()
 {
-    if(isValidInput(userChoice)){
-        return (userChoice == 1 || userChoice == 2) ? true : false;
+    return (userChoice == 1 || userChoice == 2) ? true : false;
+}
+
+bool InputValidator::isValidInput(int input)
+{
+    bool isValid = true;
+    if (std::cin.fail() || std::cin.peek() != '\n')
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        isValid = false;
     }
-    else return false;
+    else
+        isValid = true;
+    return isValid;
 }
 
-bool InputValidator:: isValidInput(int choice){
-    return (std::cin.fail() && std::cin.peek()!='\n')?false:true;
+bool InputValidator::isValidInput(double input)
+{
+    bool isValid = true;
+    if (std::cin.fail() || std::cin.peek() != '\n')
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        isValid = false;
+    }
+    else
+        isValid = true;
+    return isValid;
 }
 
-bool InputValidator:: isValidInput(char choice){
-    return true;
+bool InputValidator::isValidInput(char choice)
+{
+    return (choice == 'y' || choice == 'n') ? true : false;
 }

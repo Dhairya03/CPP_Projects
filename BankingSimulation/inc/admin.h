@@ -10,27 +10,28 @@ class Admin : public Bank
 public:
     int adminId{};
     int adminPassword{};
+    bool isLoggedIn{false};
 
 public:
     Admin();
 
     Admin(int,int);
 
-    int adminLogin();
+    void adminLogin();
 
-    int createAccount();
+    int createAccount(Bank &b);
 
     void showOperationChoices();
 
-    void performOperation(int operationChoice);
+    void performOperation(int operationChoice, Bank&b);
 
-    void seeUserList();
+    void seeUserList(Bank &b);
 
-    void seeParticularUser();
+    void seeParticularUser(Bank &b);
 
-    int closeAccount();
+    int closeAccount(Bank &b);
 
-    bool logout();
+    void logout();
 
 };
 

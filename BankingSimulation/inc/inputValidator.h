@@ -23,6 +23,8 @@ public:
 
     bool isValidInput(int choice);
 
+    bool isValidInput(double choice);
+
     bool isValidInput(char choice);
 };
 

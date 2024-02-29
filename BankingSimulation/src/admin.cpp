@@ -1,5 +1,9 @@
 #include "admin.h"
 #include "constants.h"
+#include "inputValidator.h"
+
+// Since extern is used it will be declared in constants.h and can be defined anywhere in the files
+Admin adminData(101, 123456);
 
 Admin::Admin()
 {
@@ -11,21 +15,41 @@ Admin::Admin(int aId, int adminPwd)
     adminPassword = adminPwd;
 }
 
-int Admin::adminLogin()
+void Admin::adminLogin()
 {
+    InputValidator input;
     std::cout << "Enter your Login Id" << std::endl;
-    std::cin >> adminId;
+    while (true)
+    {
+        std::cin >> adminId;
+        if (input.isValidInput(adminId))
+            break;
+        else
+            std::cout << "Invalid Id. Please enter again" << std::endl;
+    }
+
     std::cout << "Enter you password" << std::endl;
-    std::cin >> adminPassword;
+    while (true)
+    {
+        std::cin >> adminPassword;
+        if (input.isValidInput(adminPassword))
+            break;
+        else
+            std::cout << "Invalid Password. Please enter again" << std::endl;
+    }
 
-    // Since extern is used it will be declared in constants.h and can be defined anywhere in the files
-    Admin adminData(101, 123456);
-
-    return (adminId == adminData.adminId && adminPassword == adminData.adminPassword);
-    
+    if (adminId == adminData.adminId && adminPassword == adminData.adminPassword)
+    {
+        std::cout << "Successful Login" << std::endl;
+        isLoggedIn = true;
+    }
+    else
+    {
+        std::cout << "Invalid Credentials" << std::endl;
+    }
 }
 
-int Admin::createAccount()
+int Admin::createAccount(Bank &bankData)
 {
     std::cout << "Enter Account Holder Details" << std::endl;
 
@@ -37,10 +61,11 @@ int Admin::createAccount()
     std::cout << "Contact" << std::endl;
     std::cin >> newAccount.holderContact;
 
-    newAccount.accountNumber++;
+    newAccount.accountNumber += bankData.accountHolderData.size() + 1;
+    
     newAccount.totalBalance = 0;
 
-    accountHolderData.push_back(newAccount);
+    bankData.accountHolderData.push_back(newAccount);
 
     std::cout << "Account created successfully." << std::endl;
     std::cout << "Your account number is " << newAccount.accountNumber << std::endl;
@@ -58,46 +83,52 @@ void Admin::showOperationChoices()
     std::cout << "6.Get Mini Bank Statement" << std::endl;
     std::cout << "7.Get Bank Statement" << std::endl;
     std::cout << "8.Show Balance" << std::endl;
-    std::cout << "9.Logout" << std::endl;
+    std::cout << "9.Close Account" << std::endl;
+    std::cout << "10.Logout" << std::endl;
 }
 
-void Admin::performOperation(int operationChoice)
+void Admin::performOperation(int operationChoice, Bank &bankData)
 {
     switch (operationChoice)
     {
     case 1:
-        createAccount();
+        createAccount(bankData);
         break;
 
     case 2:
-        seeUserList();
+        seeUserList(bankData);
         break;
 
     case 3:
-        seeParticularUser();
+        seeParticularUser(bankData);
         break;
 
     case 4:
-        withdrawMoney();
+        withdrawMoney(bankData);
         break;
 
     case 5:
-        depositMoney();
+        depositMoney(bankData);
         break;
 
     case 6:
-        getMiniBankStatement();
+        getMiniBankStatement(bankData);
         break;
 
     case 7:
-        getBankStatement();
+        getBankStatement(bankData);
         break;
 
     case 8:
-        showBalance();
+        showBalance(bankData);
         break;
 
     case 9:
+        closeAccount(bankData);
+        break;
+
+    case 10:
+        logout();
         break;
 
     default:
@@ -106,42 +137,78 @@ void Admin::performOperation(int operationChoice)
     }
 }
 
-void Admin::seeUserList()
+void Admin::seeUserList(Bank &bankData)
 {
     std::cout << "User List is" << std::endl;
-    for (auto &account : accountHolderData)
+    std::cout << "Account NUmber"
+              << " "
+              << "Account Holder name"
+              << " "
+              << "Toatl balance" << std::endl;
+
+    for (auto &account : bankData.accountHolderData)
     {
         std::cout << account.accountNumber << " " << account.holderName << " " << account.totalBalance << std::endl;
     }
 }
 
-void Admin::seeParticularUser()
+void Admin::seeParticularUser(Bank &bankData)
 {
+    InputValidator input;
     int accountNumber;
     std::cout << "Enter account Number of which you want to see details" << std::endl;
+    while (true)
+    {
+        std::cin >> accountNumber;
+        if (input.isValidInput(accountNumber))
+            break;
+        else
+            std::cout << "you have entered invalid account number.Enter valid account number" << std::endl;
+    }
     std::cout << "Requested User is" << std::endl;
-    for (auto &account : accountHolderData)
+    std::cout << "Account Number"
+              << " "
+              << "Account Holder Name"
+              << " "
+              << "Address"
+              << " "
+              << "Contact"
+              << " "
+              << "Total balance " << std::endl;
+
+    for (auto &account : bankData.accountHolderData)
     {
         if (accountNumber == account.accountNumber)
         {
             std::cout << account.accountNumber << " " << account.holderName << " " << account.holderAddress << " " << account.holderContact << " " << account.totalBalance << std::endl;
+            break;
         }
     }
 }
 
-int Admin::closeAccount()
+int Admin::closeAccount(Bank &bankData)
 {
+    InputValidator input;
     int accountNumber;
     std::cout << "Enter Account Number to close: ";
-    std::cin >> accountNumber;
+    while (true)
+    {
+        std::cin >> accountNumber;
+        if (input.isValidInput(accountNumber))
+            break;
+        else
+            std::cout << "you have entered invalid account number.Enter valid account number" << std::endl;
+    }
 
     bool found = false;
-    for (auto &account : accountHolderData)
+    int index = 0;
+    for (auto &account : bankData.accountHolderData)
     {
+        index++;
         if (account.accountNumber == accountNumber)
         {
             found = true;
-            // account.accountNumber = NULL;
+            bankData.accountHolderData.erase(bankData.accountHolderData.begin() + index - 1);
             std::cout << "Account closed successfully" << std::endl;
             break;
         }
@@ -153,10 +220,23 @@ int Admin::closeAccount()
     return 0;
 }
 
-bool Admin::logout()
+void Admin::logout()
 {
-    std::cout << "Want to exit.\nPress q to quit.\nPress c to continue" << std::endl;
-    char continueChoice;
-    std::cin >> continueChoice;
-    return (continueChoice == 'c') ? true : false;
+    InputValidator input;
+    std::cout << "Want to logout.\nPress y for YES.\nPress n for NO" << std::endl;
+    char logoutChoice;
+    while (true)
+    {
+        std::cin >> logoutChoice;
+        if (input.isValidInput(logoutChoice))
+            break;
+        else
+            continue;
+    }
+
+    if (logoutChoice == 'y')
+    {
+        std::cout << "Logged out successfully" << std::endl;
+        isLoggedIn = false;
+    }
 }

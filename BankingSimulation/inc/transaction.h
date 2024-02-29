@@ -6,7 +6,7 @@
 class Transaction
 {
 public:
-    int accountNumber{};
+    int accountNumber;
     int transactionId;
     double transactionAmount;
     double netBalance;
