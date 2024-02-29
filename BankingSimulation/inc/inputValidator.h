@@ -11,10 +11,6 @@ public:
     int operationChoice{};
     char continueChoice{};
 
-    InputValidator()
-    {
-    }
-
     int getUserChoice();
 
     int getOperatorChoice();
