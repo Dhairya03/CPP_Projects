@@ -1,5 +1,9 @@
 #include "bank.h"
 
+bool Bank::adminLogin(int id, int pwd){
+    return true;
+}
+
 int Bank::withdrawMoney()
 {
     int withdrawAccountNumber;
@@ -34,6 +38,7 @@ int Bank::withdrawMoney()
     {
         std::cout << "Account not found." << std::endl;
     }
+    return 0;
 }
 
 int Bank::depositMoney()
@@ -64,6 +69,7 @@ int Bank::depositMoney()
     {
         std::cout << "Account not found." << std::endl;
     }
+    return 0;
 }
 
 int Bank::getMiniBankStatement()
@@ -87,6 +93,7 @@ int Bank::getMiniBankStatement()
         if (count > 5)
             break;
     }
+    return 0;
 }
 
 int Bank::getBankStatement()
@@ -106,6 +113,7 @@ int Bank::getBankStatement()
             std::cout << "Net Balance: " << transaction.netBalance << std::endl;
         }
     }
+    return 0;
 }
 
 int Bank::showBalance()
@@ -128,4 +136,5 @@ int Bank::showBalance()
     {
         std::cout << "Account not found." << std::endl;
     }
+    return 0;
 }

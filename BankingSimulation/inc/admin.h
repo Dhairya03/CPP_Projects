@@ -2,6 +2,7 @@
 #define ADMIN_H
 
 #include <iostream>
+
 #include "bank.h"
 
 class Admin : public Bank
@@ -17,6 +18,8 @@ public:
 
     int adminLogin();
 
+    int createAccount();
+
     void showOperationChoices();
 
     void performOperation(int operationChoice);
@@ -26,6 +29,8 @@ public:
     void seeParticularUser();
 
     int closeAccount();
+
+    bool logout();
 
 };
 

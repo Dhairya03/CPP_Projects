@@ -14,6 +14,16 @@ int InputValidator::getOperatorChoice()
 
 bool InputValidator::isValidUserChoice()
 {
+    if(isValidInput(userChoice)){
+        return (userChoice == 1 || userChoice == 2) ? true : false;
+    }
+    else return false;
+}
 
-    return (userChoice == 1 || userChoice == 2) ? true : false;
+bool InputValidator:: isValidInput(int choice){
+    return (std::cin.fail() && std::cin.peek()!='\n')?false:true;
+}
+
+bool InputValidator:: isValidInput(char choice){
+    return true;
 }

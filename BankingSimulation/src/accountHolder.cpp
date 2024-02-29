@@ -3,14 +3,14 @@
 void AccountHolder::showOperationChoices()
 {
     std::cout << "Select the operation you want to perform" << std::endl;
-    std::cout << "1.Request to create Account" << std::endl;
-    std::cout << "2.Withraw money from Account" << std::endl;
-    std::cout << "3.Deposit money in Account" << std::endl;
-    std::cout << "4.Get Mini Bank Statement" << std::endl;
-    std::cout << "5.Get Bank Statement" << std::endl;
-    std::cout << "6.Show Balance" << std::endl;
-    std::cout << "7.Request to close Account" << std::endl;
-    std::cout << "8.EXIT" << std::endl;
+    // std::cout << "1.Request to create Account" << std::endl;
+    std::cout << "1.Withraw money from Account" << std::endl;
+    std::cout << "2.Deposit money in Account" << std::endl;
+    std::cout << "3.Get Mini Bank Statement" << std::endl;
+    std::cout << "4.Get Bank Statement" << std::endl;
+    std::cout << "5.Show Balance" << std::endl;
+    // std::cout << "7.Request to close Account" << std::endl;
+    std::cout << "6.EXIT" << std::endl;
 }
 
 void AccountHolder::performOperation(int operationChoice)
@@ -18,27 +18,24 @@ void AccountHolder::performOperation(int operationChoice)
     switch (operationChoice)
     {
     case 1:
-        createAccount();
-        break;
-
-    case 2:
         withdrawMoney();
         break;
-    case 3:
+    case 2:
         depositMoney();
         break;
-    case 4:
+    case 3:
         getMiniBankStatement();
         break;
-    case 5:
+    case 4:
         getBankStatement();
         break;
-    case 6:
+    case 5:
         showBalance();
         break;
-    case 7:
-        closeAccount();
+    case 6:
+        
         break;
+        //to test data storage
     case 8:
     {
         seeUserList();
@@ -46,7 +43,7 @@ void AccountHolder::performOperation(int operationChoice)
         break;
     }
     default:
-        std::cout << "You have selected invalid Operation to perform." << std::endl;
+        std::cout << "You have selected invalid operation to perform." << std::endl;
         break;
     }
 }
@@ -75,29 +72,29 @@ void AccountHolder::seeParticularUser()
     }
 }
 
-int AccountHolder::createAccount()
-{
-    std::cout << "Enter your Details" << std::endl;
+// int AccountHolder::createAccount()
+// {
+//     std::cout << "Enter your Details" << std::endl;
 
-    std::cout << "Name" << std::endl;
-    std::cin >> holderName;
-    std::cout << "Address" << std::endl;
-    std::cin >> holderAddress;
-    std::cout << "Contact" << std::endl;
-    std::cin >> holderContact;
+//     std::cout << "Name" << std::endl;
+//     std::cin >> holderName;
+//     std::cout << "Address" << std::endl;
+//     std::cin >> holderAddress;
+//     std::cout << "Contact" << std::endl;
+//     std::cin >> holderContact;
 
-    AccountHolder newAccount;
-    newAccount.accountNumber = accountNumber + 1;
-    newAccount.holderName = holderName;
-    newAccount.holderContact = holderContact;
-    newAccount.holderAddress = holderAddress;
-    newAccount.totalBalance = 0;
+//     Account newAccount;
+//     newAccount.accountNumber = accountNumber + 1;
+//     newAccount.holderName = holderName;
+//     newAccount.holderContact = holderContact;
+//     newAccount.holderAddress = holderAddress;
+//     newAccount.totalBalance = 0;
 
-    accountHolderData.push_back(newAccount);
+//     accountHolderData.push_back(newAccount);
 
-    std::cout << "Account created successfully." << std::endl;
-    std::cout << "Your account number is " << newAccount.accountNumber << std::endl;
-}
+//     std::cout << "Account created successfully." << std::endl;
+//     std::cout << "Your account number is " << newAccount.accountNumber << std::endl;
+// }
 
 int AccountHolder::closeAccount()
 {
@@ -120,4 +117,11 @@ int AccountHolder::closeAccount()
     {
         std::cout << "Account not found." << std::endl;
     }
+    return 0;
+}
+bool AccountHolder::logout(){
+    std::cout << "Want to exit.\nPress q to quit.\nPress c to continue" << std::endl;
+    char continueChoice;
+    std::cin>>continueChoice;
+    return (continueChoice=='c')?true:false;
 }

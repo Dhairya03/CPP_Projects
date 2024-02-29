@@ -1,26 +1,27 @@
 #include <iostream>
 #include <vector>
 #include "bank.h"
+#include "constants.h"
 #include "admin.h"
 #include "accountHolder.h"
 #include "inputValidator.h"
-#include "constants.cpp"
+#include "account.h"
+#include "transaction.h"
 
 int main()
 {
     std::cout << "Banking Simulation" << std::endl;
-    Bank bankData;//account and transaction data
+    Bank bankData; // account and transaction data
     InputValidator input;
 
     do
     {
-        std::cout << "Want to Login as:\nAdmin "<<admin<< "\nAccountHolder "<<accountHolder << std::endl;
+        std::cout << "Want to enter as:\nAdmin " << admin << "\nAccountHolder " << accountHolder << std::endl;
 
         input.getUserChoice();
 
         if (input.isValidUserChoice())
         {
-            // std::cout<<"Valid choice"<<std::endl;
             if (input.userChoice == accountHolder)
             {
                 AccountHolder user;
@@ -28,29 +29,33 @@ int main()
                 {
                     user.showOperationChoices();
                     user.performOperation(input.getOperatorChoice());
-                    std::cout << "Want to exit.\nPress q to quit.\nPress c to continue" << std::endl;
-                    std::cin >> input.continueChoice;
-                } while (input.continueChoice == 'c');
+
+                } while (user.logout());
             }
             else
             {
                 Admin admin;
                 do
                 {
-                    admin.adminLogin();
-                    admin.showOperationChoices();
-                    admin.performOperation(input.getOperatorChoice());
-                    std::cout << "Want to log out.\nPress q to quit.\nPress c to continue" << std::endl;
-                    std::cin >> input.continueChoice;
+                    if (admin.adminLogin())
+                    {
+                        std::cout<<"Successful Login"<<std::endl;
+                        admin.showOperationChoices();
+                        admin.performOperation(input.getOperatorChoice());
+                    }
+                    else
+                    {
+                        std::cout << "Invalid Credentials" << std::endl;
+                    }
 
-                } while (input.continueChoice == 'c');
+                } while (admin.logout());
             }
         }
         else
         {
             std::cout << "Invalid Choice" << std::endl;
         }
-        std::cout << "Do you want to exit\nPress q to quit \n Press c to continue" << std::endl;
+        std::cout << "Do you want to close the application.\nPress q to quit \n Press c to continue" << std::endl;
         std::cin >> input.continueChoice;
     } while (input.continueChoice == 'c');
 }

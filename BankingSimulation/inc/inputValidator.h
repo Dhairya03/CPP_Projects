@@ -10,6 +10,7 @@ public:
     int userChoice{};
     int operationChoice{};
     char continueChoice{};
+
     InputValidator()
     {
     }
@@ -19,6 +20,10 @@ public:
     int getOperatorChoice();
 
     bool isValidUserChoice();
+
+    bool isValidInput(int choice);
+
+    bool isValidInput(char choice);
 };
 
 #endif

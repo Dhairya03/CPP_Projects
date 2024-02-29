@@ -2,17 +2,18 @@
 #define BANK_H
 
 #include <vector>
-#include "accountHolder.h"
+#include "account.h"
 #include "transaction.h"
 
 class Bank
 {
 protected:
-    std::vector<AccountHolder> accountHolderData;
+    std::vector<Account> accountHolderData;
     std::vector<Transaction> transactionDetails;
-    // Admin adminData;
 
 public:
+    bool adminLogin(int id, int pwd);
+
     int withdrawMoney();
 
     int depositMoney();

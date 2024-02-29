@@ -2,17 +2,19 @@
 #define ACCHOLDER_H
 
 #include<iostream>
-#include<bank.h>
-#include<transaction.h>
+
+#include"bank.h"
+
+// #ifndef TRANSACTION_H
+// #define TRANSACTION_H
+
+// #include<transaction.h>
+
+// #endif
 
 class AccountHolder : public Bank
 {
 public:
-    int accountNumber{4000};
-    std::string holderName;
-    long holderContact;
-    std::string holderAddress;
-    double totalBalance{};
 
     void showOperationChoices();
 
@@ -22,9 +24,10 @@ public:
 
     void seeParticularUser();
 
-    int createAccount();
+    // int createAccount();
 
     int closeAccount();
+    bool logout();
 };
 
 #endif
