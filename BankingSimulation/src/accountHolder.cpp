@@ -48,14 +48,14 @@ void AccountHolder::performOperation(int operationChoice, Bank &bankData)
 
 bool AccountHolder::logout()
 {
-    InputValidator input;
+    InputValidator inputValidator;
     std::cout << "Want to exit.\nPress y for Yes.\nPress n for No" << std::endl;
     char exitChoice;
 
     while (true)
     {
         std::cin >> exitChoice;
-        if (input.isValidInput(exitChoice))
+        if (inputValidator.isValidInput(exitChoice))
             break;
         else
             continue;

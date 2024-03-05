@@ -65,7 +65,7 @@ int BankUser::withdrawMoney(Bank &bankData)
 
 int BankUser::depositMoney(Bank &bankData)
 {
-    InputValidator input;
+    InputValidator inputValidator;
     int depositAccountNumber;
     double depositAmount;
 
@@ -73,7 +73,7 @@ int BankUser::depositMoney(Bank &bankData)
     while (true)
     {
         std::cin >> depositAccountNumber;
-        if (input.isValidInput(depositAccountNumber))
+        if (inputValidator.isValidInput(depositAccountNumber))
             break;
         else
             std::cout << "Enter valid account number" << std::endl;
@@ -89,7 +89,7 @@ int BankUser::depositMoney(Bank &bankData)
             while (true)
             {
                 std::cin >> depositAmount;
-                if (input.isValidInput(depositAmount))
+                if (inputValidator.isValidInput(depositAmount))
                     break;
                 else
                     std::cout << "You have entered invalid ammount.\nEnter valid amount" << std::endl;
@@ -133,13 +133,13 @@ bool BankUser::findStatement(Bank &bankData, Transaction &transaction, int accou
 }
 int BankUser::getMiniBankStatement(Bank &bankData)
 {
-    InputValidator input;
+    InputValidator inputValidator;
     int accountNumber;
     std::cout << "Enter Account Number to get Mini Bank Statement: ";
     while (true)
     {
         std::cin >> accountNumber;
-        if (input.isValidInput(accountNumber))
+        if (inputValidator.isValidInput(accountNumber))
             break;
         else
             std::cout << "you have entered invalid account number. Enter valid account number" << std::endl;
@@ -189,13 +189,13 @@ int BankUser::getBankStatement(Bank &bankData)
 
 int BankUser::showBalance(Bank &bankData)
 {
-    InputValidator input;
+    InputValidator inputValidator;
     int accountNumber;
     std::cout << "Enter Account Number to get Total balance: ";
     while (true)
     {
         std::cin >> accountNumber;
-        if (input.isValidInput(accountNumber))
+        if (inputValidator.isValidInput(accountNumber))
             break;
         else
             std::cout << "You have entered invalid account number.\nEnter valid account number" << std::endl;
