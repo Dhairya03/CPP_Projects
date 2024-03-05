@@ -1,14 +1,10 @@
+#include "bankUser.h"
 #include "bank.h"
 #include "inputValidator.h"
 
-bool Bank::adminLogin(int id, int pwd)
+int BankUser::withdrawMoney(Bank &bankData)
 {
-    return true;
-}
-
-int Bank::withdrawMoney(Bank &bankData)
-{
-    InputValidator input;
+    InputValidator inputValidator;
     int withdrawAccountNumber;
     double withdrawAmount;
 
@@ -16,7 +12,7 @@ int Bank::withdrawMoney(Bank &bankData)
     while (true)
     {
         std::cin >> withdrawAccountNumber;
-        if (input.isValidInput(withdrawAccountNumber))
+        if (inputValidator.isValidInput(withdrawAccountNumber))
             break;
         else
             std::cout << "Enter valid account Number" << std::endl;
@@ -25,25 +21,33 @@ int Bank::withdrawMoney(Bank &bankData)
     bool found = false;
     for (auto &account : bankData.accountHolderData)
     {
-        if (account.accountNumber == withdrawAccountNumber)
+        if (account.getAccountNumber() == withdrawAccountNumber)
         {
             found = true;
             std::cout << "Enter Amount to Withdraw: ";
             while (true)
             {
                 std::cin >> withdrawAmount;
-                if (input.isValidInput(withdrawAmount))
+                if (inputValidator.isValidInput(withdrawAmount))
                     break;
                 else
                     std::cout << "You have entered invalid ammount.\nEnter valid amount" << std::endl;
             }
 
-            if (withdrawAmount <= account.totalBalance)
+            if (withdrawAmount <= account.getTotalBalance())
             {
-                account.totalBalance -= withdrawAmount;
-                bankData.transactionDetails.push_back(Transaction(account.accountNumber, bankData.transactionDetails.size() + 1, withdrawAmount, account.totalBalance, "Withdraw"));
+                account.setTotalBalance((-1) * withdrawAmount);
 
-                std::cout << "Withdrawal successful. Updated Balance: " << account.totalBalance << std::endl;
+                Transaction newTransaction;
+                newTransaction.setAccountNumber(account.getAccountNumber());
+                newTransaction.setTransactionId(bankData.transactionDetails.size() + 1);
+                newTransaction.setTransactionAmount(withdrawAmount);
+                newTransaction.setNetBalance(account.getTotalBalance());
+                newTransaction.setTransactionType("Withdraw");
+
+                bankData.transactionDetails.push_back(newTransaction);
+
+                std::cout << "Withdrawal successful. Updated Balance: " << account.getTotalBalance() << std::endl;
             }
             else
             {
@@ -59,7 +63,7 @@ int Bank::withdrawMoney(Bank &bankData)
     return 0;
 }
 
-int Bank::depositMoney(Bank &bankData)
+int BankUser::depositMoney(Bank &bankData)
 {
     InputValidator input;
     int depositAccountNumber;
@@ -78,7 +82,7 @@ int Bank::depositMoney(Bank &bankData)
     bool found = false;
     for (auto &account : bankData.accountHolderData)
     {
-        if (account.accountNumber == depositAccountNumber)
+        if (account.getAccountNumber() == depositAccountNumber)
         {
             found = true;
             std::cout << "Enter Amount to Deposit: ";
@@ -91,10 +95,18 @@ int Bank::depositMoney(Bank &bankData)
                     std::cout << "You have entered invalid ammount.\nEnter valid amount" << std::endl;
             }
 
-            account.totalBalance += depositAmount;
-            bankData.transactionDetails.push_back(Transaction(account.accountNumber, bankData.transactionDetails.size() + 1, depositAmount, account.totalBalance, "Deposit"));
+            account.setTotalBalance(depositAmount);
 
-            std::cout << "Deposit successful. Updated Balance: " << account.totalBalance << std::endl;
+            Transaction newTransaction;
+            newTransaction.setAccountNumber(account.getAccountNumber());
+            newTransaction.setTransactionId(bankData.transactionDetails.size() + 1);
+            newTransaction.setTransactionAmount(depositAmount);
+            newTransaction.setNetBalance(account.getTotalBalance());
+            newTransaction.setTransactionType("Deposit");
+
+            bankData.transactionDetails.push_back(newTransaction);
+
+            std::cout << "Deposit successful. Updated Balance: " << account.getTotalBalance() << std::endl;
 
             break;
         }
@@ -106,7 +118,20 @@ int Bank::depositMoney(Bank &bankData)
     return 0;
 }
 
-int Bank::getMiniBankStatement(Bank &bankData)
+bool BankUser::findStatement(Bank &bankData, Transaction &transaction, int accountNumber)
+{
+    bool found = false;
+    if (transaction.getAccountNumber() == accountNumber)
+    {
+        found = true;
+        std::cout << "Transaction ID: " << transaction.getTransactionId() << std::endl;
+        std::cout << "Transaction Amount: " << transaction.getTransactionAmount() << std::endl;
+        std::cout << "Transaction Type:" << transaction.getTransactionType() << std::endl;
+        std::cout << "Net Balance: " << transaction.getNetBalance() << std::endl;
+    }
+    return found;
+}
+int BankUser::getMiniBankStatement(Bank &bankData)
 {
     InputValidator input;
     int accountNumber;
@@ -124,31 +149,27 @@ int Bank::getMiniBankStatement(Bank &bankData)
     int count = 0;
     for (auto &transaction : bankData.transactionDetails)
     {
-        if (transaction.accountNumber == accountNumber)
-        {
-            std::cout << "Transaction ID: " << transaction.transactionId << std::endl;
-            std::cout << "Transaction Amount: " << transaction.transactionAmount << std::endl;
-            std::cout << "Transaction Type:" << transaction.transactionType << std::endl;
-            std::cout << "Net Balance: " << transaction.netBalance << std::endl;
+        if (findStatement(bankData, transaction, accountNumber))
             count++;
-        }
+
         if (count >= 5)
             break;
     }
     if (count == 0)
         std::cout << "No transactions found for the account number " << accountNumber << std::endl;
+
     return 0;
 }
 
-int Bank::getBankStatement(Bank &bankData)
+int BankUser::getBankStatement(Bank &bankData)
 {
-    InputValidator input;
+    InputValidator inputValidator;
     int accountNumber;
     std::cout << "Enter Account Number to get Bank Statement: ";
     while (true)
     {
         std::cin >> accountNumber;
-        if (input.isValidInput(accountNumber))
+        if (inputValidator.isValidInput(accountNumber))
             break;
         else
             std::cout << "You have entered invalid account number.\nEnter valid account number" << std::endl;
@@ -158,21 +179,15 @@ int Bank::getBankStatement(Bank &bankData)
     bool found = false;
     for (auto &transaction : bankData.transactionDetails)
     {
-        if (transaction.accountNumber == accountNumber)
-        {
+        if (findStatement(bankData, transaction, accountNumber))
             found = true;
-            std::cout << "Transaction ID: " << transaction.transactionId << std::endl;
-            std::cout << "Transaction Amount: " << transaction.transactionAmount << std::endl;
-            std::cout << "Transaction Type:" << transaction.transactionType << std::endl;
-            std::cout << "Net Balance: " << transaction.netBalance << std::endl;
-        }
     }
     if (!found)
         std::cout << "No transaction for the account Number " << accountNumber << std::endl;
-    return 0;
+    return found;
 }
 
-int Bank::showBalance(Bank &bankData)
+int BankUser::showBalance(Bank &bankData)
 {
     InputValidator input;
     int accountNumber;
@@ -189,10 +204,10 @@ int Bank::showBalance(Bank &bankData)
     bool found = false;
     for (auto &account : bankData.accountHolderData)
     {
-        if (account.accountNumber == accountNumber)
+        if (account.getAccountNumber() == accountNumber)
         {
             found = true;
-            std::cout << "Total Balance: " << account.totalBalance << std::endl;
+            std::cout << "Total Balance: " << account.getTotalBalance() << std::endl;
             break;
         }
     }

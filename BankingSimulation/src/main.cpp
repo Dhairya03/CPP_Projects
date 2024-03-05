@@ -12,7 +12,7 @@ int main()
 {
     std::cout << "Banking Simulation" << std::endl;
     Bank bankData; // account and transaction data
-    InputValidator input;
+    InputValidator inputValidator;
 
     do
     {
@@ -20,16 +20,18 @@ int main()
                   << admin << ". Admin \n"
                   << accountHolder << ". AccountHolder " << std::endl;
 
-        input.getUserChoice();
-        if (input.isValidUserChoice())
+        inputValidator.setUserChoice();
+
+        if (inputValidator.isValidUserChoice())
         {
-            if (input.userChoice == accountHolder)
+            if (inputValidator.getUserChoice() == accountHolder)
             {
                 AccountHolder user;
                 do
                 {
                     user.showOperationChoices();
-                    user.performOperation(input.getOperatorChoice(), bankData);
+                    inputValidator.setOperatorChoice();
+                    user.performOperation(inputValidator.getOperatorChoice(), bankData);
 
                 } while (!user.logout());
             }
@@ -40,7 +42,8 @@ int main()
                 while (admin.isLoggedIn)
                 {
                     admin.showOperationChoices();
-                    admin.performOperation(input.getOperatorChoice(), bankData);
+                    inputValidator.setOperatorChoice();
+                    admin.performOperation(inputValidator.getOperatorChoice(), bankData);
                 }
             }
         }
@@ -50,13 +53,7 @@ int main()
         }
 
         std::cout << "Do you want to close the application.\nPress y for Yes \nPress n for NO" << std::endl;
-        while (true)
-        {
-            std::cin >> input.continueChoice;
-            if (input.isValidInput(input.continueChoice))
-                break;
-            else
-                std::cout << "Enter valid choice.Please try again." << std::endl;
-        }
-    } while (input.continueChoice == 'n');
+        inputValidator.setContinueChoice();
+
+    } while (inputValidator.getContinueChoice() == 'n');
 }

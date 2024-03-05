@@ -2,10 +2,10 @@
 #define ADMIN_H
 
 #include <iostream>
-
+#include "bankUser.h"
 #include "bank.h"
 
-class Admin : public Bank
+class Admin : public BankUser
 {
 private:
     int adminId{};
@@ -20,17 +20,17 @@ public:
 
     void adminLogin();
 
-    int createAccount(Bank &b);
+    int createAccount(Bank &bankData);
 
     void showOperationChoices();
 
-    void performOperation(int operationChoice, Bank &b);
+    void performOperation(int operationChoice, Bank &bankData);
 
-    void seeUserList(Bank &b);
+    void showUserList(Bank &bankData);
 
-    void seeParticularUser(Bank &b);
+    void showParticularUser(Bank &bankData);
 
-    int closeAccount(Bank &b);
+    int closeAccount(Bank &bankData);
 
     void logout();
 };

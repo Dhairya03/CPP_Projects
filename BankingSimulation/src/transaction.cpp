@@ -1,10 +1,51 @@
 #include "transaction.h"
 
-Transaction::Transaction(int accNum, int transId, double transAmount, double netBal, std::string transType)
+int Transaction::getAccountNumber()
 {
-    accountNumber = accNum;
-    transactionId = transId;
-    transactionAmount = transAmount;
-    netBalance = netBal;
-    transactionType = transType;
+    return accountNumber;
+}
+
+int Transaction::getTransactionId()
+{
+    return transactionId;
+}
+
+double Transaction::getTransactionAmount()
+{
+    return transactionAmount;
+}
+
+double Transaction::getNetBalance()
+{
+    return netBalance;
+}
+
+std::string Transaction::getTransactionType()
+{
+    return transactionType;
+}
+
+void Transaction::setAccountNumber(int accountNumber)
+{
+    this->accountNumber = accountNumber;
+}
+
+void Transaction::setTransactionId(int transactionId)
+{
+    this->transactionId = transactionId;
+}
+
+void Transaction::setTransactionAmount(double transactionAmount)
+{
+    this->transactionAmount = transactionAmount;
+}
+
+void Transaction::setNetBalance(double netBalance)
+{
+    this->netBalance = netBalance;
+}
+
+void Transaction::setTransactionType(std::string transactionType)
+{
+    this->transactionType = transactionType;
 }

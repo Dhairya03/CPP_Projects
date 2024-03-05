@@ -9,20 +9,20 @@ Admin::Admin()
 {
 }
 
-Admin::Admin(int aId, int adminPwd)
+Admin::Admin(int adminId, int adminPassword)
 {
-    adminId = aId;
-    adminPassword = adminPwd;
+    this->adminId = adminId;
+    this->adminPassword = adminPassword;
 }
 
 void Admin::adminLogin()
 {
-    InputValidator input;
+    InputValidator inputValidator;
     std::cout << "Enter your Login Id" << std::endl;
     while (true)
     {
         std::cin >> adminId;
-        if (input.isValidInput(adminId))
+        if (inputValidator.isValidInput(adminId))
             break;
         else
             std::cout << "Invalid Id. Please enter again" << std::endl;
@@ -32,7 +32,7 @@ void Admin::adminLogin()
     while (true)
     {
         std::cin >> adminPassword;
-        if (input.isValidInput(adminPassword))
+        if (inputValidator.isValidInput(adminPassword))
             break;
         else
             std::cout << "Invalid Password. Please enter again" << std::endl;
@@ -51,24 +51,29 @@ void Admin::adminLogin()
 
 int Admin::createAccount(Bank &bankData)
 {
+    std::string holderName;
+    std::string holderAddress;
+    long holderContact;
     std::cout << "Enter Account Holder Details" << std::endl;
 
     Account newAccount;
     std::cout << "Name" << std::endl;
-    std::cin >> newAccount.holderName;
+    std::cin >> holderName;
     std::cout << "Address" << std::endl;
-    std::cin >> newAccount.holderAddress;
+    std::cin >> holderAddress;
     std::cout << "Contact" << std::endl;
-    std::cin >> newAccount.holderContact;
+    std::cin >> holderContact;
 
-    newAccount.accountNumber += bankData.accountHolderData.size() + 1;
-    
-    newAccount.totalBalance = 0;
+    newAccount.setHolderName(holderName);
+    newAccount.setHolderAddress(holderAddress);
+    newAccount.setHolderContact(holderContact);
+    newAccount.setAccountNumber(bankData.accountHolderData.size() + 1);
+    newAccount.setTotalBalance(0);
 
     bankData.accountHolderData.push_back(newAccount);
 
     std::cout << "Account created successfully." << std::endl;
-    std::cout << "Your account number is " << newAccount.accountNumber << std::endl;
+    std::cout << "Your account number is " << newAccount.getAccountNumber() << std::endl;
     return 0;
 }
 
@@ -96,11 +101,11 @@ void Admin::performOperation(int operationChoice, Bank &bankData)
         break;
 
     case 2:
-        seeUserList(bankData);
+        showUserList(bankData);
         break;
 
     case 3:
-        seeParticularUser(bankData);
+        showParticularUser(bankData);
         break;
 
     case 4:
@@ -137,64 +142,81 @@ void Admin::performOperation(int operationChoice, Bank &bankData)
     }
 }
 
-void Admin::seeUserList(Bank &bankData)
+void Admin::showUserList(Bank &bankData)
 {
+    bool found = false;
     std::cout << "User List is" << std::endl;
-    std::cout << "Account NUmber"
+    std::cout << "AccountNumber"
               << " "
-              << "Account Holder name"
+              << "AccountHolderName"
               << " "
-              << "Toatl balance" << std::endl;
+              << "TotalBalance" << std::endl;
 
     for (auto &account : bankData.accountHolderData)
     {
-        std::cout << account.accountNumber << " " << account.holderName << " " << account.totalBalance << std::endl;
+        found = true;
+        std::cout << account.getAccountNumber() << " " << account.getHolderName() << " " << account.getTotalBalance() << std::endl;
+    }
+
+    if (!found)
+    {
+        std::cout << "No User data found" << std::endl;
     }
 }
 
-void Admin::seeParticularUser(Bank &bankData)
+void Admin::showParticularUser(Bank &bankData)
 {
-    InputValidator input;
+    InputValidator inputValidator;
     int accountNumber;
+    bool found = false;
     std::cout << "Enter account Number of which you want to see details" << std::endl;
+
     while (true)
     {
         std::cin >> accountNumber;
-        if (input.isValidInput(accountNumber))
+        if (inputValidator.isValidInput(accountNumber))
             break;
         else
             std::cout << "you have entered invalid account number.Enter valid account number" << std::endl;
     }
+
     std::cout << "Requested User is" << std::endl;
-    std::cout << "Account Number"
+    std::cout << "AccountNumber"
               << " "
-              << "Account Holder Name"
+              << "AccountHolderName"
               << " "
               << "Address"
               << " "
               << "Contact"
               << " "
-              << "Total balance " << std::endl;
+              << "TotalBalance " << std::endl;
 
     for (auto &account : bankData.accountHolderData)
     {
-        if (accountNumber == account.accountNumber)
+        if (accountNumber == account.getAccountNumber())
         {
-            std::cout << account.accountNumber << " " << account.holderName << " " << account.holderAddress << " " << account.holderContact << " " << account.totalBalance << std::endl;
+            found = true;
+            std::cout << account.getAccountNumber() << " " << account.getHolderName() << " " << account.getHolderAddress() << " " << account.getHolderContact() << " " << account.getTotalBalance() << std::endl;
             break;
         }
+    }
+
+    if (!found)
+    {
+        std::cout << "No User data found" << std::endl;
     }
 }
 
 int Admin::closeAccount(Bank &bankData)
 {
-    InputValidator input;
+    InputValidator inputValidator;
     int accountNumber;
     std::cout << "Enter Account Number to close: ";
+
     while (true)
     {
         std::cin >> accountNumber;
-        if (input.isValidInput(accountNumber))
+        if (inputValidator.isValidInput(accountNumber))
             break;
         else
             std::cout << "you have entered invalid account number.Enter valid account number" << std::endl;
@@ -202,10 +224,11 @@ int Admin::closeAccount(Bank &bankData)
 
     bool found = false;
     int index = 0;
+
     for (auto &account : bankData.accountHolderData)
     {
         index++;
-        if (account.accountNumber == accountNumber)
+        if (account.getAccountNumber() == accountNumber)
         {
             found = true;
             bankData.accountHolderData.erase(bankData.accountHolderData.begin() + index - 1);
@@ -213,6 +236,7 @@ int Admin::closeAccount(Bank &bankData)
             break;
         }
     }
+
     if (!found)
     {
         std::cout << "Account not found." << std::endl;
@@ -222,13 +246,14 @@ int Admin::closeAccount(Bank &bankData)
 
 void Admin::logout()
 {
-    InputValidator input;
+    InputValidator inputValidator;
     std::cout << "Want to logout.\nPress y for YES.\nPress n for NO" << std::endl;
     char logoutChoice;
+
     while (true)
     {
         std::cin >> logoutChoice;
-        if (input.isValidInput(logoutChoice))
+        if (inputValidator.isValidInput(logoutChoice))
             break;
         else
             continue;

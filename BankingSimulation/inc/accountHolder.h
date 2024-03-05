@@ -2,15 +2,15 @@
 #define ACCHOLDER_H
 
 #include <iostream>
-
+#include "bankUser.h"
 #include "bank.h"
 
-class AccountHolder : public Bank
+class AccountHolder : public BankUser
 {
 public:
     void showOperationChoices();
 
-    void performOperation(int operationChoice, Bank &b);
+    void performOperation(int operationChoice, Bank &bankData);
 
     bool logout();
 };
