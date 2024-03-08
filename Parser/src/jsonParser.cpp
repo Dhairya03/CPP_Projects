@@ -24,8 +24,33 @@ bool JsonParser::parseFile()
 
 bool JsonParser::printFileData()
 {
-    std::cout << "Complete Json Data" << std::endl
-              << completeJsonData << std::endl;
+    printJson(completeJsonData, 0);
+    return true;
+}
+
+bool JsonParser::printJson(const Json::Value &value, int indent)
+{
+    if (value.isObject())
+    {
+        for (const auto &key : value.getMemberNames())
+        {
+            std::cout<<std::endl << std::string(indent, ' ') << key << ": ";
+            printJson(value[key], indent+2);
+        }
+    }
+    else if (value.isArray())
+    {
+        std::cout<<std::endl;
+        for (int i = 0; i < value.size(); ++i)
+        {
+            std::cout << std::string(indent, ' ') << "- ";
+            printJson(value[i], indent + 2);
+        }
+    }
+    else
+    {
+        std::cout << value << std::endl;
+    }
     return true;
 }
 
