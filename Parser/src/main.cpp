@@ -7,11 +7,40 @@
 #include "csvParser.h"
 #include "inputValidator.h"
 
+bool handleParser(InputValidator&inputValidator)
+{
+    Parser *parser;
+    switch (inputValidator.getParserChoice())
+    {
+    case 1:
+    {
+        JsonParser jsonParser;
+        parser->parse(jsonParser);
+        break;
+    }
+    case 2:
+    {
+        XmlParser xmlParser;
+        parser->parse(xmlParser);
+        break;
+    }
+    case 3:
+    {
+        CsvParser csvParser;
+        parser->parse(csvParser);
+        break;
+    }
+    default:
+        std::cout << "Exited Successfully" << std::endl;
+        break;
+    }
+    return true;
+}
+
 int main()
 {
     try
     {
-        Parser *parser;
         InputValidator inputValidator;
 
         do
@@ -24,35 +53,11 @@ int main()
                 std::cout << "3.CSV Parser" << std::endl;
                 std::cout << "4.Exit" << std::endl;
                 inputValidator.setParserChoice();
-
-                switch (inputValidator.getParserChoice())
-                {
-                case 1:
-                {
-                    JsonParser jsonParser;
-                    parser->parse(jsonParser);
-                    break;
-                }
-                case 2:
-                {
-                    XmlParser xmlParser;
-                    parser->parse(xmlParser);
-                    break;
-                }
-                case 3:
-                {
-                    CsvParser csvParser;
-                    parser->parse(csvParser);
-                    break;
-                }
-                default:
-                    std::cout << "Exited Successfully" << std::endl;
-                    break;
-                }
+                handleParser(inputValidator);
             }
             catch (const char *&error)
             {
-                std::cout << "Error: "<<error << std::endl;
+                std::cout << "Error: " << error << std::endl;
             }
             catch (const std::runtime_error &exception)
             {
@@ -66,14 +71,8 @@ int main()
         } while (inputValidator.getParserChoice() != 4);
         return 0;
     }
-    catch (const std::runtime_error &exception)
-    {
-        std::cout << "Error: " << exception.what() << std::endl;
-    }
     catch (const std::exception &exception)
     {
         std::cout << "Error: " << exception.what() << std::endl;
     }
 }
-
-// g++ -I/home/dhairyagupta/training/c-_dhairyagupta/Parser/inc /home/dhairyagupta/training/c-_dhairyagupta/Parser/lib/pugixml-master/src/pugixml.cpp *.cpp -ljsoncpp
