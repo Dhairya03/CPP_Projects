@@ -14,9 +14,9 @@ bool XmlParser::openFile()
 bool XmlParser::parseFile()
 {
 
-    result = document.load(file);
-    if (!result)
-        throw result.description();
+    xmlData = document.load(file);
+    if (!xmlData)
+        throw xmlData.description();
 
     return true;
 }

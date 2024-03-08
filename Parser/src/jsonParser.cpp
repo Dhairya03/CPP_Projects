@@ -5,7 +5,7 @@
 
 bool JsonParser::openFile()
 {
-    file.open("../files/example_2.json", std::ifstream::binary);
+    file.open("../files/quiz.json");
     if (!file.is_open())
     {
         throw std::runtime_error("Unable to open file.");

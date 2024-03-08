@@ -11,7 +11,7 @@ class XmlParser : public Parser
 private:
     std::ifstream file;
     pugi::xml_document document;
-    pugi::xml_parse_result result;
+    pugi::xml_parse_result xmlData;
 
     bool openFile();
 
@@ -19,9 +19,9 @@ private:
 
     bool printFileData();
 
-    bool printFile(pugi::xml_attribute &attribute);
+    bool printFile(pugi::xml_attribute &);
 
-    bool printFile(pugi::xml_node &node);
+    bool printFile(pugi::xml_node &);
 
     bool closeFile();
 };

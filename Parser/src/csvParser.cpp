@@ -22,12 +22,12 @@ bool CsvParser::parseFile()
     try
     {
         csvDataColumnNames = document.GetColumnNames();
-        for (int index = 0; index < document.GetColumnCount(); index++)
+        for (int columnIndex = 0; columnIndex < document.GetColumnCount(); columnIndex++)
         {
             std::vector<std::string> columnData;
             for (int rowIndex = 0; rowIndex < document.GetRowCount(); rowIndex++)
             {
-                columnData.push_back(document.GetCell<std::string>(index, rowIndex));
+                columnData.push_back(document.GetCell<std::string>(columnIndex, rowIndex));
             }
             csvData.push_back(columnData);
         }
@@ -43,12 +43,12 @@ bool CsvParser::printFileData()
 {
     try
     {
-        for (int index = 0; index < csvData.size(); index++)
+        for (int columnIndex = 0; columnIndex < csvData.size(); columnIndex++)
         {
-            std::cout << csvDataColumnNames[index] << "\t";
-            for (int rowIndex = 0; rowIndex < csvData[index].size(); rowIndex++)
+            std::cout << csvDataColumnNames[columnIndex] << "\t";
+            for (int rowIndex = 0; rowIndex < csvData[columnIndex].size(); rowIndex++)
             {
-                std::cout << csvData[index][rowIndex] << "\t";
+                std::cout << csvData[columnIndex][rowIndex] << "\t";
             }
             std::cout << std::endl;
         }
