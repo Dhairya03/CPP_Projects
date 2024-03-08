@@ -3,48 +3,38 @@
 #include "jsonParser.h"
 #include <stdexcept>
 
-// std::ifstream &JsonParser::getFile()
-// {
-//     return file;
-// }
-
-void JsonParser::openFile()
+bool JsonParser::openFile()
 {
-    file.open("../files/example_2.json");
+    file.open("../files/example_2.json", std::ifstream::binary);
     if (!file.is_open())
     {
-        std::cerr << "Error: Unable to open file." << std::endl;
+        throw std::runtime_error("Unable to open file.");
     }
+    return true;
 }
 
-void JsonParser::parseFile()
+bool JsonParser::parseFile()
 {
-    try
+    if (!reader.parse(file, completeJsonData))
     {
-        if (!reader.parse(file, completeJsonData))
-        {
-            throw std::runtime_error("Failed to parse JSON from file. Check if the file exists and is properly formatted.");
-        }
-        std::cout << "Success" << std::endl;
+        throw std::runtime_error("Failed to parse complete JSON from file. Check if the file exists and is properly formatted.");
     }
-    catch (const std::exception &exception)
-    {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
+    return true;
 }
 
-void JsonParser::printFileData()
+bool JsonParser::printFileData()
 {
     std::cout << "Complete Json Data" << std::endl
               << completeJsonData << std::endl;
-    // std::cout << "math:" << completeJsonData["quiz"]["maths"]["q2"] << std::endl;
+    return true;
 }
 
-void JsonParser::closeFile()
+bool JsonParser::closeFile()
 {
     file.close();
     if (file.is_open())
     {
-        std::cerr << "Error: Unable to close file." << std::endl;
+        throw std::runtime_error("Error: Unable to close file.");
     }
+    return true;
 }

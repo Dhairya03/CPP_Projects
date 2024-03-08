@@ -6,18 +6,17 @@
 
 class Parser
 {
+protected:
+    virtual bool openFile() = 0;
+
+    virtual bool parseFile() = 0;
+
+    virtual bool printFileData() = 0;
+
+    virtual bool closeFile() = 0;
+
 public:
-    // virtual std::ifstream& getFile()=0;
-    
-    virtual void openFile()=0;
-
-    virtual void parseFile()=0;
-
-    virtual void printFileData()=0;
-
-    virtual void closeFile()=0;
-
-    void parse(Parser &fileParser);
+    bool parse(Parser &fileParser);
 };
 
 #endif

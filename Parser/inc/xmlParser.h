@@ -12,23 +12,18 @@ private:
     std::ifstream file;
     pugi::xml_document document;
     pugi::xml_parse_result result;
-    //pugi::xml_node catalog;
 
-    // pugi::xml_document &getDocument();
+    bool openFile();
 
-    // std::ifstream &getFile();
+    bool parseFile();
 
-    void openFile();
+    bool printFileData();
 
-    void parseFile();
+    bool printFile(pugi::xml_attribute &attribute);
 
-    void printFileData();
+    bool printFile(pugi::xml_node &node);
 
-    void printFile(pugi::xml_attribute &attribute);
-
-    void printFile(pugi::xml_node &node);
-
-    void closeFile();
+    bool closeFile();
 };
 
 #endif

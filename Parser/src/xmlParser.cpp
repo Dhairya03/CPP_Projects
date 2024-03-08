@@ -3,25 +3,36 @@
 #include "xmlParser.h"
 #include "../lib/pugixml-master/src/pugixml.hpp"
 
-// pugi::xml_document &XmlParser::getDocument()
-// {
-//     return document;
-// }
-
-// std::ifstream& XmlParser::getFile(){
-//     return file;
-// }
-
-void XmlParser::openFile()
+bool XmlParser::openFile()
 {
     file.open("../files/books.xml");
-    result = document.load(file);
+    if (!file.is_open())
+        throw std::runtime_error("Unable to open file");
+    return true;
 }
 
-void XmlParser::parseFile()
+bool XmlParser::parseFile()
+{
+
+    result = document.load(file);
+    if (!result)
+        throw result.description();
+
+    return true;
+}
+
+bool XmlParser::printFileData()
 {
     pugi::xml_node catalog = document.child("catalog");
+    if (!catalog)
+    {
+        throw std::runtime_error("Root 'catalog' node not found.");
+    }
     std::cout << catalog.name() << std::endl;
+    if (!catalog.first_child())
+    {
+        throw std::runtime_error("Node 'book' not found.");
+    }
     for (pugi::xml_node book = catalog.first_child(); book; book = book.next_sibling())
     {
         std::cout << book.name() << std::endl;
@@ -32,21 +43,26 @@ void XmlParser::parseFile()
             printFile(element);
         }
     }
+    return true;
 }
 
-void XmlParser::printFileData(){
-    std::cout<<"Printed Successfully"<<std::endl;
-}
-
-void XmlParser::printFile(pugi::xml_attribute &attribute)
+bool XmlParser::printFile(pugi::xml_attribute &attribute)
 {
     std::cout << attribute.name() << " = " << attribute.value() << std::endl;
-}
-void XmlParser::printFile(pugi::xml_node &node)
-{
-    std::cout << node.name() << " = " << node.child_value() << std::endl;
+    return true;
 }
 
-void XmlParser::closeFile(){
+bool XmlParser::printFile(pugi::xml_node &node)
+{
+    std::cout << node.name() << " = " << node.child_value() << std::endl;
+    return true;
+}
+
+bool XmlParser::closeFile()
+{
     file.close();
+    if (file.is_open())
+        throw std::runtime_error("Unable to close file");
+
+    return true;
 }

@@ -3,42 +3,69 @@
 #include "csvParser.h"
 #include "../lib/rapidcsv.h"
 
-// std::ifstream &CsvParser::getFile()
-// {
-//     return file;
-// }
-
-void CsvParser::openFile()
+bool CsvParser::openFile()
 {
     file.open("../files/student_marks.csv");
     if (!file.is_open())
-        std::cout << "Open the file" << std::endl;
-    else
-        std::cout << "file is openened" << std::endl;
+        throw std::runtime_error("Unable to open file");
+    return true;
 }
 
-void CsvParser::parseFile()
+bool CsvParser::parseFile()
 {
-   // rapidcsv::Document document(file);
-}
-
-void CsvParser::printFileData()
-{
-    if (!file.is_open())
-        std::cout << "Open the file" << std::endl;
     rapidcsv::Document document(file);
-    for(int index=0;index<document.GetColumnCount();index++){
-        std::cout<<document.GetColumnName(index)<<" ";
-        for(int rowIndex=0;rowIndex<document.GetRowCount();rowIndex++){
-            std::cout<<document.GetCell<std::string>(index,rowIndex)<<"   ";
-        }
-        std::cout<<std::endl;
+    if (!document.GetColumnCount())
+    {
+        throw std::runtime_error("Empty CSV file or unable to read columns.");
     }
+
+    try
+    {
+        csvDataColumnNames = document.GetColumnNames();
+        for (int index = 0; index < document.GetColumnCount(); index++)
+        {
+            std::vector<std::string> columnData;
+            for (int rowIndex = 0; rowIndex < document.GetRowCount(); rowIndex++)
+            {
+                columnData.push_back(document.GetCell<std::string>(index, rowIndex));
+            }
+            csvData.push_back(columnData);
+        }
+    }
+    catch (const std::out_of_range &exception)
+    {
+        throw std::out_of_range(exception.what() + std::string(" in CSV Parser"));
+    }
+    return true;
 }
 
-void CsvParser::closeFile()
+bool CsvParser::printFileData()
 {
+    try
+    {
+        for (int index = 0; index < csvData.size(); index++)
+        {
+            std::cout << csvDataColumnNames[index] << "\t";
+            for (int rowIndex = 0; rowIndex < csvData[index].size(); rowIndex++)
+            {
+                std::cout << csvData[index][rowIndex] << "\t";
+            }
+            std::cout << std::endl;
+        }
+    }
+    catch (const std::out_of_range &exception)
+    {
+        throw std::out_of_range(exception.what() + std::string(" in CSV Parser"));
+    }
+    return true;
+}
 
+bool CsvParser::closeFile()
+{
     file.close();
-    std::cout<<"File is closed"<<std::endl;
+    if (file.is_open())
+    {
+        throw std::runtime_error("Unable to close file");
+    }
+    return true;
 }

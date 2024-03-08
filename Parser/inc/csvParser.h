@@ -4,21 +4,22 @@
 #include <iostream>
 #include <fstream>
 #include "parser.h"
+#include "../lib/rapidcsv.h"
 
 class CsvParser : public Parser
 {
 private:
     std::ifstream file;
+    std::vector<std::vector<std::string>> csvData;
+    std::vector<std::string> csvDataColumnNames;
 
-    // std::ifstream &getFile();
+    bool openFile();
 
-    void openFile();
+    bool parseFile();
 
-    void parseFile();
+    bool printFileData();
 
-    void printFileData();
-
-    void closeFile();
+    bool closeFile();
 };
 
 #endif
