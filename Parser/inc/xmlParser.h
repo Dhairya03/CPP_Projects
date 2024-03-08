@@ -12,11 +12,11 @@ private:
     std::ifstream file;
     pugi::xml_document document;
     pugi::xml_parse_result result;
+    //pugi::xml_node catalog;
 
-public:
-    pugi::xml_document &getDocument();
+    // pugi::xml_document &getDocument();
 
-    std::ifstream &getFile();
+    // std::ifstream &getFile();
 
     void openFile();
 

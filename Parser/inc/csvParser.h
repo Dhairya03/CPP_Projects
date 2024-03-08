@@ -10,8 +10,7 @@ class CsvParser : public Parser
 private:
     std::ifstream file;
 
-public:
-    std::ifstream &getFile();
+    // std::ifstream &getFile();
 
     void openFile();
 

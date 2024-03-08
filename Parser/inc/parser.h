@@ -7,7 +7,7 @@
 class Parser
 {
 public:
-    virtual std::ifstream& getFile()=0;
+    // virtual std::ifstream& getFile()=0;
     
     virtual void openFile()=0;
 
@@ -17,7 +17,7 @@ public:
 
     virtual void closeFile()=0;
 
-    void parse();
+    void parse(Parser &fileParser);
 };
 
 #endif

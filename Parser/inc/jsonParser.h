@@ -13,8 +13,7 @@ private:
     Json::Reader reader;
     Json::Value completeJsonData;
 
-public:
-    std::ifstream &getFile();
+    // std::ifstream &getFile();
 
     void openFile();
 

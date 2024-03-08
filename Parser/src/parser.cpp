@@ -1,8 +1,8 @@
 #include "parser.h"
 
-void Parser::parse(){
-    openFile();
-    parseFile();
-    printFileData();
-    closeFile();
+void Parser::parse(Parser& fileParser){
+    fileParser.openFile();
+    fileParser.parseFile();
+    fileParser.printFileData();
+    fileParser.closeFile();
 }

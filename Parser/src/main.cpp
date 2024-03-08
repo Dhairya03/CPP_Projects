@@ -1,12 +1,14 @@
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include "jsonParser.h"
 #include "xmlParser.h"
 #include "csvParser.h"
 
 int main()
 {
-    // Parser *p;
+    Parser *p;
+
     int parserChoice;
     do
     {
@@ -22,38 +24,29 @@ int main()
         case 1:
         {
             JsonParser jsonParser;
-            //p=&jsonParser;
-            jsonParser.openFile();
-            jsonParser.parseFile();
-            jsonParser.printFileData();
-            jsonParser.closeFile();
+            // p=&jsonParser;
+            p->parse(jsonParser);
             break;
         }
         case 2:
         {
             XmlParser xmlParser;
             // p=&xmlParser;
-            xmlParser.openFile();
-            xmlParser.parseFile();
-            xmlParser.printFileData();
-            xmlParser.closeFile();
+            p->parse(xmlParser);
             break;
         }
          case 3:
         {
             CsvParser csvParser;
-            //p=&csvParser;
-            csvParser.openFile();
-            csvParser.parseFile();
-            csvParser.printFileData();
-            csvParser.closeFile();
+            // p=&csvParser;
+            p->parse(csvParser);
             break;
         }
         default:
             std::cout << "Exited Successfully" << std::endl;
             break;
         }
-        //p->parse();
+        
     } while (parserChoice != 4);
     return 0;
 }

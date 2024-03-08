@@ -3,14 +3,14 @@
 #include "xmlParser.h"
 #include "../lib/pugixml-master/src/pugixml.hpp"
 
-pugi::xml_document &XmlParser::getDocument()
-{
-    return document;
-}
+// pugi::xml_document &XmlParser::getDocument()
+// {
+//     return document;
+// }
 
-std::ifstream& XmlParser::getFile(){
-    return file;
-}
+// std::ifstream& XmlParser::getFile(){
+//     return file;
+// }
 
 void XmlParser::openFile()
 {

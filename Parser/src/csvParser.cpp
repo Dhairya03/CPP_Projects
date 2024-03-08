@@ -3,10 +3,10 @@
 #include "csvParser.h"
 #include "../lib/rapidcsv.h"
 
-std::ifstream &CsvParser::getFile()
-{
-    return file;
-}
+// std::ifstream &CsvParser::getFile()
+// {
+//     return file;
+// }
 
 void CsvParser::openFile()
 {
