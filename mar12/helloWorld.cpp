@@ -1,0 +1,15 @@
+#include<iostream>
+#include <gtest/gtest.h>
+
+TEST(SampleTestName,SUbtest){
+    ASSERT_TRUE(1==2);
+}
+
+TEST(SampleTestName,SUbtest2){
+    ASSERT_FALSE(1==2);
+}
+
+int main(int argc, char**argv){
+    ::testing::InitGoogleTest(&argc,argv);
+    return RUN_ALL_TESTS();
+}
