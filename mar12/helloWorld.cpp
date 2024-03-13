@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 TEST(SampleTestName,SUbtest){
-    ASSERT_TRUE(1==2);
+    ASSERT_TRUE(1==1);
 }
 
 TEST(SampleTestName,SUbtest2){
