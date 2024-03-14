@@ -6,7 +6,7 @@
 
 class Parser
 {
-protected:
+private:
     virtual bool openFile() = 0;
 
     virtual bool parseFile() = 0;
@@ -17,6 +17,10 @@ protected:
 
 public:
     bool parse(Parser &fileParser);
+
+    bool parse();
+
+    virtual ~Parser();
 };
 
 #endif

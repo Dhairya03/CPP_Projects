@@ -7,33 +7,37 @@
 #include "csvParser.h"
 #include "inputValidator.h"
 
-bool handleParser(InputValidator&inputValidator)
+bool handleParser(InputValidator &inputValidator)
 {
-    Parser *parser;
+    Parser *parser=nullptr;
+    bool isValidParse = true;
     switch (inputValidator.getParserChoice())
     {
     case 1:
     {
-        JsonParser jsonParser;
-        parser->parse(jsonParser);
+        parser = new JsonParser;
         break;
     }
     case 2:
     {
-        XmlParser xmlParser;
-        parser->parse(xmlParser);
+        parser = new XmlParser;
         break;
     }
     case 3:
     {
-        CsvParser csvParser;
-        parser->parse(csvParser);
+        parser = new CsvParser;
         break;
     }
     default:
+        isValidParse = false;
         std::cout << "Exited Successfully" << std::endl;
         break;
     }
+    if (isValidParse)
+    {
+        parser->parse();
+    }
+    delete parser;
     return true;
 }
 
@@ -42,7 +46,6 @@ int main()
     try
     {
         InputValidator inputValidator;
-
         do
         {
             try
@@ -55,7 +58,7 @@ int main()
                 inputValidator.setParserChoice();
                 handleParser(inputValidator);
             }
-            catch (const char *&error)
+            catch (const char *error)
             {
                 std::cout << "Error: " << error << std::endl;
             }
@@ -69,6 +72,7 @@ int main()
             }
 
         } while (inputValidator.getParserChoice() != 4);
+
         return 0;
     }
     catch (const std::exception &exception)

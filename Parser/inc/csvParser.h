@@ -20,6 +20,8 @@ private:
     bool printFileData();
 
     bool closeFile();
+
+    ~CsvParser();
 };
 
 #endif

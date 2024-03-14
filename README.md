@@ -7,3 +7,7 @@ To compile the code file
 
 g++ -I/home/dhairyagupta/training/c-_dhairyagupta/Parser/inc /home/dhairyagupta/training/c-_dhairyagupta/Parser/lib/pugixml-master/src/pugixml.cpp *.cpp -ljsoncpp
 
+g++ -I/home/dhairyagupta/training/c-_dhair
+yagupta/Parser/inc -I/home/dhairyagupta/training/c-_dhairyagupta/Parser/lib /home/dhairyagupta/training/c-_dhair
+yagupta/Parser/lib/pugixml-master/src/pugixml.cpp *.cpp -ljsoncpp
+

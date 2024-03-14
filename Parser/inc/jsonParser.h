@@ -22,6 +22,8 @@ private:
     bool printJson(const Json::Value &, int);
 
     bool closeFile();
+
+    ~JsonParser();
 };
 
 #endif

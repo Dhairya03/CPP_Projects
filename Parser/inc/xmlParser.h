@@ -24,6 +24,8 @@ private:
     bool printFile(pugi::xml_node &);
 
     bool closeFile();
+
+    ~XmlParser();
 };
 
 #endif
