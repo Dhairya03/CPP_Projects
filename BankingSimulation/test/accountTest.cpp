@@ -1,5 +1,4 @@
 #include "account.h"
-#include "account.cpp"
 #include <gtest/gtest.h>
 
 class AccountTest : public ::testing::Test

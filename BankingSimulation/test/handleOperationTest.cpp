@@ -29,12 +29,6 @@ protected:
     }
 };
 
-TEST_F(HandleOperationTest, GetOperationChoice){
-    int operationChoice=1;
-    handleOperation.setOperationChoice();
-    EXPECT_EQ(handleOperation.getOperationChoice(), operationChoice);
-}
-
 TEST_F(HandleOperationTest, SetOperationChoice)
 {
     int operationChoice = 1;

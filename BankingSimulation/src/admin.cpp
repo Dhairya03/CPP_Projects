@@ -201,5 +201,8 @@ bool Admin::logout()
         std::cout << "Logged out successfully" << std::endl;
         isLoggedIn = false;
     }
+    else {
+        isLoggedIn=true;
+    }
     return !isLoggedIn;
 }

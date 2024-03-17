@@ -51,6 +51,7 @@ int BankUser::withdrawMoney(Bank &bankData)
             }
             else
             {
+                found=false;
                 std::cout << "Insufficient Balance." << std::endl;
             }
             break;
@@ -60,7 +61,7 @@ int BankUser::withdrawMoney(Bank &bankData)
     {
         std::cout << "Account not found." << std::endl;
     }
-    return 0;
+    return found;
 }
 
 int BankUser::depositMoney(Bank &bankData)
@@ -115,7 +116,7 @@ int BankUser::depositMoney(Bank &bankData)
     {
         std::cout << "Account not found." << std::endl;
     }
-    return 0;
+    return found;
 }
 
 bool BankUser::findStatement(Bank &bankData, Transaction &transaction, int accountNumber)
@@ -158,7 +159,7 @@ int BankUser::getMiniBankStatement(Bank &bankData)
     if (count == 0)
         std::cout << "No transactions found for the account number " << accountNumber << std::endl;
 
-    return 0;
+    return count;
 }
 
 int BankUser::getBankStatement(Bank &bankData)
@@ -215,5 +216,5 @@ int BankUser::showBalance(Bank &bankData)
     {
         std::cout << "Account not found." << std::endl;
     }
-    return 0;
+    return found;
 }

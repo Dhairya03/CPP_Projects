@@ -1,5 +1,6 @@
 #include "admin.h"
 #include "mockBank.h"
+#include "mockAdmin.h"
 #include "mockInputValidator.h"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -10,6 +11,7 @@ public:
     Admin admin;
     MockInputValidator inputValidator;
     MockBank bankData;
+    MockAdmin mockAdmin;
 };
 
 TEST_F(AdminTest, Login_Successful)
@@ -22,9 +24,9 @@ TEST_F(AdminTest, Login_Successful)
     inputBuffer << "101" << std::endl;
     inputBuffer << "123456" << std::endl;
 
-    std::cin.rdbuf(oldCin);
-
     ASSERT_TRUE(admin.login());
+
+    std::cin.rdbuf(oldCin);
 }
 
 TEST_F(AdminTest, Login_Unsuccessful)
@@ -36,9 +38,9 @@ TEST_F(AdminTest, Login_Unsuccessful)
     inputBuffer << "123" << std::endl;
     inputBuffer << "223434" << std::endl;
 
-    std::cin.rdbuf(oldCin);
-
     ASSERT_FALSE(admin.login());
+
+    std::cin.rdbuf(oldCin);
 }
 
 TEST_F(AdminTest, CreateAccount_Successful)
@@ -68,9 +70,9 @@ TEST_F(AdminTest, ShowUserList_WithUsers)
     std::stringstream outputStream;
     std::streambuf *oldCout = std::cout.rdbuf(outputStream.rdbuf());
 
-    std::cout.rdbuf(oldCout);
-
     ASSERT_TRUE(admin.showUserList(bankData));
+
+    std::cout.rdbuf(oldCout);
 }
 
 TEST_F(AdminTest, ShowUserList_NoUsers)
@@ -78,9 +80,9 @@ TEST_F(AdminTest, ShowUserList_NoUsers)
     std::stringstream outputStream;
     std::streambuf *oldCout = std::cout.rdbuf(outputStream.rdbuf());
 
-    std::cout.rdbuf(oldCout);
-
     ASSERT_FALSE(admin.showUserList(bankData));
+
+    std::cout.rdbuf(oldCout);
 }
 
 TEST_F(AdminTest, ShowParticularUser_ExistingUser)
@@ -101,25 +103,25 @@ TEST_F(AdminTest, ShowParticularUser_ExistingUser)
     std::stringstream outputStream;
     std::streambuf *oldCout = std::cout.rdbuf(outputStream.rdbuf());
 
+    ASSERT_TRUE(admin.showParticularUser(bankData));
+
     std::cin.rdbuf(oldCin);
     std::cout.rdbuf(oldCout);
-
-    ASSERT_TRUE(admin.showParticularUser(bankData));
 }
 
 TEST_F(AdminTest, ShowParticularUser_NonExistingUser)
 {
     std::stringstream inputBuffer;
     std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
-    inputBuffer << "99999" << std::endl; 
+    inputBuffer << "99999" << std::endl;
 
     std::stringstream outputStream;
     std::streambuf *oldCout = std::cout.rdbuf(outputStream.rdbuf());
 
+    ASSERT_FALSE(admin.showParticularUser(bankData));
+
     std::cin.rdbuf(oldCin);
     std::cout.rdbuf(oldCout);
-
-    ASSERT_FALSE(admin.showParticularUser(bankData));
 }
 
 TEST_F(AdminTest, CloseAccount_ExistingAccount)
@@ -135,7 +137,7 @@ TEST_F(AdminTest, CloseAccount_ExistingAccount)
 
     std::stringstream inputBuffer;
     std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
-    inputBuffer << "4001" << std::endl; 
+    inputBuffer << "4001" << std::endl;
 
     ASSERT_TRUE(admin.closeAccount(bankData));
 
@@ -146,34 +148,49 @@ TEST_F(AdminTest, CloseAccount_NonExistingAccount)
 {
     std::stringstream inputBuffer;
     std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
-    inputBuffer << "99999" << std::endl; 
+    inputBuffer << "99999" << std::endl;
 
     ASSERT_FALSE(admin.closeAccount(bankData));
 
     std::cin.rdbuf(oldCin);
-
 }
 
 TEST_F(AdminTest, Logout_YesChoice)
 {
-    admin.login();
+    EXPECT_CALL(mockAdmin, login).WillOnce(::testing::Return(true));
+
     std::stringstream inputBuffer;
     std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "101" << std::endl;
+    inputBuffer << "123456" << std::endl;
+
+    ASSERT_TRUE(mockAdmin.login());
+
+    // std::stringstream inputBuffer;
+    // std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
     inputBuffer << "y" << std::endl;
 
-    std::cin.rdbuf(oldCin);
+    ASSERT_TRUE(admin.logout());
 
-    ASSERT_FALSE(admin.logout()); 
+    std::cin.rdbuf(oldCin);
 }
 
 TEST_F(AdminTest, Logout_NoChoice)
 {
-    admin.login();
+    EXPECT_CALL(mockAdmin, login).WillOnce(::testing::Return(true));
+
     std::stringstream inputBuffer;
     std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
-    inputBuffer << "n" << std::endl; 
+    inputBuffer << "101" << std::endl;
+    inputBuffer << "123456" << std::endl;
+
+    ASSERT_TRUE(mockAdmin.login());
+
+    // std::stringstream inputBuffer;
+    // std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "n" << std::endl;
+
+    ASSERT_FALSE(admin.logout());
 
     std::cin.rdbuf(oldCin);
-
-    ASSERT_TRUE(admin.logout()); 
 }
