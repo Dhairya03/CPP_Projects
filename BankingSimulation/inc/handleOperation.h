@@ -4,6 +4,7 @@
 #include <iostream>
 #include "bank.h"
 #include "admin.h"
+#include "IAdmin.h"
 #include "accountHolder.h"
 
 class HandleOperation
@@ -19,9 +20,9 @@ public:
 
     void showAccountHolderChoices();
 
-    void performAdminOperation(BankUser &, Bank &);
+    void performAdminOperation(Admin &, Bank &);
 
-    void performAccountHolderOperation(BankUser &, Bank &);
+    void performAccountHolderOperation(AccountHolder &, Bank &);
 };
 
 #endif

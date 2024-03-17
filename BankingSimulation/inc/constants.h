@@ -5,6 +5,8 @@
 
 extern Admin adminData;
 
+const int initialAccountNumber=4000;
+
 enum UserTypes
 {
     admin = 1,

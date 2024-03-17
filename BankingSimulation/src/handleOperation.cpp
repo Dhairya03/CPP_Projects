@@ -45,23 +45,21 @@ void HandleOperation::showAdminChoices()
     std::cout << "10.Logout" << std::endl;
 }
 
-void HandleOperation::performAdminOperation(BankUser &admin, Bank &bankData)
+void HandleOperation::performAdminOperation(Admin &admin, Bank &bankData)
 {
-    // std::cout<<getOperationChoice()<<std::endl;
-    Admin *user=(Admin*)&admin;
     switch (getOperationChoice())
     {
     case 1:
 
-        user->createAccount(bankData);
+        admin.createAccount(bankData);
         break;
 
     case 2:
-        user->showUserList(bankData);
+        admin.showUserList(bankData);
         break;
 
     case 3:
-        user->showParticularUser(bankData);
+        admin.showParticularUser(bankData);
         break;
 
     case 4:
@@ -85,11 +83,11 @@ void HandleOperation::performAdminOperation(BankUser &admin, Bank &bankData)
         break;
 
     case 9:
-        user->closeAccount(bankData);
+        admin.closeAccount(bankData);
         break;
 
     case 10:
-        user->logout();
+        admin.logout();
         break;
 
     default:
@@ -98,8 +96,7 @@ void HandleOperation::performAdminOperation(BankUser &admin, Bank &bankData)
     }
 }
 
-void HandleOperation::performAccountHolderOperation(BankUser& accountHolder,Bank& bankData){
-    AccountHolder*user=(AccountHolder*)&accountHolder;
+void HandleOperation::performAccountHolderOperation(AccountHolder& accountHolder,Bank& bankData){
     switch (getOperationChoice())
     {
     case 1:
@@ -123,7 +120,7 @@ void HandleOperation::performAccountHolderOperation(BankUser& accountHolder,Bank
         break;
 
     case 6:
-        user->logout();
+        accountHolder.logout();
         break;
 
     default:

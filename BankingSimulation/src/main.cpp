@@ -7,12 +7,15 @@
 #include "inputValidator.h"
 #include "account.h"
 #include "transaction.h"
+#include"handleOperation.h"
 
 int main()
 {
+    int userChoice;
     std::cout << "Banking Simulation" << std::endl;
-    Bank bankData; // account and transaction data
+    Bank bankData; 
     InputValidator inputValidator;
+    HandleOperation operation;
 
     do
     {
@@ -20,6 +23,7 @@ int main()
                   << admin << ". Admin \n"
                   << accountHolder << ". AccountHolder " << std::endl;
 
+        std::cin>>userChoice;
         inputValidator.setUserChoice();
 
         if (inputValidator.isValidUserChoice())
@@ -29,21 +33,21 @@ int main()
                 AccountHolder user;
                 do
                 {
-                    user.showOperationChoices();
-                    inputValidator.setOperatorChoice();
-                    user.performOperation(inputValidator.getOperatorChoice(), bankData);
+                    operation.showAccountHolderChoices();
+                    operation.setOperationChoice();
+                    operation.performAccountHolderOperation(user, bankData);
 
                 } while (!user.logout());
             }
             else
             {
                 Admin admin;
-                admin.adminLogin();
+                admin.login();
                 while (admin.isLoggedIn)
                 {
-                    admin.showOperationChoices();
-                    inputValidator.setOperatorChoice();
-                    admin.performOperation(inputValidator.getOperatorChoice(), bankData);
+                    operation.showAdminChoices();
+                    operation.setOperationChoice();
+                    operation.performAdminOperation(admin, bankData);
                 }
             }
         }

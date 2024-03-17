@@ -1,61 +1,79 @@
 #include "transaction.h"
-#include "transaction.cpp"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 class TransactionTest : public ::testing::Test
 {
 public:
-    Transaction *trans;
-
-    void SetUp()
-    {
-        trans = new Transaction;
-    }
-    void TearDown()
-    {
-        delete trans;
-    }
+    Transaction transaction;
 };
 
-TEST_F(TransactionTest, getAccountTest)
+TEST_F(TransactionTest, GetAccountNumber)
 {
-    const int accountNumber = 4001;
-    trans->setAccountNumber(4001);
-    EXPECT_THAT(trans->getAccountNumber(), accountNumber);
-    EXPECT_NE(trans->getAccountNumber(), accountNumber - 1);
+    int accountNumber = 12345;
+    transaction.setAccountNumber(accountNumber);
+    EXPECT_EQ(transaction.getAccountNumber(), accountNumber);
 }
 
-TEST_F(TransactionTest, getTransactionIdTest)
+TEST_F(TransactionTest, GetTransactionId)
 {
-    trans->setTransactionId(4);
-    EXPECT_THAT(trans->getTransactionId(), 4);
-    EXPECT_NE(trans->getTransactionId(), 0);
-    EXPECT_NE(trans->getTransactionId(), -1);
+    int transactionId = 1001;
+    transaction.setTransactionId(transactionId);
+    EXPECT_EQ(transaction.getTransactionId(), transactionId);
 }
 
-TEST_F(TransactionTest, getTransactionAmountTest)
+TEST_F(TransactionTest, GetTransactionAmount)
 {
-    trans->setTransactionAmount(400);
-    trans->setNetBalance(4000);
-    EXPECT_THAT(trans->getTransactionAmount(), 400);
-    EXPECT_NE(trans->getTransactionAmount(), -1);
-    EXPECT_LT(trans->getTransactionAmount(), trans->getNetBalance());
+    double transactionAmount = 500.0;
+    transaction.setTransactionAmount(transactionAmount);
+    EXPECT_EQ(transaction.getTransactionAmount(), transactionAmount);
 }
 
-TEST_F(TransactionTest, getNetBalanceTest)
+TEST_F(TransactionTest, GetNetBalance)
 {
-    trans->setNetBalance(4000);
-    EXPECT_THAT(trans->getNetBalance(), 4000);
-    EXPECT_GT(trans->getNetBalance(), -1);
+    double netBalance = 2500.0;
+    transaction.setNetBalance(netBalance);
+    EXPECT_EQ(transaction.getNetBalance(), netBalance);
 }
 
-TEST_F(TransactionTest, getTransactionTypeTest)
+TEST_F(TransactionTest, GetTransactionType)
 {
-    trans->setTransactionType("Withdraw");
-    EXPECT_THAT(trans->getTransactionType(), "Withdraw");
-    EXPECT_NE(trans->getTransactionType(), "random");
-    trans->setTransactionType("Deposit");
-    EXPECT_THAT(trans->getTransactionType(), "Deposit");
-    EXPECT_NE(trans->getTransactionType(), "random");
+    std::string transactionType = "Withdraw";
+    transaction.setTransactionType(transactionType);
+    EXPECT_EQ(transaction.getTransactionType(), transactionType);
+}
+
+TEST_F(TransactionTest, SetAccountNumber)
+{
+    int accountNumber = 123456;
+    transaction.setAccountNumber(accountNumber);
+    EXPECT_EQ(transaction.getAccountNumber(), accountNumber);
+}
+
+TEST_F(TransactionTest, SetTransactionId)
+{
+    int transactionId = 1001;
+    transaction.setTransactionId(transactionId);
+    EXPECT_EQ(transaction.getTransactionId(), transactionId);
+}
+
+TEST_F(TransactionTest, SetTransactionAmount)
+{
+    double transactionAmount = 500.0;
+    transaction.setTransactionAmount(transactionAmount);
+    EXPECT_EQ(transaction.getTransactionAmount(), transactionAmount);
+}
+
+TEST_F(TransactionTest, SetNetBalance)
+{
+    double netBalance = 2500.0;
+    transaction.setNetBalance(netBalance);
+    EXPECT_EQ(transaction.getNetBalance(), netBalance);
+}
+
+TEST_F(TransactionTest, SetTransactionType)
+{
+    std::string transactionType = "Withdraw";
+    transaction.setTransactionType(transactionType);
+    EXPECT_EQ(transaction.getTransactionType(), transactionType);
 }

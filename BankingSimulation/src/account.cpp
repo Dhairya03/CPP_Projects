@@ -28,7 +28,7 @@ double Account::getTotalBalance()
 
 void Account::setAccountNumber(int accountNumber)
 {
-    this->accountNumber += accountNumber;
+    this->accountNumber = accountNumber;
 }
 
 void Account::setHolderName(const std::string &holderName)

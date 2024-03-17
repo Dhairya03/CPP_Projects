@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-class InputValidator
+class InputValidator 
 {
 private:
     int userChoice{};

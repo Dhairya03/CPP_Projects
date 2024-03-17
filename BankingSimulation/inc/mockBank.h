@@ -1,8 +1,8 @@
-#include "IBank.h"
+#include "bank.h"
 #include <gmock/gmock.h>
 
-class MockBank : public IBank {
+class MockBank : public Bank {
 public:
-    MOCK_METHOD(std::vector<Account>&, getAccountHolderData, (), (override));
-    MOCK_METHOD(std::vector<Transaction>&, getTransactionDetails, (), (override));
+    std::vector<Account> mockAccountData;
+    std::vector <Transaction> mockTransactionData;
 };

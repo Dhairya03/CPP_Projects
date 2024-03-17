@@ -7,7 +7,6 @@
 class BankUser
 {
 public:
-
     int withdrawMoney(Bank &bankData);
 
     int depositMoney(Bank &bankData);

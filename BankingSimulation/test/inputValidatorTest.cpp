@@ -4,29 +4,30 @@
 
 class InputValidatorTest : public ::testing::Test
 {
-public:
+protected:
     InputValidator inputValidator;
 };
 
-TEST_F(InputValidatorTest, SetValidUserChoice)
+TEST_F(InputValidatorTest, SetUserChoiceValidInput)
 {
-    EXPECT_TRUE(inputValidator.setUserChoice(4));
-    EXPECT_EQ(4,inputValidator.getUserChoice());
-}
-TEST_F(InputValidatorTest, SetInValidUserChoice)
-{
-    EXPECT_FALSE(inputValidator.setUserChoice(-1));
-    EXPECT_EQ(-1,inputValidator.getUserChoice());
+    int userChoice = 1;
+
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "1" << std::endl; 
+
+    inputValidator.setUserChoice();
+
+    EXPECT_EQ(inputValidator.getUserChoice(), userChoice);
 }
 
-TEST_F(InputValidatorTest, GetValidUserChoice)
+TEST_F(InputValidatorTest, SetUserChoiceInvalidInput)
 {
-    inputValidator.setUserChoice(2);
-    EXPECT_EQ(inputValidator.getUserChoice(),2);
-}
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "0" << std::endl; 
 
-TEST_F(InputValidatorTest, GetInValidUserChoice)
-{
-    inputValidator.setUserChoice(-1);
-    EXPECT_GT(inputValidator.getUserChoice(), 0);
+    inputValidator.setUserChoice();
+
+    EXPECT_NE(inputValidator.getUserChoice(), 1); 
 }

@@ -1,44 +1,46 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "mockBankUser.h"
 #include "bankUser.h"
 #include "bank.h"
 #include "account.h"
 #include "transaction.h"
+#include "MockInputValidator.h"
+#include "mockBank.h"
 using ::testing::_;
 using ::testing::Return;
 
 class BankUserTest : public ::testing::Test
 {
 public:
-    Bank bankData;
+    MockBank bankData;
     Account account;
     Transaction transaction;
-    MockBankUser mockBankUser;
-    void SetUp(){
-
-    }
+    BankUser bankUser;
+    MockInputValidator inputValidator;
 };
 
-TEST_F(BankUserTest, LoginTestSuccess)
+TEST_F(BankUserTest, WithdrawMoney_ValidAccount_InSufficientBalance)
 {
-    EXPECT_CALL(mockBankUser, login()).Times(1).WillOnce(Return(true));
+    account.setAccountNumber(4001);
+    account.setHolderName("dhairya");
+    account.setHolderAddress("area1");
+    account.setHolderContact(123456);
+    account.setTotalBalance(20);
+    bankData.accountHolderData.push_back(account);
 
-    bool result = mockBankUser.login();
+    EXPECT_CALL(inputValidator, isValidInput(::testing::_)).WillRepeatedly(::testing::Return(true));
 
-    ASSERT_TRUE(result);
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "4001" << std::endl;
+    inputBuffer << "100.0" << std::endl;
+
+    ASSERT_FALSE(bankUser.withdrawMoney(bankData));
+
+    std::cin.rdbuf(oldCin);
 }
 
-TEST_F(BankUserTest, LoginTestFailure)
-{
-    EXPECT_CALL(mockBankUser, login()).Times(1).WillOnce(Return(false));
-
-    bool result = mockBankUser.login();
-
-    ASSERT_FALSE(result);
-}
-
-TEST_F(BankUserTest, WithdrawalSuccess)
+TEST_F(BankUserTest, WithdrawMoney_ValidAccount_SufficientBalance)
 {
     account.setAccountNumber(4001);
     account.setHolderName("dhairya");
@@ -47,25 +49,121 @@ TEST_F(BankUserTest, WithdrawalSuccess)
     account.setTotalBalance(20000);
     bankData.accountHolderData.push_back(account);
 
-    EXPECT_CALL(mockBankUser, withdrawMoney(_)).Times(1).WillOnce(Return(1));
+    EXPECT_CALL(inputValidator, isValidInput(::testing::_)).WillRepeatedly(::testing::Return(true));
 
-    int result = mockBankUser.withdrawMoney(bankData);
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "4001" << std::endl;
+    inputBuffer << "100.0" << std::endl;
+
+    ASSERT_TRUE(bankUser.withdrawMoney(bankData));
+
+    std::cin.rdbuf(oldCin);
+}
+
+TEST_F(BankUserTest, WithdrawMoney_InvalidAccount)
+{
+    account.setAccountNumber(4001);
+    account.setHolderName("dhairya");
+    account.setHolderAddress("area1");
+    account.setHolderContact(123456);
+    account.setTotalBalance(20000);
+    bankData.accountHolderData.push_back(account);
+
+    EXPECT_CALL(inputValidator, isValidInput(::testing::_)).WillRepeatedly(::testing::Return(false));
+
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "4000" << std::endl;
+    inputBuffer << "100.0" << std::endl;
+
+    ASSERT_FALSE(bankUser.withdrawMoney(bankData));
+
+    std::cin.rdbuf(oldCin);
+}
+
+TEST_F(BankUserTest, DepositMoney_ValidAccount)
+{
+    account.setAccountNumber(4001);
+    account.setHolderName("dhairya");
+    account.setHolderAddress("area1");
+    account.setHolderContact(123456);
+    account.setTotalBalance(20000);
+    bankData.accountHolderData.push_back(account);
+
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "4001" << std::endl;
+    inputBuffer << "100.0" << std::endl;
+
+    ASSERT_TRUE(bankUser.depositMoney(bankData));
+
+    std::cin.rdbuf(oldCin);
+}
+
+TEST_F(BankUserTest, DepositMoney_InValidAccount)
+{
+    account.setAccountNumber(4001);
+    account.setHolderName("dhairya");
+    account.setHolderAddress("area1");
+    account.setHolderContact(123456);
+    account.setTotalBalance(20000);
+    bankData.accountHolderData.push_back(account);
+
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "99999" << std::endl;
+    inputBuffer << "100.0" << std::endl;
+
+    ASSERT_FALSE(bankUser.depositMoney(bankData));
+
+    std::cin.rdbuf(oldCin);
+}
+
+TEST_F(BankUserTest, FindStatement_Successful)
+{
+    account.setAccountNumber(4001);
+    account.setHolderName("dhairya");
+    account.setHolderAddress("area1");
+    account.setHolderContact(123456);
+    account.setTotalBalance(20000);
+    bankData.accountHolderData.push_back(account);
 
     transaction.setAccountNumber(4001);
     transaction.setTransactionId(1);
     transaction.setTransactionAmount(50);
+    transaction.setTransactionType("Withdraw");
     transaction.setNetBalance(19950);
+    bankData.transactionDetails.push_back(transaction);
+
+    int accountNumber = 4001;
+
+    ASSERT_TRUE(bankUser.findStatement(bankData, transaction, accountNumber));
+}
+
+TEST_F(BankUserTest, FindStatement_AcccountNotFound)
+{
+    account.setAccountNumber(4001);
+    account.setHolderName("dhairya");
+    account.setHolderAddress("area1");
+    account.setHolderContact(123456);
+    account.setTotalBalance(20000);
+    bankData.accountHolderData.push_back(account);
+
+    transaction.setAccountNumber(4001);
+    transaction.setTransactionId(1);
+    transaction.setTransactionAmount(50);
     transaction.setTransactionType("Withdraw");
-
+    transaction.setNetBalance(19950);
     bankData.transactionDetails.push_back(transaction);
 
-    EXPECT_EQ(transaction.getNetBalance(), account.getTotalBalance() - transaction.getTransactionAmount());
-    ASSERT_EQ(result, 1);
+    int accountNumber = 99999;
+
+    ASSERT_FALSE(bankUser.findStatement(bankData, transaction, accountNumber));
 }
 
-TEST_F(BankUserTest, WithdrawalFailure)
+TEST_F(BankUserTest, GetMiniBankStatement_WithTransactions)
 {
-
     account.setAccountNumber(4001);
     account.setHolderName("dhairya");
     account.setHolderAddress("area1");
@@ -73,22 +171,34 @@ TEST_F(BankUserTest, WithdrawalFailure)
     account.setTotalBalance(20000);
     bankData.accountHolderData.push_back(account);
 
-    EXPECT_CALL(mockBankUser, withdrawMoney(_)).Times(1).WillOnce(Return(0));
-
-    int result = mockBankUser.withdrawMoney(bankData);
     transaction.setAccountNumber(4001);
     transaction.setTransactionId(1);
     transaction.setTransactionAmount(50);
-    transaction.setNetBalance(19000);
     transaction.setTransactionType("Withdraw");
-
+    transaction.setNetBalance(19950);
     bankData.transactionDetails.push_back(transaction);
 
-    EXPECT_NE(transaction.getNetBalance(), account.getTotalBalance() - transaction.getTransactionAmount());
-    ASSERT_EQ(result, 0);
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "4001" << std::endl;
+
+    ASSERT_TRUE(bankUser.getMiniBankStatement(bankData));
+
+    std::cin.rdbuf(oldCin);
 }
 
-TEST_F(BankUserTest, DepositSuccess)
+TEST_F(BankUserTest, GetMiniBankStatement_NoTransactions)
+{
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "4001" << std::endl;
+
+    ASSERT_FALSE(bankUser.getMiniBankStatement(bankData));
+
+    std::cin.rdbuf(oldCin);
+}
+
+TEST_F(BankUserTest, GetBankStatement_WithTransactions)
 {
     account.setAccountNumber(4001);
     account.setHolderName("dhairya");
@@ -97,25 +207,35 @@ TEST_F(BankUserTest, DepositSuccess)
     account.setTotalBalance(20000);
     bankData.accountHolderData.push_back(account);
 
-    EXPECT_CALL(mockBankUser, withdrawMoney(_)).Times(1).WillOnce(Return(1));
-
-    int result = mockBankUser.withdrawMoney(bankData);
-
     transaction.setAccountNumber(4001);
     transaction.setTransactionId(1);
     transaction.setTransactionAmount(50);
-    transaction.setNetBalance(20050);
-    transaction.setTransactionType("Deposit");
-
+    transaction.setTransactionType("Withdraw");
+    transaction.setNetBalance(19950);
     bankData.transactionDetails.push_back(transaction);
 
-    EXPECT_EQ(transaction.getNetBalance(), account.getTotalBalance() + transaction.getTransactionAmount());
-    ASSERT_EQ(result, 1);
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "4001" << std::endl;
+
+    ASSERT_TRUE(bankUser.getBankStatement(bankData));
+
+    std::cin.rdbuf(oldCin);
 }
 
-TEST_F(BankUserTest, DepositFailure)
+TEST_F(BankUserTest, GetBankStatement_NoTransactions)
 {
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "4001" << std::endl;
 
+    ASSERT_FALSE(bankUser.getBankStatement(bankData));
+
+    std::cin.rdbuf(oldCin);
+}
+
+TEST_F(BankUserTest, ShowBalance_ValidAccount)
+{
     account.setAccountNumber(4001);
     account.setHolderName("dhairya");
     account.setHolderAddress("area1");
@@ -123,17 +243,22 @@ TEST_F(BankUserTest, DepositFailure)
     account.setTotalBalance(20000);
     bankData.accountHolderData.push_back(account);
 
-    EXPECT_CALL(mockBankUser, withdrawMoney(_)).Times(1).WillOnce(Return(0));
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "4001" << std::endl;
 
-    int result = mockBankUser.withdrawMoney(bankData);
-    transaction.setAccountNumber(4001);
-    transaction.setTransactionId(1);
-    transaction.setTransactionAmount(50);
-    transaction.setNetBalance(19000);
-    transaction.setTransactionType("Deposit");
+    ASSERT_TRUE(bankUser.showBalance(bankData));
 
-    bankData.transactionDetails.push_back(transaction);
+    std::cin.rdbuf(oldCin);
+}
 
-    EXPECT_NE(transaction.getNetBalance(), account.getTotalBalance() + transaction.getTransactionAmount());
-    ASSERT_EQ(result, 0);
+TEST_F(BankUserTest, ShowBalance_InvalidAccount)
+{
+    std::stringstream inputBuffer;
+    std::streambuf *oldCin = std::cin.rdbuf(inputBuffer.rdbuf());
+    inputBuffer << "99999" << std::endl;
+
+    ASSERT_FALSE(bankUser.showBalance(bankData));
+
+    std::cin.rdbuf(oldCin);
 }

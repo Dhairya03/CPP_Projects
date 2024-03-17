@@ -4,6 +4,7 @@
 #include <iostream>
 #include "bankUser.h"
 #include "bank.h"
+#include "IAdmin.h"
 
 class Admin : public BankUser
 {
@@ -13,26 +14,22 @@ private:
 
 public:
     bool isLoggedIn{false};
-    
+
     Admin();
 
     Admin(int, int);
 
-    void adminLogin();
+    bool login();
 
-    int createAccount(Bank &bankData);
+    void createAccount(Bank &bankData);
 
-    void showOperationChoices();
+    bool showUserList(Bank &bankData);
 
-    void performOperation(int operationChoice, Bank &bankData);
-
-    void showUserList(Bank &bankData);
-
-    void showParticularUser(Bank &bankData);
+    bool showParticularUser(Bank &bankData);
 
     int closeAccount(Bank &bankData);
 
-    void logout();
+    bool logout();
 };
 
 #endif

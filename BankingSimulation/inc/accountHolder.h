@@ -8,10 +8,6 @@
 class AccountHolder : public BankUser
 {
 public:
-    void showOperationChoices();
-
-    void performOperation(int operationChoice, Bank &bankData);
-
     bool logout();
 };
 

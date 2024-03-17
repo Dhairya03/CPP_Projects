@@ -12,7 +12,9 @@ void InputValidator::setUserChoice()
     {
         std::cin >> userChoice;
         if (isValidInput(userChoice))
+        {
             break;
+        }
         else
             std::cout << "Enter Valid user choice" << std::endl;
     }
@@ -29,7 +31,9 @@ void InputValidator::setOperatorChoice()
     {
         std::cin >> operationChoice;
         if (isValidInput(operationChoice))
+        {
             break;
+        }
         else
             std::cout << "Enter Valid user choice" << std::endl;
     }
@@ -46,7 +50,9 @@ void InputValidator::setContinueChoice()
     {
         std::cin >> continueChoice;
         if (isValidInput(continueChoice))
+        {
             break;
+        }
         else
             std::cout << "Enter valid choice.Please try again." << std::endl;
     }

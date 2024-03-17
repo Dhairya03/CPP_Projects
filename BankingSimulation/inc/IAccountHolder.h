@@ -1,17 +1,13 @@
-#ifndef IADMIN_H
-#define IADMIN_H
+#ifndef IACCOUNT_HOLDER_H
+#define IACCOUNT_HOLDER_H
 
 #include <iostream>
 #include "bankUser.h"
 #include "bank.h"
 
-class IAdmin : public BankUser
+class IAccountHolder : public BankUser
 {
 public:
-    virtual bool login()=0;
-
-    virtual void createAccount(Bank &bankData)=0;
-
     virtual int withdrawMoney(Bank &bankData)=0;
 
     virtual int depositMoney(Bank &bankData)=0;
@@ -23,12 +19,6 @@ public:
     virtual int getBankStatement(Bank &bankData)=0;
 
     virtual int showBalance(Bank &bankData)=0;
-
-    virtual bool showUserList(Bank &bankData)=0;
-
-    virtual bool showParticularUser(Bank &bankData)=0;
-
-    virtual int closeAccount(Bank &bankData)=0;
 
     virtual bool logout()=0;
 };
