@@ -1,6 +1,6 @@
 #include "admin.h"
 #include "mockBank.h"
-#include "MockInputValidator.h"
+#include "mockInputValidator.h"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 

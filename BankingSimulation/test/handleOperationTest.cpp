@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "MockAdmin.h"
+#include "mockAdmin.h"
 #include "handleOperation.h"
 #include "mockBank.h"
-#include "MockInputValidator.h"
-#include "MockAccountHolder.h"
+#include "mockInputValidator.h"
+#include "mockAccountHolder.h"
 
 class HandleOperationTest : public ::testing::Test
 {

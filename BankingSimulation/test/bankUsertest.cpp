@@ -4,7 +4,7 @@
 #include "bank.h"
 #include "account.h"
 #include "transaction.h"
-#include "MockInputValidator.h"
+#include "mockInputValidator.h"
 #include "mockBank.h"
 using ::testing::_;
 using ::testing::Return;
