@@ -3,36 +3,49 @@
 
 #include <iostream>
 #include "bankUser.h"
-#include "bank.h"
+#include "Accounts.h"
 
 class Admin : public BankUser
 {
 private:
+    Accounts *bankData;
     int adminId{};
     int adminPassword{};
 
 public:
     bool isLoggedIn{false};
-    
-    Admin();
+
+    Admin(Accounts *bank) : bankData(bank) {}
 
     Admin(int, int);
 
     void adminLogin();
 
-    int createAccount(Bank &bankData);
+    int createAccount();
 
-    void showOperationChoices();
+    void showUserList();
 
-    void performOperation(int operationChoice, Bank &bankData);
+    void showParticularUser();
 
-    void showUserList(Bank &bankData);
+    int withdrawMoney();
 
-    void showParticularUser(Bank &bankData);
+    int depositMoney();
 
-    int closeAccount(Bank &bankData);
+    bool printStatement(Account &,int );
 
-    void logout();
+    int getMiniBankStatement();
+
+    int getBankStatement();
+
+    int showBalance();
+
+    int closeAccount();
+
+    bool login();
+
+    bool logout();
+
+    // ~Admin(){}
 };
 
 #endif

@@ -1,9 +1,5 @@
 #include "transaction.h"
 
-int Transaction::getAccountNumber()
-{
-    return accountNumber;
-}
 
 int Transaction::getTransactionId()
 {
@@ -23,11 +19,6 @@ double Transaction::getNetBalance()
 std::string Transaction::getTransactionType()
 {
     return transactionType;
-}
-
-void Transaction::setAccountNumber(int accountNumber)
-{
-    this->accountNumber = accountNumber;
 }
 
 void Transaction::setTransactionId(int transactionId)

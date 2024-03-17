@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "bank.h"
+#include "Accounts.h"
 #include "constants.h"
 #include "admin.h"
 #include "accountHolder.h"
@@ -8,52 +8,67 @@
 #include "account.h"
 #include "transaction.h"
 
+void showAccountHolderChoices()
+{
+    
+}
+
+void showAdminChoices()
+{
+    
+}
+
+bool handleAccountHolderOperation(BankUser *user, int operationChoice)
+{
+    
+}
+
+bool handleAdminOperation(BankUser *user, int operationChoice)
+{
+    
+}
 int main()
 {
+    int userChoice;
+    int operatorChoice;
+    // char continueChoice;
+    BankUser *bankUser;
     std::cout << "Banking Simulation" << std::endl;
-    Bank bankData; // account and transaction data
+    Accounts *accounts; // account and transaction data
     InputValidator inputValidator;
 
     do
     {
-        std::cout << "Want to enter as:\n"
-                  << admin << ". Admin \n"
-                  << accountHolder << ". AccountHolder " << std::endl;
+        
 
-        inputValidator.setUserChoice();
-
-        if (inputValidator.isValidUserChoice())
+        std::cin >> userChoice;
+        if (inputValidator.isValidInput(userChoice))
         {
-            if (inputValidator.getUserChoice() == accountHolder)
+            inputValidator.setUserChoice(userChoice);
+            if (inputValidator.isValidUserChoice())
             {
-                AccountHolder user;
-                do
+                if (inputValidator.getUserChoice() == accountHolder)
                 {
-                    user.showOperationChoices();
-                    inputValidator.setOperatorChoice();
-                    user.performOperation(inputValidator.getOperatorChoice(), bankData);
-
-                } while (!user.logout());
+                    
+                }
+                else
+                {
+                    
+                }
             }
             else
             {
-                Admin admin;
-                admin.adminLogin();
-                while (admin.isLoggedIn)
-                {
-                    admin.showOperationChoices();
-                    inputValidator.setOperatorChoice();
-                    admin.performOperation(inputValidator.getOperatorChoice(), bankData);
-                }
+                std::cout << "Invalid Choice" << std::endl;
             }
-        }
-        else
-        {
-            std::cout << "Invalid Choice" << std::endl;
+            std::cout << "Please enter a valid number" << std::endl;
         }
 
-        std::cout << "Do you want to close the application.\nPress y for Yes \nPress n for NO" << std::endl;
-        inputValidator.setContinueChoice();
+        // std::cout << "Do you want to close the application.\nPress y for Yes \nPress n for NO" << std::endl;
+        // std::cin >> continueChoice;
+        // if (inputValidator.isValidInput(continueChoice))
+        // {
+        //     inputValidator.setContinueChoice(continueChoice);
+        // }
 
-    } while (inputValidator.getContinueChoice() == 'n');
+    } while (userChoice!=3);
 }

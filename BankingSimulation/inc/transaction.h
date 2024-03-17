@@ -6,14 +6,12 @@
 class Transaction
 {
 private:
-    int accountNumber;
     int transactionId;
     double transactionAmount;
     double netBalance;
     std::string transactionType;
 
 public:
-    int getAccountNumber();
 
     int getTransactionId();
 
@@ -22,8 +20,6 @@ public:
     double getNetBalance();
 
     std::string getTransactionType();
-
-    void setAccountNumber(int accountNumber);
 
     void setTransactionId(int transactionId);
 

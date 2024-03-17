@@ -26,14 +26,24 @@ double Account::getTotalBalance()
     return totalBalance;
 }
 
+std::vector<Transaction> Account:: getTransactions() const
+{
+    return transactions;
+}
+
+void Account ::setTransactions(const std::vector<Transaction> &newTransactions)
+{
+    transactions = newTransactions;
+}
+
 void Account::setAccountNumber(int accountNumber)
 {
-    this->accountNumber += accountNumber;
+    this->accountNumber = accountNumber;
 }
 
 void Account::setHolderName(const std::string &holderName)
 {
-    this->holderName=holderName;
+    this->holderName = holderName;
 }
 
 void Account::setHolderContact(long holderContact)

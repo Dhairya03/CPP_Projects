@@ -6,16 +6,9 @@ int InputValidator::getUserChoice()
     return userChoice;
 }
 
-void InputValidator::setUserChoice()
+void InputValidator::setUserChoice(int userChoice)
 {
-    while (true)
-    {
-        std::cin >> userChoice;
-        if (isValidInput(userChoice))
-            break;
-        else
-            std::cout << "Enter Valid user choice" << std::endl;
-    }
+    this->userChoice=userChoice;
 }
 
 int InputValidator::getOperatorChoice()
@@ -23,16 +16,9 @@ int InputValidator::getOperatorChoice()
     return operationChoice;
 }
 
-void InputValidator::setOperatorChoice()
+void InputValidator::setOperatorChoice(int operatorChoice)
 {
-    while (true)
-    {
-        std::cin >> operationChoice;
-        if (isValidInput(operationChoice))
-            break;
-        else
-            std::cout << "Enter Valid user choice" << std::endl;
-    }
+    this->operationChoice=operatorChoice;
 }
 
 char InputValidator::getContinueChoice()
@@ -40,16 +26,9 @@ char InputValidator::getContinueChoice()
     return continueChoice;
 }
 
-void InputValidator::setContinueChoice()
+void InputValidator::setContinueChoice(char continueChoice)
 {
-    while (true)
-    {
-        std::cin >> continueChoice;
-        if (isValidInput(continueChoice))
-            break;
-        else
-            std::cout << "Enter valid choice.Please try again." << std::endl;
-    }
+    this->continueChoice=continueChoice;
 }
 
 bool InputValidator::isValidUserChoice()
@@ -64,6 +43,7 @@ bool InputValidator::isValidInput(int input)
     {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout<<"Please enter valid input integer."<<std::endl;
         isValid = false;
     }
     else

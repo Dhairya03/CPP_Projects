@@ -5,9 +5,9 @@
 // Since extern is used it will be declared in constants.h and can be defined anywhere in the files
 Admin adminData(101, 123456);
 
-Admin::Admin()
-{
-}
+// Admin::Admin()
+// {
+// }
 
 Admin::Admin(int adminId, int adminPassword)
 {
@@ -49,100 +49,28 @@ void Admin::adminLogin()
     }
 }
 
-int Admin::createAccount(Bank &bankData)
+int Admin::createAccount()
 {
     std::string holderName;
-    std::string holderAddress;
-    long holderContact;
     std::cout << "Enter Account Holder Details" << std::endl;
 
     Account newAccount;
     std::cout << "Name" << std::endl;
     std::cin >> holderName;
-    std::cout << "Address" << std::endl;
-    std::cin >> holderAddress;
-    std::cout << "Contact" << std::endl;
-    std::cin >> holderContact;
-
     newAccount.setHolderName(holderName);
-    newAccount.setHolderAddress(holderAddress);
-    newAccount.setHolderContact(holderContact);
-    newAccount.setAccountNumber(bankData.accountHolderData.size() + 1);
+
+    std::cout << "+++";
+    newAccount.setAccountNumber(initialAccountNumber + bankData->accounts.size() + 1);
     newAccount.setTotalBalance(0);
 
-    bankData.accountHolderData.push_back(newAccount);
+    bankData->accounts.push_back(newAccount);
 
     std::cout << "Account created successfully." << std::endl;
     std::cout << "Your account number is " << newAccount.getAccountNumber() << std::endl;
     return 0;
 }
 
-void Admin::showOperationChoices()
-{
-    std::cout << "Select the operation you want to perform" << std::endl;
-    std::cout << "1.Create Account" << std::endl;
-    std::cout << "2.See the list of Account Holders" << std::endl;
-    std::cout << "3.See the account details of a particular Account Holder" << std::endl;
-    std::cout << "4.Withraw money from Account" << std::endl;
-    std::cout << "5.Deposit money in Account" << std::endl;
-    std::cout << "6.Get Mini Bank Statement" << std::endl;
-    std::cout << "7.Get Bank Statement" << std::endl;
-    std::cout << "8.Show Balance" << std::endl;
-    std::cout << "9.Close Account" << std::endl;
-    std::cout << "10.Logout" << std::endl;
-}
-
-void Admin::performOperation(int operationChoice, Bank &bankData)
-{
-    switch (operationChoice)
-    {
-    case 1:
-        createAccount(bankData);
-        break;
-
-    case 2:
-        showUserList(bankData);
-        break;
-
-    case 3:
-        showParticularUser(bankData);
-        break;
-
-    case 4:
-        withdrawMoney(bankData);
-        break;
-
-    case 5:
-        depositMoney(bankData);
-        break;
-
-    case 6:
-        getMiniBankStatement(bankData);
-        break;
-
-    case 7:
-        getBankStatement(bankData);
-        break;
-
-    case 8:
-        showBalance(bankData);
-        break;
-
-    case 9:
-        closeAccount(bankData);
-        break;
-
-    case 10:
-        logout();
-        break;
-
-    default:
-        std::cout << "You have selected invalid Operation to perform." << std::endl;
-        break;
-    }
-}
-
-void Admin::showUserList(Bank &bankData)
+void Admin::showUserList()
 {
     bool found = false;
     std::cout << "User List is" << std::endl;
@@ -152,7 +80,7 @@ void Admin::showUserList(Bank &bankData)
               << " "
               << "TotalBalance" << std::endl;
 
-    for (auto &account : bankData.accountHolderData)
+    for (auto &account : bankData->accounts)
     {
         found = true;
         std::cout << account.getAccountNumber() << " " << account.getHolderName() << " " << account.getTotalBalance() << std::endl;
@@ -164,7 +92,7 @@ void Admin::showUserList(Bank &bankData)
     }
 }
 
-void Admin::showParticularUser(Bank &bankData)
+void Admin::showParticularUser()
 {
     InputValidator inputValidator;
     int accountNumber;
@@ -191,7 +119,7 @@ void Admin::showParticularUser(Bank &bankData)
               << " "
               << "TotalBalance " << std::endl;
 
-    for (auto &account : bankData.accountHolderData)
+    for (auto &account : bankData->accounts)
     {
         if (accountNumber == account.getAccountNumber())
         {
@@ -207,7 +135,7 @@ void Admin::showParticularUser(Bank &bankData)
     }
 }
 
-int Admin::closeAccount(Bank &bankData)
+int Admin::closeAccount()
 {
     InputValidator inputValidator;
     int accountNumber;
@@ -225,13 +153,13 @@ int Admin::closeAccount(Bank &bankData)
     bool found = false;
     int index = 0;
 
-    for (auto &account : bankData.accountHolderData)
+    for (auto &account : bankData->accounts)
     {
         index++;
         if (account.getAccountNumber() == accountNumber)
         {
             found = true;
-            bankData.accountHolderData.erase(bankData.accountHolderData.begin() + index - 1);
+            bankData->accounts.erase(bankData->accounts.begin() + index - 1);
             std::cout << "Account closed successfully" << std::endl;
             break;
         }
@@ -244,7 +172,7 @@ int Admin::closeAccount(Bank &bankData)
     return 0;
 }
 
-void Admin::logout()
+bool Admin::logout()
 {
     InputValidator inputValidator;
     std::cout << "Want to logout.\nPress y for YES.\nPress n for NO" << std::endl;
@@ -264,4 +192,235 @@ void Admin::logout()
         std::cout << "Logged out successfully" << std::endl;
         isLoggedIn = false;
     }
+}
+
+bool Admin::login()
+{
+}
+
+int Admin::withdrawMoney()
+{
+    InputValidator inputValidator;
+    int withdrawAccountNumber;
+    double withdrawAmount;
+
+    std::cout << "Enter Account Number from which you want to withdraw: ";
+    while (true)
+    {
+        std::cin >> withdrawAccountNumber;
+        if (inputValidator.isValidInput(withdrawAccountNumber))
+            break;
+        else
+            std::cout << "Enter valid account Number" << std::endl;
+    }
+
+    bool found = false;
+    for (auto &account : bankData->accounts)
+    {
+        if (account.getAccountNumber() == withdrawAccountNumber)
+        {
+            found = true;
+            std::cout << "Enter Amount to Withdraw: ";
+            while (true)
+            {
+                std::cin >> withdrawAmount;
+                if (inputValidator.isValidInput(withdrawAmount))
+                    break;
+                else
+                    std::cout << "You have entered invalid ammount.\nEnter valid amount" << std::endl;
+            }
+
+            if (withdrawAmount <= account.getTotalBalance())
+            {
+                account.setTotalBalance((-1) * withdrawAmount);
+
+                Transaction newTransaction;
+                newTransaction.setTransactionId(account.transactions.size() + 1);
+                newTransaction.setTransactionAmount(withdrawAmount);
+                newTransaction.setNetBalance(account.getTotalBalance());
+                newTransaction.setTransactionType("Withdraw");
+
+                account.transactions.push_back(newTransaction);
+
+                std::cout << "Withdrawal successful. Updated Balance: " << account.getTotalBalance() << std::endl;
+            }
+            else
+            {
+                std::cout << "Insufficient Balance." << std::endl;
+            }
+            break;
+        }
+    }
+    if (!found)
+    {
+        std::cout << "Account not found." << std::endl;
+    }
+    return 0;
+}
+
+int Admin::depositMoney()
+{
+    InputValidator inputValidator;
+    int depositAccountNumber;
+    double depositAmount;
+
+    std::cout << "Enter Account Number in which you want to deposit ";
+    while (true)
+    {
+        std::cin >> depositAccountNumber;
+        if (inputValidator.isValidInput(depositAccountNumber))
+            break;
+        else
+            std::cout << "Enter valid account number" << std::endl;
+    }
+
+    bool found = false;
+    for (auto &account : bankData->accounts)
+    {
+        if (account.getAccountNumber() == depositAccountNumber)
+        {
+            found = true;
+            std::cout << "Enter Amount to Deposit: ";
+            while (true)
+            {
+                std::cin >> depositAmount;
+                if (inputValidator.isValidInput(depositAmount))
+                    break;
+                else
+                    std::cout << "You have entered invalid ammount.\nEnter valid amount" << std::endl;
+            }
+
+            account.setTotalBalance(depositAmount);
+
+            Transaction newTransaction;
+            newTransaction.setTransactionId(account.transactions.size() + 1);
+            newTransaction.setTransactionAmount(depositAmount);
+            newTransaction.setNetBalance(account.getTotalBalance());
+            newTransaction.setTransactionType("Deposit");
+
+            account.transactions.push_back(newTransaction);
+
+            std::cout << "Deposit successful. Updated Balance: " << account.getTotalBalance() << std::endl;
+
+            break;
+        }
+    }
+    if (!found)
+    {
+        std::cout << "Account not found." << std::endl;
+    }
+    return 0;
+}
+
+bool Admin::printStatement(Account &account, int transactionCount)
+{
+    int totalTransactions=account.transactions.size();
+    bool found = false;
+    if (!totalTransactions)
+    {
+        std::cout << "No transactions for this account Number" << std::endl;
+        return false;
+    }
+    else if(!transactionCount){
+        transactionCount=totalTransactions;
+    }
+    for (int index = 0; index < transactionCount; index++)
+    {
+        Transaction transaction = account.transactions[index];
+        std::cout << "Transaction ID: " << transaction.getTransactionId() << std::endl;
+        std::cout << "Transaction Amount: " << transaction.getTransactionAmount() << std::endl;
+        std::cout << "Transaction Type:" << transaction.getTransactionType() << std::endl;
+        std::cout << "Net Balance: " << transaction.getNetBalance() << std::endl;
+    }
+    
+    return true;
+}
+int Admin::getMiniBankStatement()
+{
+    InputValidator inputValidator;
+    int accountNumber;
+    std::cout << "Enter Account Number to get Mini Bank Statement: ";
+    while (true)
+    {
+        std::cin >> accountNumber;
+        if (inputValidator.isValidInput(accountNumber))
+            break;
+        else
+            std::cout << "you have entered invalid account number. Enter valid account number" << std::endl;
+    }
+
+    std::cout << "Mini Bank Statement for Account Number " << accountNumber << ":" << std::endl;
+    int count = 0;
+    for (auto &account : bankData->accounts)
+    {
+        if (account.getAccountNumber() == accountNumber)
+        {
+            if (printStatement(account))
+                count++;
+
+            if (count >= 5)
+                break;
+        }
+    }
+    if (count == 0)
+        std::cout << "No transactions found for the account number " << accountNumber << std::endl;
+
+    return 0;
+}
+
+int Admin::getBankStatement()
+{
+    InputValidator inputValidator;
+    int accountNumber;
+    std::cout << "Enter Account Number to get Bank Statement: ";
+    while (true)
+    {
+        std::cin >> accountNumber;
+        if (inputValidator.isValidInput(accountNumber))
+            break;
+        else
+            std::cout << "You have entered invalid account number.\nEnter valid account number" << std::endl;
+    }
+
+    std::cout << "Bank Statement for Account Number " << accountNumber << ":" << std::endl;
+    bool found = false;
+    for (auto &transaction : bankData->transactionDetails)
+    {
+        if (findStatement(transaction, accountNumber))
+            found = true;
+    }
+    if (!found)
+        std::cout << "No transaction for the account Number " << accountNumber << std::endl;
+    return found;
+}
+
+int Admin::showBalance()
+{
+    InputValidator inputValidator;
+    int accountNumber;
+    std::cout << "Enter Account Number to get Total balance: ";
+    while (true)
+    {
+        std::cin >> accountNumber;
+        if (inputValidator.isValidInput(accountNumber))
+            break;
+        else
+            std::cout << "You have entered invalid account number.\nEnter valid account number" << std::endl;
+    }
+
+    bool found = false;
+    for (auto &account : bankData->accountHolderData)
+    {
+        if (account.getAccountNumber() == accountNumber)
+        {
+            found = true;
+            std::cout << "Total Balance: " << account.getTotalBalance() << std::endl;
+            break;
+        }
+    }
+    if (!found)
+    {
+        std::cout << "Account not found." << std::endl;
+    }
+    return 0;
 }

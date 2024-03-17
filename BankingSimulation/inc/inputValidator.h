@@ -13,17 +13,17 @@ private:
 public:
     int getUserChoice();
 
-    void setUserChoice();
+    void setUserChoice(int userChoice);
 
     int getOperatorChoice();
 
-    void setOperatorChoice();
+    void setOperatorChoice(int operatorChoice);
 
     bool isValidUserChoice();
 
     char getContinueChoice();
 
-    void setContinueChoice();
+    void setContinueChoice(char continueChoice);
 
     bool isValidInput(int choice);
 

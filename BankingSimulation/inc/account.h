@@ -2,34 +2,32 @@
 #define ACCOUNT_H
 
 #include <iostream>
+#include <vector>
+#include "transaction.h"
 
 class Account
 {
 private:
-    int accountNumber{4000};
+    int accountNumber{};
     std::string holderName = "";
-    long holderContact{};
-    std::string holderAddress = "";
     double totalBalance{};
 
 public:
+    std::vector<Transaction> transactions;
+
     int getAccountNumber();
 
     std::string getHolderName();
 
-    long getHolderContact();
-
-    std::string getHolderAddress();
-
     double getTotalBalance();
+
+    std::vector<Transaction> getTransactions() const;
+
+    void setTransactions(const std::vector<Transaction> &newTransactions);
 
     void setAccountNumber(int accountNumber);
 
     void setHolderName(const std::string &holderName);
-
-    void setHolderContact(long holderContact);
-
-    void setHolderAddress(const std::string &holderAddress);
 
     void setTotalBalance(double totalBalance);
 };

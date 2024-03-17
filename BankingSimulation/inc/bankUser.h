@@ -2,23 +2,29 @@
 #define BANKUSER_H
 
 #include <vector>
-#include "bank.h"
+#include "Accounts.h"
 
 class BankUser
 {
 public:
+    BankUser() {}
+    // virtual ~BankUser(){}
 
-    int withdrawMoney(Bank &bankData);
+    virtual bool login()=0;
 
-    int depositMoney(Bank &bankData);
+    virtual int withdrawMoney() = 0;
 
-    bool findStatement(Bank &bankData, Transaction &transaction, int accountNumber);
+    virtual int depositMoney() = 0;
 
-    int getMiniBankStatement(Bank &bankData);
+    virtual bool findStatement(Transaction &transaction, int accountNumber) = 0;
 
-    int getBankStatement(Bank &bankData);
+    virtual int getMiniBankStatement() = 0;
 
-    int showBalance(Bank &bankData);
+    virtual int getBankStatement() = 0;
+
+    virtual int showBalance() = 0;
+
+    virtual bool logout() = 0;
 };
 
 #endif
