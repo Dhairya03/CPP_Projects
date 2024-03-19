@@ -9,7 +9,9 @@ class FileParser
 
 public:
     FileParser(IParser *);
+
     bool parse();
+    
     ~FileParser();
 };
 

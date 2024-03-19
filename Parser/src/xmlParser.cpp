@@ -1,25 +1,30 @@
 #include <iostream>
 #include <fstream>
 #include "xmlParser.h"
+#include "IStream.h"
 #include "pugixml-master/src/pugixml.hpp"
+
+XmlParser::XmlParser(IStream *stream) : streamFile(stream) {}
 
 bool XmlParser::openFile()
 {
-    bool isOpen=false;
-    file.open("../files/books.xml");
-    if (!file.is_open())
+    bool isOpen = false;
+    streamFile->open("../files/books.xml");
+    if (!streamFile->is_open())
         throw std::runtime_error("Unable to open file in XmlParser::openFile()");
-        else isOpen=true;
+    else
+        isOpen = true;
     return isOpen;
 }
 
 bool XmlParser::parseFile()
 {
-    bool isParsed=false;
+    bool isParsed = false;
     xmlData = document.load(file);
     if (!xmlData)
         throw xmlData.description();
-    else isParsed=true;
+    else
+        isParsed = true;
     return isParsed;
 }
 
@@ -75,11 +80,12 @@ void XmlParser::printFile(pugi::xml_node &node)
 
 bool XmlParser::closeFile()
 {
-    bool isClose=false;
-    file.close();
-    if (file.is_open())
+    bool isClose = false;
+    streamFile->close();
+    if (streamFile->is_open())
         throw std::runtime_error("Unable to close file in XmlParser::closeFile()");
-    else isClose=true;
+    else
+        isClose = true;
     return isClose;
 }
 

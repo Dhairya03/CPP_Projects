@@ -4,14 +4,19 @@
 #include <iostream>
 #include <fstream>
 #include "IParser.h"
+#include "IStream.h"
+#include "IJsonReader.h"
 #include "jsoncpp/json/json.h"
 
 class JsonParser : public IParser
 {
-private:
-    std::ifstream file;
-    Json::Reader reader;
-    Json::Value completeJsonData;
+public:
+    std::ifstream file;    
+    IStream *streamFile;
+    IJsonReader *jsonReader;
+   Json::Value completeJsonData;
+
+    JsonParser(IStream*,IJsonReader *);
 
     bool openFile();
 

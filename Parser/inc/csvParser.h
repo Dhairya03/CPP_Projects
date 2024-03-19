@@ -3,15 +3,19 @@
 
 #include <iostream>
 #include <fstream>
-#include "parser.h"
+#include "IParser.h"
 #include "rapidcsv.h"
+#include "IStream.h"
 
 class CsvParser : public IParser
 {
-private:
+public:
     std::ifstream file;
+    IStream *streamFile;
     std::vector<std::vector<std::string>> csvData;
     std::vector<std::string> csvDataColumnNames;
+
+    CsvParser(IStream *);
 
     bool openFile();
 

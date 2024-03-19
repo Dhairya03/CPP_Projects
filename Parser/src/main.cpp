@@ -1,32 +1,41 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include "jsoncpp/json.h"
 #include "IParser.h"
 #include "FileParser.h"
 #include "jsonParser.h"
 #include "xmlParser.h"
 #include "csvParser.h"
 #include "inputValidator.h"
+#include "fstream"
+#include "Stream.h"
+#include "JsonReader.h"
 
 bool handleParser(InputValidator &inputValidator)
 {
+    std::ifstream file;
+    Json::Reader reader;
+    Stream streamFile(file);
+    JsonReader jsonReader(reader);
+
     IParser *parser = nullptr;
     bool isValidParse = true;
     switch (inputValidator.getParserChoice())
     {
     case 1:
     {
-        parser = new JsonParser;
+        parser = new JsonParser(&streamFile,&jsonReader);
         break;
     }
     case 2:
     {
-        parser = new XmlParser;
+        parser = new XmlParser(&streamFile);
         break;
     }
     case 3:
     {
-        parser = new CsvParser;
+        parser = new CsvParser(&streamFile);
         break;
     }
     default:
@@ -37,7 +46,7 @@ bool handleParser(InputValidator &inputValidator)
     FileParser fileParser(parser);
     if (isValidParse)
     {
-        FileParser.parse();
+        fileParser.parse();
     }
     delete parser;
     return isValidParse;

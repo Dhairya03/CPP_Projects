@@ -2,20 +2,24 @@
 #include <fstream>
 #include "csvParser.h"
 #include "rapidcsv.h"
+#include "IStream.h"
+
+CsvParser::CsvParser(IStream *stream) : streamFile(stream) {}
 
 bool CsvParser::openFile()
 {
-    bool isOpen=false;
-    file.open("../files/student_marks.csv");
-    if (!file.is_open())
+    bool isOpen = false;
+    streamFile->open("../files/student_marks.csv");
+    if (!streamFile->is_open())
         throw std::runtime_error("Unable to open file in CsvParser::openFile()");
-    else isOpen=true;
+    else
+        isOpen = true;
     return isOpen;
 }
 
 bool CsvParser::parseFile()
 {
-    bool isParsed=false;
+    bool isParsed = false;
     rapidcsv::Document document(file);
     if (!document.GetColumnCount())
     {
@@ -24,7 +28,7 @@ bool CsvParser::parseFile()
 
     try
     {
-        isParsed=true;
+        isParsed = true;
         csvDataColumnNames = document.GetColumnNames();
         for (int columnIndex = 0; columnIndex < document.GetColumnCount(); columnIndex++)
         {
@@ -65,13 +69,14 @@ void CsvParser::printFileData()
 
 bool CsvParser::closeFile()
 {
-    bool isClose=false;
-    file.close();
-    if (file.is_open())
+    bool isClose = false;
+    streamFile->close();
+    if (streamFile->is_open())
     {
         throw std::runtime_error("Unable to close file in CsvParser::closeFile()");
     }
-    else isClose=true;
+    else
+        isClose = true;
     return isClose;
 }
 

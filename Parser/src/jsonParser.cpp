@@ -1,12 +1,16 @@
 #include <iostream>
 #include <fstream>
+#include "IStream.h"
 #include "jsonParser.h"
+#include "jsoncpp/json.h"
+
+JsonParser::JsonParser(IStream*stream,IJsonReader*reader):streamFile(stream),jsonReader(reader){}
 
 bool JsonParser::openFile()
 {
     bool isOpen = false;
-    file.open("../files/quiz.json");
-    if (!file.is_open())
+    streamFile->open("../files/quiz.json");
+    if (!streamFile->is_open())
     {
         throw std::runtime_error("Unable to open file  or File not found in JsonParser::openFile()");
     }
@@ -18,7 +22,7 @@ bool JsonParser::openFile()
 bool JsonParser::parseFile()
 {
     bool isParsed = false;
-    if (!reader.parse(file, completeJsonData))
+    if (!jsonReader->parse(*streamFile, completeJsonData))
     {
         throw std::runtime_error("Failed to parse complete JSON from file. Check if the file exists and is properly formatted in JsonParser::parseFile()");
     }
@@ -69,8 +73,8 @@ void JsonParser::printJson(const Json::Value &value, int indent)
 bool JsonParser::closeFile()
 {
     bool isClose = false;
-    file.close();
-    if (file.is_open())
+    streamFile->close();
+    if (streamFile->is_open())
     {
         throw std::runtime_error("Error: Unable to close file in JsonParser::closeFile()");
     }

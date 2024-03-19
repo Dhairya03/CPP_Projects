@@ -5,13 +5,17 @@
 #include <fstream>
 #include "IParser.h"
 #include "pugixml-master/src/pugixml.hpp"
+#include "IStream.h"
 
 class XmlParser : public IParser
 {
-private:
+public:
     std::ifstream file;
+    IStream *streamFile;
     pugi::xml_document document;
     pugi::xml_parse_result xmlData;
+
+    XmlParser(IStream *);
 
     bool openFile();
 
