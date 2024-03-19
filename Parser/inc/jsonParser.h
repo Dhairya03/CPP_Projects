@@ -3,10 +3,10 @@
 
 #include <iostream>
 #include <fstream>
-#include "parser.h"
+#include "IParser.h"
 #include "jsoncpp/json/json.h"
 
-class JsonParser : public Parser
+class JsonParser : public IParser
 {
 private:
     std::ifstream file;
@@ -17,9 +17,9 @@ private:
 
     bool parseFile();
 
-    bool printFileData();
+    void printFileData();
 
-    bool printJson(const Json::Value &, int);
+    void printJson(const Json::Value &, int);
 
     bool closeFile();
 

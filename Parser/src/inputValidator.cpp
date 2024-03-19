@@ -35,21 +35,25 @@ bool InputValidator::setParserChoice()
 
 bool InputValidator::isValidParserChoice()
 {
+    bool isvalidChoice=false;
     if (parserChoice < 1 || parserChoice > 4)
     {
         throw std::invalid_argument("Parser choice must be between 1 and 4.");
     }
-    return true;
+    else isvalidChoice=true;
+    return isvalidChoice;
 }
 
 bool InputValidator::isValidInput()
 {
+    bool isValid=false;
     if (std::cin.fail() || std::cin.peek() != '\n')
     {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         throw std::runtime_error("Invalid input: unexpected characters or input failure.");
     }
+    else isValid=true;
 
-    return true;
+    return isValid;
 }

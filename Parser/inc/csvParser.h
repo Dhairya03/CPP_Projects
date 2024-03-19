@@ -4,9 +4,9 @@
 #include <iostream>
 #include <fstream>
 #include "parser.h"
-#include "../lib/rapidcsv.h"
+#include "rapidcsv.h"
 
-class CsvParser : public Parser
+class CsvParser : public IParser
 {
 private:
     std::ifstream file;
@@ -17,7 +17,7 @@ private:
 
     bool parseFile();
 
-    bool printFileData();
+    void printFileData();
 
     bool closeFile();
 

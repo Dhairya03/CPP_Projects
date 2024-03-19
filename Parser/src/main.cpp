@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
-#include "parser.h"
+#include "IParser.h"
+#include "FileParser.h"
 #include "jsonParser.h"
 #include "xmlParser.h"
 #include "csvParser.h"
@@ -9,7 +10,7 @@
 
 bool handleParser(InputValidator &inputValidator)
 {
-    Parser *parser=nullptr;
+    IParser *parser = nullptr;
     bool isValidParse = true;
     switch (inputValidator.getParserChoice())
     {
@@ -33,12 +34,13 @@ bool handleParser(InputValidator &inputValidator)
         std::cout << "Exited Successfully" << std::endl;
         break;
     }
+    FileParser fileParser(parser);
     if (isValidParse)
     {
-        parser->parse();
+        FileParser.parse();
     }
     delete parser;
-    return true;
+    return isValidParse;
 }
 
 int main()

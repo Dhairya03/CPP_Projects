@@ -5,22 +5,25 @@
 
 bool XmlParser::openFile()
 {
+    bool isOpen=false;
     file.open("../files/books.xml");
     if (!file.is_open())
         throw std::runtime_error("Unable to open file in XmlParser::openFile()");
-    return true;
+        else isOpen=true;
+    return isOpen;
 }
 
 bool XmlParser::parseFile()
 {
+    bool isParsed=false;
     xmlData = document.load(file);
     if (!xmlData)
         throw xmlData.description();
-
-    return true;
+    else isParsed=true;
+    return isParsed;
 }
 
-bool XmlParser::printFileData()
+void XmlParser::printFileData()
 {
     pugi::xml_node catalog = document.child("catalog");
     if (!catalog)
@@ -42,10 +45,9 @@ bool XmlParser::printFileData()
             printFile(element);
         }
     }
-    return true;
 }
 
-bool XmlParser::printFile(pugi::xml_attribute &attribute)
+void XmlParser::printFile(pugi::xml_attribute &attribute)
 {
     try
     {
@@ -56,10 +58,9 @@ bool XmlParser::printFile(pugi::xml_attribute &attribute)
         std::cout << "Error: in XmlParser::printFile(pugi::xml_attribute &attribute) \n";
         throw std::exception(error);
     }
-    return true;
 }
 
-bool XmlParser::printFile(pugi::xml_node &node)
+void XmlParser::printFile(pugi::xml_node &node)
 {
     try
     {
@@ -70,16 +71,16 @@ bool XmlParser::printFile(pugi::xml_node &node)
         std::cout << "Error: in XmlParser::printFile(pugi::xml_node &node) \n";
         throw std::exception(error);
     }
-    return true;
 }
 
 bool XmlParser::closeFile()
 {
+    bool isClose=false;
     file.close();
     if (file.is_open())
         throw std::runtime_error("Unable to close file in XmlParser::closeFile()");
-
-    return true;
+    else isClose=true;
+    return isClose;
 }
 
 XmlParser::~XmlParser()

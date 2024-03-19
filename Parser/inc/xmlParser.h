@@ -3,10 +3,10 @@
 
 #include <iostream>
 #include <fstream>
-#include "parser.h"
-#include "../lib/pugixml-master/src/pugixml.hpp"
+#include "IParser.h"
+#include "pugixml-master/src/pugixml.hpp"
 
-class XmlParser : public Parser
+class XmlParser : public IParser
 {
 private:
     std::ifstream file;
@@ -17,11 +17,11 @@ private:
 
     bool parseFile();
 
-    bool printFileData();
+    void printFileData();
 
-    bool printFile(pugi::xml_attribute &);
+    void printFile(pugi::xml_attribute &);
 
-    bool printFile(pugi::xml_node &);
+    void printFile(pugi::xml_node &);
 
     bool closeFile();
 

@@ -4,30 +4,35 @@
 
 bool JsonParser::openFile()
 {
+    bool isOpen = false;
     file.open("../files/quiz.json");
     if (!file.is_open())
     {
         throw std::runtime_error("Unable to open file  or File not found in JsonParser::openFile()");
     }
-    return true;
+    else
+        isOpen = true;
+    return isOpen;
 }
 
 bool JsonParser::parseFile()
 {
+    bool isParsed = false;
     if (!reader.parse(file, completeJsonData))
     {
         throw std::runtime_error("Failed to parse complete JSON from file. Check if the file exists and is properly formatted in JsonParser::parseFile()");
     }
-    return true;
+    else
+        isParsed = true;
+    return isParsed;
 }
 
-bool JsonParser::printFileData()
+void JsonParser::printFileData()
 {
     printJson(completeJsonData, 0);
-    return true;
 }
 
-bool JsonParser::printJson(const Json::Value &value, int indent)
+void JsonParser::printJson(const Json::Value &value, int indent)
 {
     try
     {
@@ -59,17 +64,19 @@ bool JsonParser::printJson(const Json::Value &value, int indent)
         std::cout << "Error: in JsonParser::printFileData() \n";
         throw std::exception(error);
     }
-    return true;
 }
 
 bool JsonParser::closeFile()
 {
+    bool isClose = false;
     file.close();
     if (file.is_open())
     {
         throw std::runtime_error("Error: Unable to close file in JsonParser::closeFile()");
     }
-    return true;
+    else
+        isClose = true;
+    return isClose;
 }
 
 JsonParser::~JsonParser()

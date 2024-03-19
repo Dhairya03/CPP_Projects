@@ -5,14 +5,17 @@
 
 bool CsvParser::openFile()
 {
+    bool isOpen=false;
     file.open("../files/student_marks.csv");
     if (!file.is_open())
         throw std::runtime_error("Unable to open file in CsvParser::openFile()");
-    return true;
+    else isOpen=true;
+    return isOpen;
 }
 
 bool CsvParser::parseFile()
 {
+    bool isParsed=false;
     rapidcsv::Document document(file);
     if (!document.GetColumnCount())
     {
@@ -21,6 +24,7 @@ bool CsvParser::parseFile()
 
     try
     {
+        isParsed=true;
         csvDataColumnNames = document.GetColumnNames();
         for (int columnIndex = 0; columnIndex < document.GetColumnCount(); columnIndex++)
         {
@@ -36,10 +40,10 @@ bool CsvParser::parseFile()
     {
         throw std::out_of_range(exception.what() + std::string(" in CsvParser::parseFile()"));
     }
-    return true;
+    return isParsed;
 }
 
-bool CsvParser::printFileData()
+void CsvParser::printFileData()
 {
     try
     {
@@ -57,17 +61,18 @@ bool CsvParser::printFileData()
     {
         throw std::out_of_range(exception.what() + std::string(" in CsvParser::printFileData()"));
     }
-    return true;
 }
 
 bool CsvParser::closeFile()
 {
+    bool isClose=false;
     file.close();
     if (file.is_open())
     {
         throw std::runtime_error("Unable to close file in CsvParser::closeFile()");
     }
-    return true;
+    else isClose=true;
+    return isClose;
 }
 
 CsvParser::~CsvParser()
