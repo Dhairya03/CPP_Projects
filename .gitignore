@@ -52,3 +52,4 @@ Thumbs.db
 Parser/
 gtest/
 *.txt
+lib/
