@@ -2,26 +2,32 @@
 
 SFMLWrapper::SFMLWrapper() {}
 
-bool SFMLWrapper::getStatus(){
-    return music.getStatus();
-}
-
 bool SFMLWrapper::openFromFile(const std::string &filename)
 {
-    return music.openFromFile(filename);
+    bool isOpen = music.openFromFile(filename);
+    return isOpen;
 }
 
-void SFMLWrapper::play()
+bool SFMLWrapper::play()
 {
+    bool isPlayed=false;
     music.play();
+    isPlayed=true;
+    return isPlayed;
 }
 
-void SFMLWrapper::pause()
+bool SFMLWrapper::pause()
 {
+    bool isPaused=false;
     music.pause();
+    isPaused=true;
+    return isPaused;
 }
 
-void SFMLWrapper::stop()
+bool SFMLWrapper::stop()
 {
+    bool isStopped=false;
     music.stop();
+    isStopped=true;
+    return isStopped;
 }

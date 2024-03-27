@@ -8,11 +8,10 @@ class ILibraryWrapper
 {
 public:
     // ILibraryWrapper();
-    virtual bool getStatus()=0;
     virtual bool openFromFile(const std::string& filename)=0;
-    virtual void play() = 0;
-    virtual void pause() = 0;
-    virtual void stop() = 0;
+    virtual bool play() = 0;
+    virtual bool pause() = 0;
+    virtual bool stop() = 0;
     // virtual ~ILibraryWrapper();
 };
 

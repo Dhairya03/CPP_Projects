@@ -3,7 +3,7 @@
 
 Playlist::Playlist(std::string name) : name(name) {}
 
-void Playlist::addSong(const std::string &song)
+void Playlist::addSong(const Song &song)
 {
     songs.push_back(song);
 }
@@ -13,7 +13,7 @@ void Playlist::displaySongs() const
     std::cout << "Songs in Playlist '" << name << "':" << std::endl;
     for (const auto &song : songs)
     {
-        std::cout << song << std::endl;
+        std::cout << song.getTitle() << std::endl;
     }
 }
 
@@ -67,7 +67,7 @@ std::string Playlist::getName() const
     return name;
 }
 
-const std::vector<std::string> &Playlist::getSongs() const
+const std::vector<Song> &Playlist::getSongs() const
 {
     return songs;
 }

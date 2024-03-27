@@ -12,27 +12,30 @@ class MusicPlayer
 {
 private:
     std::vector<Playlist> playlists;
-    std::vector<Song> allSongs;
     ILibraryWrapper &music;
-    Playlist *currentPlaylist=nullptr;
+    Playlist *currentPlaylist = nullptr;
     int currentSongIndex;
+    bool isPlaying = false;
 
     void savePlaylistsToFile(const std::vector<Playlist> &playlists);
     void loadPlaylistsFromFile(std::vector<Playlist> &playlists);
     void loadSongsFromFile(std::vector<Song> &allSongs);
+    bool playSong(const Song &songFile);
 
 public:
+    std::vector<Song> allSongs;
+
     MusicPlayer(ILibraryWrapper &);
-    bool playSong(const std::string &songFile);
-    void togglePause();
-    void stopAndReset();
-    void playNextSong();
-    void playPreviousSong();
+    bool togglePause();
+    bool stop();
+    bool replay();
+    bool playNextSong();
+    bool playPreviousSong();
     void showPlaylist();
     bool playPlaylist(int);
-    bool createPlaylist();
+    bool createPlaylist(std::string name, std::vector<Song> &);
     bool deletePlaylist(int);
-    bool updatePlaylist(int);
+    bool updatePlaylist(int, int);
 };
 
 #endif

@@ -12,11 +12,10 @@ private:
 
 public:
     SFMLWrapper();
-    bool getStatus();
     bool openFromFile(const std::string &filename);
-    void play();
-    void pause();
-    void stop();
+    bool play();
+    bool pause();
+    bool stop();
 };
 
-#endif // SFML_WRAPPER_H
+#endif 
