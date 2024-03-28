@@ -7,11 +7,17 @@ class MusicPlayerTest : public ::testing::Test
 {
 public:
     MockLibraryWrapper mockLibrary;
-    MusicPlayer player{mockLibrary};
+    MusicPlayer *player;
     void SetUp()
     {
+        player = new MusicPlayer(mockLibrary);
         int index = 1;
-        player.playPlaylist(index);
+        player->playPlaylist(index);
+        ON_CALL(mockLibrary, openFromFile(::testing::_)).WillByDefault(::testing::Return(true));
+    }
+    void TearDown()
+    {
+        delete player;
     }
 };
 
@@ -22,28 +28,28 @@ TEST_F(MusicPlayerTest, WhenPlayPlaylistHasValidIndex_MusicPlays)
     EXPECT_CALL(mockLibrary, openFromFile(::testing::_)).WillOnce(::testing::Return(true));
     EXPECT_CALL(mockLibrary, play()).Times(::testing::AtLeast(1));
 
-    EXPECT_TRUE(player.playPlaylist(index));
+    EXPECT_TRUE(player->playPlaylist(index));
 }
 
 TEST_F(MusicPlayerTest, WhenPlayPlaylistHasInvalidIndex_ReturnsFalse)
 {
     int invalidIndex = 0;
 
-    EXPECT_FALSE(player.playPlaylist(invalidIndex));
+    EXPECT_FALSE(player->playPlaylist(invalidIndex));
 }
 
 TEST_F(MusicPlayerTest, WhenMusicIsStopped_ThenMusicStops)
 {
     EXPECT_CALL(mockLibrary, stop()).WillOnce(::testing::Return(true));
 
-    EXPECT_TRUE(player.stop());
+    EXPECT_TRUE(player->stop());
 }
 
 TEST_F(MusicPlayerTest, WhenMusicIsStopped_ThenMusicNotStops)
 {
     EXPECT_CALL(mockLibrary, stop()).WillOnce(::testing::Return(false));
 
-    EXPECT_FALSE(player.stop());
+    EXPECT_FALSE(player->stop());
 }
 
 TEST_F(MusicPlayerTest, WhenMusicIsReplayed_ThenMusicReplays)
@@ -51,14 +57,14 @@ TEST_F(MusicPlayerTest, WhenMusicIsReplayed_ThenMusicReplays)
     EXPECT_CALL(mockLibrary, stop()).WillOnce(::testing::Return(true));
     EXPECT_CALL(mockLibrary, play()).WillOnce(::testing::Return(true));
 
-    EXPECT_TRUE(player.replay());
+    EXPECT_TRUE(player->replay());
 }
 
 TEST_F(MusicPlayerTest, WhenMusicIsReplayed_ThenMusicNotStopsAndDoesNotReplays)
 {
     EXPECT_CALL(mockLibrary, stop()).WillOnce(::testing::Return(false));
 
-    EXPECT_FALSE(player.replay());
+    EXPECT_FALSE(player->replay());
 }
 
 TEST_F(MusicPlayerTest, WhenMusicIsReplayed_ThenMusicStopsButDoesNotPlayAndDoesNotReplays)
@@ -66,13 +72,12 @@ TEST_F(MusicPlayerTest, WhenMusicIsReplayed_ThenMusicStopsButDoesNotPlayAndDoesN
     EXPECT_CALL(mockLibrary, stop()).WillOnce(::testing::Return(true));
     EXPECT_CALL(mockLibrary, play()).WillOnce(::testing::Return(false));
 
-    EXPECT_FALSE(player.replay());
+    EXPECT_FALSE(player->replay());
 }
 
 TEST_F(MusicPlayerTest, WhenNextMusicIsPlayed_ThenNextMusicPlays)
 {
     EXPECT_CALL(mockLibrary, stop()).WillOnce(::testing::Return(true));
 
-    EXPECT_TRUE(player.playNextSong());
+    EXPECT_TRUE(player->playNextSong());
 }
-

@@ -15,7 +15,7 @@ private:
 public:
     Playlist(std::string _name);
     bool addSong(const Song &song);
-    bool displaySongs() const;
+    void displaySongs() const;
     bool deleteSong(int index);
     bool updatePlaylistName(const std::string &newName);
     bool moveSongUp(int index);

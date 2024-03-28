@@ -33,6 +33,7 @@ int getPlayerAction()
 int main()
 {
     SFMLWrapper music;
+    ILibraryWrapper *wrapper=&music;
     MusicPlayer player(music);
     std::vector<Song> playlist;
     InputValidator inputValidator;
