@@ -3,12 +3,12 @@
 
 Playlist::Playlist(std::string name) : name(name) {}
 
-void Playlist::addSong(const Song &song)
+bool Playlist::addSong(const Song &song)
 {
     songs.push_back(song);
 }
 
-void Playlist::displaySongs() const
+bool Playlist::displaySongs() const
 {
     std::cout << "Songs in Playlist '" << name << "':" << std::endl;
     for (const auto &song : songs)
@@ -17,7 +17,7 @@ void Playlist::displaySongs() const
     }
 }
 
-void Playlist::deleteSong(int index)
+bool Playlist::deleteSong(int index)
 {
     if (index >= 0 && index < songs.size())
     {
@@ -30,13 +30,13 @@ void Playlist::deleteSong(int index)
     }
 }
 
-void Playlist::updatePlaylistName(const std::string &newName)
+bool Playlist::updatePlaylistName(const std::string &newName)
 {
     name = newName;
     std::cout << "Playlist name updated successfully." << std::endl;
 }
 
-void Playlist::moveSongUp(int index)
+bool Playlist::moveSongUp(int index)
 {
     if (index > 0 && index < songs.size())
     {
@@ -49,7 +49,7 @@ void Playlist::moveSongUp(int index)
     }
 }
 
-void Playlist::moveSongDown(int index)
+bool Playlist::moveSongDown(int index)
 {
     if (index >= 0 && index < songs.size() - 1)
     {

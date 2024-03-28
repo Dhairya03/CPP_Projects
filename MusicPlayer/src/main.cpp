@@ -10,7 +10,7 @@
 int getPlayerAction()
 {
     int choice;
-    do
+    while (true)
     {
         std::cout << "1. Pause/Play\n"
                   << "2. Stop\n"
@@ -20,7 +20,13 @@ int getPlayerAction()
                   << "6. Exit\n"
                   << "Enter your choice:\n ";
         std::cin >> choice;
-    } while (!inputValidator.isValidInput());
+        if (inputValidator.isValidInput())
+            break;
+        else
+        {
+            std::cout << "Enter correct choice";
+        }
+    }
     return choice;
 }
 
@@ -35,7 +41,7 @@ int main()
     int index;
     do
     {
-        do
+        while (true)
         {
             std::cout << "Main Menu:\n"
                       << "1. Play Playlist\n"
@@ -46,15 +52,26 @@ int main()
                       << "Enter your choice: \n";
 
             std::cin >> option;
-        } while (!inputValidator.isValidInput());
+            if (inputValidator.isValidInput())
+                break;
+            else
+                std::cout << "Enter valid choice";
+        }
 
         switch (option)
         {
         case 1:
         {
             player.showPlaylist();
-            std::cout << "Enter the number of the playlist to play: ";
-            std::cin >> index;
+            while (true)
+            {
+                std::cout << "Enter the number of the playlist to play: ";
+                std::cin >> index;
+                if (inputValidator.isValidInput())
+                    break;
+                else
+                    std::cout << "Enter valid choice";
+            }
             player.playPlaylist(index);
             PlaylistAction action;
             do
@@ -104,7 +121,14 @@ int main()
                     std::cout << i + 1 << ". " << player.allSongs[i].getTitle() << std::endl;
                 }
                 std::cout << "Add song: ";
-                std::cin >> choice;
+                while (true)
+                {
+                    std::cin >> choice;
+                    if (inputValidator.isValidInput())
+                        break;
+                    else
+                        std::cout << "Enter valid choice";
+                }
                 getline(std::cin, song);
                 if (choice != -1)
                 {
@@ -119,8 +143,14 @@ int main()
         {
             player.showPlaylist();
             std::cout << "Enter the number of the playlist to delete: ";
-            std::cin >> index;
-            std::cin.ignore();
+            while (true)
+            {
+                std::cin >> index;
+                if (inputValidator.isValidInput())
+                    break;
+                else
+                    std::cout << "Enter valid choice";
+            }
             if (player.deletePlaylist(index))
             {
                 std::cout << "Playlist deleted successfully." << std::endl;
@@ -135,8 +165,14 @@ int main()
         {
             player.showPlaylist();
             std::cout << "Enter the number of the playlist to update: ";
-            std::cin >> index;
-            std::cin.ignore();
+            while (true)
+            {
+                std::cin >> index;
+                if (inputValidator.isValidInput())
+                    break;
+                else
+                    std::cout << "Enter valid choice";
+            }
 
             std::cout << "Update Menu:\n"
                       << "1. Update Playlist Name\n"

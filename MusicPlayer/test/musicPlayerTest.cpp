@@ -76,9 +76,3 @@ TEST_F(MusicPlayerTest, WhenNextMusicIsPlayed_ThenNextMusicPlays)
     EXPECT_TRUE(player.playNextSong());
 }
 
-// TEST_F(MusicPlayerTest, WhenPreviousMusicIsPlayed_ThenPreviousMusicPlays)
-// {
-//     EXPECT_CALL(mockLibrary, stop()).WillOnce(::testing::Return(true));
-
-//     EXPECT_TRUE(player.playPreviousSong());
-// }

@@ -14,12 +14,12 @@ private:
 
 public:
     Playlist(std::string _name);
-    void addSong(const Song &song);
-    void displaySongs() const;
-    void deleteSong(int index);
-    void updatePlaylistName(const std::string &newName);
-    void moveSongUp(int index);
-    void moveSongDown(int index);
+    bool addSong(const Song &song);
+    bool displaySongs() const;
+    bool deleteSong(int index);
+    bool updatePlaylistName(const std::string &newName);
+    bool moveSongUp(int index);
+    bool moveSongDown(int index);
     std::string getName() const;
     const std::vector<Song> &getSongs() const;
 };
