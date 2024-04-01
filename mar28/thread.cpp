@@ -9,13 +9,16 @@ void DoWork()
     while (!isFinished)
     {
         std::cout << "Working..." << std::endl;
-        std::this_thread::sleep_for(1s);
+        // std::this_thread::sleep_for(1s);
     }
 }
 
 int main()
 {
     std::thread worker(DoWork);
+    while(1){
+        std::cout<<"In main"<<std::endl;
+    }
     std::cin.get();
     isFinished = true;
     worker.join();
