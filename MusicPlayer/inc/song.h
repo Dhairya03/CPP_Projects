@@ -2,8 +2,9 @@
 #define SONG_H
 
 #include <string>
+#include "ISong.h"
 
-class Song
+class Song : public ISong
 {
 private:
     std::string title;
@@ -13,4 +14,4 @@ public:
     std::string getTitle() const;
 };
 
-#endif 
+#endif

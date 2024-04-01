@@ -5,8 +5,9 @@
 #include <vector>
 #include "song.h"
 #include <fstream>
+#include "IPlaylist.h"
 
-class Playlist
+class Playlist : public IPlaylist
 {
 private:
     std::string name;

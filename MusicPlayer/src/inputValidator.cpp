@@ -1,6 +1,6 @@
 #include "inputValidator.h"
 
-bool Inputvalidator::isValidInput()
+bool InputValidator::isValidInput()
 {
     bool isValid = false;
     if (std::cin.fail() || std::cin.peek() != '\n')

@@ -6,9 +6,10 @@
 #include "song.h"
 #include <SFML/Audio.hpp>
 #include "ILibraryWrapper.h"
+#include "IMusicPlayer.h"
 #include "constants.h"
 
-class MusicPlayer
+class MusicPlayer : public IMusicPlayer
 {
 private:
     std::vector<Playlist> playlists;
@@ -17,6 +18,7 @@ private:
     int currentSongIndex;
     bool isPlaying = false;
 
+    bool getIsPlaying();
     void savePlaylistsToFile(const std::vector<Playlist> &playlists);
     void loadPlaylistsFromFile(std::vector<Playlist> &playlists);
     void loadSongsFromFile(std::vector<Song> &allSongs);

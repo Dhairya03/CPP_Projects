@@ -9,6 +9,7 @@
 
 int getPlayerAction()
 {
+    InputValidator inputValidator;
     int choice;
     while (true)
     {

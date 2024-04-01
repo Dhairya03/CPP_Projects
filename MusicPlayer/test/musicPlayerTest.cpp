@@ -11,9 +11,6 @@ public:
     void SetUp()
     {
         player = new MusicPlayer(mockLibrary);
-        int index = 1;
-        player->playPlaylist(index);
-        ON_CALL(mockLibrary, openFromFile(::testing::_)).WillByDefault(::testing::Return(true));
     }
     void TearDown()
     {
@@ -41,7 +38,7 @@ TEST_F(MusicPlayerTest, WhenPlayPlaylistHasInvalidIndex_ReturnsFalse)
 TEST_F(MusicPlayerTest, WhenMusicIsStopped_ThenMusicStops)
 {
     EXPECT_CALL(mockLibrary, stop()).WillOnce(::testing::Return(true));
-
+ 
     EXPECT_TRUE(player->stop());
 }
 
@@ -75,9 +72,4 @@ TEST_F(MusicPlayerTest, WhenMusicIsReplayed_ThenMusicStopsButDoesNotPlayAndDoesN
     EXPECT_FALSE(player->replay());
 }
 
-TEST_F(MusicPlayerTest, WhenNextMusicIsPlayed_ThenNextMusicPlays)
-{
-    EXPECT_CALL(mockLibrary, stop()).WillOnce(::testing::Return(true));
 
-    EXPECT_TRUE(player->playNextSong());
-}

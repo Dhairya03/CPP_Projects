@@ -9,6 +9,11 @@ MusicPlayer::MusicPlayer(ILibraryWrapper &music) : music(music)
     loadSongsFromFile(allSongs);
 }
 
+bool MusicPlayer::getIsPlaying()
+{
+    return isPlaying;
+}
+
 bool MusicPlayer::playSong(const Song &songFile)
 {
     bool isPlayed = false;
@@ -29,7 +34,7 @@ bool MusicPlayer::playSong(const Song &songFile)
 bool MusicPlayer::togglePause()
 {
     bool isPaused = false;
-    if (isPlaying)
+    if (getIsPlaying())
     {
         if (music.pause())
         {
@@ -73,8 +78,7 @@ bool MusicPlayer::playNextSong()
     {
         ++currentSongIndex;
         music.stop();
-        playSong(currentPlaylist->getSongs()[currentSongIndex]);
-        isNextPlayed = true;
+        isNextPlayed = playSong(currentPlaylist->getSongs()[currentSongIndex]);
     }
     else
     {
@@ -90,8 +94,7 @@ bool MusicPlayer::playPreviousSong()
     {
         --currentSongIndex;
         music.stop();
-        playSong(currentPlaylist->getSongs()[currentSongIndex]);
-        isPreviousPlayed = true;
+        isPreviousPlayed = playSong(currentPlaylist->getSongs()[currentSongIndex]);
     }
     else
     {
