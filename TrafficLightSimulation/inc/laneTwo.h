@@ -10,27 +10,18 @@ using namespace std::chrono;
 class LaneTwo : public Lane
 {
     int laneNumber = 2;
-    int counter = 0;
+    int *counterTwo = 0;
 
 public:
-    int getCounter()
-    {
-        return counter;
-    }
+    bool start = false;
+    LaneTwo();
 
-    void switchLight()
-    {
-        while (true)
-        {
-            laneOneToLaneTwo.acquire();
-            counter = 1;
-            std::cout << "Lane 2 is green" << std::endl;
-            std::this_thread::sleep_for(10s);
-            counter = 0;
-            std::cout << "Lane 2 is red" << std::endl;
-            laneTwoToLaneThree.release();
-            std::this_thread::sleep_for(30s);
-        }
-    }
+    ~LaneTwo();
+
+    int getCounter();
+
+    void setCounter(int val);
+
+    void switchLight();
 };
 #endif

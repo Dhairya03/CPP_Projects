@@ -9,12 +9,8 @@
 #include "laneFour.h"
 #include "lane.h"
 #include "constants.h"
-// std::binary_semaphore
-//     mainToLaneOne{0},
-//     laneOneToLaneTwo{0},
-//     laneTwoToLaneThree{0},
-//     laneThreeToLaneFour{0},
-//     laneFourToMain{0};
+
+using namespace std::chrono;
 
 int main()
 {
@@ -25,7 +21,10 @@ int main()
     LaneThree laneThree;
     LaneFour laneFour;
     std::cout << "Starting the traffic light" << std::endl;
-
+    laneOne.start = true;
+    laneTwo.start = true;
+    laneThree.start = true;
+    laneFour.start = true;
     std::thread LaneOneThread(&LaneOne::switchLight, laneOne);
     std::thread LaneTwoThread(&LaneTwo::switchLight, laneTwo);
     std::thread LaneThreeThread(&LaneThree::switchLight, laneThree);
@@ -35,7 +34,7 @@ int main()
     {
         std::cout << "\t | Lane 3 | \t\n------\t\t\t------\nLane 4 \t\t\tLane 2\n------\t\t\t------\n\t | Lane 1 | \t \n";
 
-        std::cout << "Where are you standing?\nChoose your lane number(Enter 1,2,3 or 4 only)" << std::endl;
+        std::cout << "Where are you standing?\nChoose your lane number(Enter 1, 2, 3, or 4 only)" << std::endl;
         std::cin >> sourceLane;
 
         std::cout << "Where do you want to go?\nChoose the lane number(Enter 1, 2, 3, or 4 only)" << std::endl;
@@ -53,19 +52,22 @@ int main()
         {
             if (sourceLane == 1)
             {
-                std::cout<<laneOne.getCounter();
                 if (laneOne.getCounter() == 1)
                 {
                     std::cout << "You can go ahead" << std::endl;
                 }
                 else
                 {
-                    std::cout << "You have to wait" << std::endl;
+                    while (laneOne.getCounter() != 1)
+                    {
+                        std::cout << "You have to wait" << std::endl;
+                        std::this_thread::sleep_for(1s);
+                    }
+                    std::cout << "Now you can go" << std::endl;
                 }
             }
             else if (sourceLane == 2)
             {
-                std::cout << laneTwo.getCounter();
                 if (laneTwo.getCounter() == 1)
                 {
                     std::cout << "You can go ahead" << std::endl;
@@ -106,7 +108,12 @@ int main()
         std::cout << "Want to continue\nEnter 1 to continue.\nEnter -1 to quit" << std::endl;
         std::cin >> choice;
     } while (choice != -1);
-    std::cout << "TurningOff traffic light" << std::endl;
+    std::cout << "Turning Off traffic light" << std::endl;
+    laneOne.start = false;
+    laneTwo.start = false;
+    laneThree.start = false;
+    laneFour.start = false;
+
     if (LaneOneThread.joinable())
         LaneOneThread.join();
     if (LaneTwoThread.joinable())
@@ -115,6 +122,6 @@ int main()
         LaneThreeThread.join();
     if (LaneFourThread.joinable())
         LaneFourThread.join();
-
+    std::cout << "Finished" << std::endl;
     return 0;
 }
