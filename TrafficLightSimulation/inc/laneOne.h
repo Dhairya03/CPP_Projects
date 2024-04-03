@@ -5,6 +5,8 @@
 #include <chrono>
 #include <semaphore>
 #include <mutex>
+#include "trafficSignal.h"
+
 #include "constants.h"
 
 using namespace std::chrono;
@@ -12,19 +14,23 @@ using namespace std::chrono;
 class LaneOne : public Lane
 {
     int laneNumber = 1;
-    int *counterOne = 0;
+    // int *counterOne = 0;
+    // TrafficSignal signal;
+    // bool start = false;
 
 public:
-    bool start=false;
-
     LaneOne();
 
     ~LaneOne();
 
-    int getCounter();
+    // int getLoopStart();
 
-    void setCounter(int val);
+    // void setLoopStart(int);
 
-    void switchLight();    
+    // int getCounter();
+
+    // void setCounter();
+
+    void switchLight();
 };
 #endif

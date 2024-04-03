@@ -2,29 +2,39 @@
 #include <mutex>
 #include <thread>
 #include <chrono>
-#include <semaphore>
+#include <semaphore.h>
 #include "laneOne.h"
 #include "laneTwo.h"
 #include "laneThree.h"
 #include "laneFour.h"
 #include "lane.h"
+#include "ILane.h"
 #include "constants.h"
 
 using namespace std::chrono;
+sem_t laneOneToLaneTwo, laneTwoToLaneThree, laneThreeToLaneFour, laneFourToLaneOne;
 
 int main()
 {
+    sem_init(&laneOneToLaneTwo, 0, 0);
+    sem_init(&laneTwoToLaneThree, 0, 0);
+    sem_init(&laneThreeToLaneFour, 0, 0);
+    sem_init(&laneFourToLaneOne, 0, 1);
+
     int numberOfLanes = 4;
     int sourceLane, destinationLane, choice;
+
     LaneOne laneOne;
     LaneTwo laneTwo;
     LaneThree laneThree;
     LaneFour laneFour;
+
     std::cout << "Starting the traffic light" << std::endl;
-    laneOne.start = true;
-    laneTwo.start = true;
-    laneThree.start = true;
-    laneFour.start = true;
+    laneOne.setLoopStart(true);
+    laneTwo.setLoopStart(true);
+    laneThree.setLoopStart(true);
+    laneFour.setLoopStart(true);
+
     std::thread LaneOneThread(&LaneOne::switchLight, laneOne);
     std::thread LaneTwoThread(&LaneTwo::switchLight, laneTwo);
     std::thread LaneThreeThread(&LaneThree::switchLight, laneThree);
@@ -74,7 +84,12 @@ int main()
                 }
                 else
                 {
-                    std::cout << "You have to wait" << std::endl;
+                    while (laneOne.getCounter() != 1)
+                    {
+                        std::cout << "You have to wait" << std::endl;
+                        std::this_thread::sleep_for(1s);
+                    }
+                    std::cout << "Now you can go" << std::endl;
                 }
             }
             else if (sourceLane == 3)
@@ -108,11 +123,13 @@ int main()
         std::cout << "Want to continue\nEnter 1 to continue.\nEnter -1 to quit" << std::endl;
         std::cin >> choice;
     } while (choice != -1);
+
     std::cout << "Turning Off traffic light" << std::endl;
-    laneOne.start = false;
-    laneTwo.start = false;
-    laneThree.start = false;
-    laneFour.start = false;
+
+    laneOne.setLoopStart(false);
+    laneTwo.setLoopStart(false);
+    laneThree.setLoopStart(false);
+    laneFour.setLoopStart(false);
 
     if (LaneOneThread.joinable())
         LaneOneThread.join();
@@ -122,6 +139,7 @@ int main()
         LaneThreeThread.join();
     if (LaneFourThread.joinable())
         LaneFourThread.join();
-    std::cout << "Finished" << std::endl;
+
+    std::cout << "Exited Successfully" << std::endl;
     return 0;
 }

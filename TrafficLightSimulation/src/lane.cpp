@@ -1,6 +1,30 @@
 #include "lane.h"
+#include <iostream>
 
-// std::binary_semaphore laneOneToLaneTwo{0};
-// std::binary_semaphore laneTwoToLaneThree{0};
-// std::binary_semaphore laneThreeToLaneFour{0};
-// std::binary_semaphore laneFourToLaneOne{0};
+Lane::Lane()
+{
+}
+
+int Lane::getLoopStart()
+{
+    return *isLoopStart;
+}
+
+void Lane::setLoopStart(bool loopChoice)
+{
+    *isLoopStart = loopChoice;
+}
+
+int Lane::getCounter()
+{
+    return *counter;
+}
+
+void Lane::setCounter()
+{
+    *counter = signal.getSignal();
+}
+
+Lane::~Lane()
+{
+}

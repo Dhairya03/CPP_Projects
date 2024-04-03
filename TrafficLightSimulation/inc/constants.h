@@ -1,16 +1,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include <semaphore>
+#include <semaphore.h>
 
-// class Constants{
-//     public:
-    
-// }
-// std::binary_semaphore
-//     laneOneToLaneTwo{0},
-//     laneTwoToLaneThree{0},
-//     laneThreeToLaneFour{0},
-//     laneFourToLaneOne{0};
+extern sem_t laneOneToLaneTwo, laneTwoToLaneThree, laneThreeToLaneFour, laneFourToLaneOne;
 
 #endif

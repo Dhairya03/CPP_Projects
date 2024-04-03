@@ -1,27 +1,23 @@
 #ifndef LANE_H
 #define LANE_H
 
-// #include "constants.h"
-#include <semaphore>
+#include "ILane.h"
+#include "trafficSignal.h"
 
-class Lane
+class Lane : public ILane
 {
 protected:
-    std::counting_semaphore
-        laneOneToLaneTwo{1};
-    std::counting_semaphore
-        laneTwoToLaneThree{1};
-    std::counting_semaphore
-        laneThreeToLaneFour{1};
-    std::counting_semaphore
-        laneFourToLaneOne{1};
-
-    // Constants constant;
+    int *counter = 0;
+    bool *isLoopStart = 0;
+    TrafficSignal signal;
 
 public:
+    Lane();
+    int getLoopStart();
+    void setLoopStart(bool);
     int getCounter();
     void setCounter();
-    void switchLight();
+    ~Lane();
 };
 
 #endif

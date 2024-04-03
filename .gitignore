@@ -53,3 +53,5 @@ Parser/
 *.txt
 MusicPlayer/
 lib/
+*.a
+*.o

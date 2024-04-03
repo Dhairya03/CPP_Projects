@@ -1,37 +1,33 @@
 #include "laneThree.h"
-#include "semaphores.cpp"
 
 #include <iostream>
 
 LaneThree::LaneThree()
 {
-    counterThree = new int;
-}
-LaneThree::~LaneThree()
-{
-    delete counterThree;
-}
-int LaneThree:: getCounter()
-{
-    return *counterThree;
+    counter = new int;
+    isLoopStart = new bool;
 }
 
-void LaneThree::setCounter(int val)
+LaneThree::~LaneThree()
 {
-    *counterThree = val;
+    delete counter;
+    delete isLoopStart;
 }
 
 void LaneThree::switchLight()
 {
-    while (start)
+    while (getLoopStart())
     {
-        laneTwoToLaneThree.acquire();
-        setCounter(1);
-        std::cout << "Lane 3 is green" << std::endl;
+        sem_wait(&laneTwoToLaneThree);
+
+        signal.changeSignalGreen();
+        setCounter();
         std::this_thread::sleep_for(10s);
-        setCounter(0);
-        std::cout << "Lane 3 is red" << std::endl;
-        laneThreeToLaneFour.release();
+        signal.changeSignalRed();
+        setCounter();
+        std::cout << "lane 3 is red" << std::endl;
+
+        sem_post(&laneThreeToLaneFour);
         std::this_thread::sleep_for(30s);
     }
 }

@@ -4,23 +4,29 @@
 #include <thread>
 #include <chrono>
 #include "constants.h"
+#include "trafficSignal.h"
 
 using namespace std::chrono;
 
 class LaneTwo : public Lane
 {
     int laneNumber = 2;
-    int *counterTwo = 0;
+    // int *counterTwo = 0;
+    // TrafficSignal signal;
+    // bool start = false;
 
 public:
-    bool start = false;
     LaneTwo();
 
     ~LaneTwo();
 
-    int getCounter();
+    // int getLoopStart();
 
-    void setCounter(int val);
+    // void setLoopStart(int);
+
+    // int getCounter();
+
+    // void setCounter();
 
     void switchLight();
 };
