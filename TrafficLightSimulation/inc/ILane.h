@@ -10,7 +10,6 @@ public:
     virtual void setCounter(ITrafficSignal*) = 0;
     virtual int getLoopStart() = 0;
     virtual void setLoopStart(bool) = 0;
-    virtual void switchLight() = 0;
 };
 
 #endif
