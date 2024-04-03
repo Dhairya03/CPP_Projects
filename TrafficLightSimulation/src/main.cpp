@@ -23,7 +23,7 @@ int main()
 
     int numberOfLanes = 4;
     int sourceLane, destinationLane, choice;
-    ITrafficSignal *signal=new TrafficSignal();
+    ITrafficSignal *signal = new TrafficSignal();
     LaneOne laneOne{signal};
     LaneTwo laneTwo{signal};
     LaneThree laneThree{signal};
@@ -84,7 +84,7 @@ int main()
                 }
                 else
                 {
-                    while (laneOne.getCounter() != 1)
+                    while (laneTwo.getCounter() != 1)
                     {
                         std::cout << "You have to wait" << std::endl;
                         std::this_thread::sleep_for(1s);
@@ -100,7 +100,12 @@ int main()
                 }
                 else
                 {
-                    std::cout << "You have to wait" << std::endl;
+                    while (laneThree.getCounter() != 1)
+                    {
+                        std::cout << "You have to wait" << std::endl;
+                        std::this_thread::sleep_for(1s);
+                    }
+                    std::cout << "Now you can go" << std::endl;
                 }
             }
             else if (sourceLane == 4)
@@ -111,7 +116,12 @@ int main()
                 }
                 else
                 {
-                    std::cout << "You have to wait" << std::endl;
+                    while (laneFour.getCounter() != 1)
+                    {
+                        std::cout << "You have to wait" << std::endl;
+                        std::this_thread::sleep_for(1s);
+                    }
+                    std::cout << "Now you can go" << std::endl;
                 }
             }
             else
