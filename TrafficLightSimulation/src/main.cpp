@@ -3,13 +3,10 @@
 #include <thread>
 #include <chrono>
 #include <semaphore.h>
-#include "laneOne.h"
-#include "laneTwo.h"
-#include "laneThree.h"
-#include "laneFour.h"
 #include "lane.h"
 #include "ILane.h"
 #include "constants.h"
+#include "inputValidator.h"
 
 using namespace std::chrono;
 sem_t laneOneToLaneTwo, laneTwoToLaneThree, laneThreeToLaneFour, laneFourToLaneOne;
@@ -23,11 +20,20 @@ int main()
 
     int numberOfLanes = 4;
     int sourceLane, destinationLane, choice;
+    InputValidator inputValidator;
+
     ITrafficSignal *signal = new TrafficSignal();
-    LaneOne laneOne{signal};
-    LaneTwo laneTwo{signal};
-    LaneThree laneThree{signal};
-    LaneFour laneFour{signal};
+    if (signal != NULL)
+    {
+        Lane laneOne{signal};
+        Lane laneTwo{signal};
+        Lane laneThree{signal};
+        Lane laneFour{signal};
+    }
+    else
+    {
+        std::cout << "No traffic signal found" << std::endl;
+    }
 
     std::cout << "Starting the traffic light" << std::endl;
     laneOne.setLoopStart(true);
@@ -35,20 +41,42 @@ int main()
     laneThree.setLoopStart(true);
     laneFour.setLoopStart(true);
 
-    std::thread LaneOneThread(&LaneOne::switchLight, laneOne);
-    std::thread LaneTwoThread(&LaneTwo::switchLight, laneTwo);
-    std::thread LaneThreeThread(&LaneThree::switchLight, laneThree);
-    std::thread LaneFourThread(&LaneFour::switchLight, laneFour);
+    std::thread LaneOneThread(&Lane::switchLight, &laneOne, std::ref(laneFourToLaneOne), std::ref(laneOneToLaneTwo), 1);
+    std::thread LaneTwoThread(&Lane::switchLight, &laneTwo, std::ref(laneOneToLaneTwo), std::ref(laneTwoToLaneThree), 2);
+    std::thread LaneThreeThread(&Lane::switchLight, &laneThree, std::ref(laneTwoToLaneThree), std::ref(laneThreeToLaneFour), 3);
+    std::thread LaneFourThread(&Lane::switchLight, &laneFour, std::ref(laneThreeToLaneFour), std::ref(laneFourToLaneOne), 4);
 
     do
     {
         std::cout << "\t | Lane 3 | \t\n------\t\t\t------\nLane 4 \t\t\tLane 2\n------\t\t\t------\n\t | Lane 1 | \t \n";
 
         std::cout << "Where are you standing?\nChoose your lane number(Enter 1, 2, 3, or 4 only)" << std::endl;
-        std::cin >> sourceLane;
+        while (true)
+        {
+            std::cin >> sourceLane;
+            if (inputValidator.isValidInput() && inputValidator.isValidLane(sourceLane))
+            {
+                break;
+            }
+            else
+            {
+                std::cout << "Invalid lane choice.Please try again" << std::endl;
+            }
+        }
 
         std::cout << "Where do you want to go?\nChoose the lane number(Enter 1, 2, 3, or 4 only)" << std::endl;
-        std::cin >> destinationLane;
+        while (true)
+        {
+            std::cin >> destinationLane;
+            if (inputValidator.isValidInput() && inputValidator.isValidLane(destinationLane))
+            {
+                break;
+            }
+            else
+            {
+                std::cout << "Invalid lane choice.Please try again" << std::endl;
+            }
+        }
 
         if (sourceLane == destinationLane)
         {
@@ -60,73 +88,41 @@ int main()
         }
         else
         {
-            if (sourceLane == 1)
+            Lane *laneObj = nullptr;
+            switch (sourceLane)
             {
-                if (laneOne.getCounter() == 1)
-                {
-                    std::cout << "You can go ahead" << std::endl;
-                }
-                else
-                {
-                    while (laneOne.getCounter() != 1)
-                    {
-                        std::cout << "You have to wait" << std::endl;
-                        std::this_thread::sleep_for(1s);
-                    }
-                    std::cout << "Now you can go" << std::endl;
-                }
-            }
-            else if (sourceLane == 2)
-            {
-                if (laneTwo.getCounter() == 1)
-                {
-                    std::cout << "You can go ahead" << std::endl;
-                }
-                else
-                {
-                    while (laneTwo.getCounter() != 1)
-                    {
-                        std::cout << "You have to wait" << std::endl;
-                        std::this_thread::sleep_for(1s);
-                    }
-                    std::cout << "Now you can go" << std::endl;
-                }
-            }
-            else if (sourceLane == 3)
-            {
-                if (laneThree.getCounter() == 1)
-                {
-                    std::cout << "You can go ahead" << std::endl;
-                }
-                else
-                {
-                    while (laneThree.getCounter() != 1)
-                    {
-                        std::cout << "You have to wait" << std::endl;
-                        std::this_thread::sleep_for(1s);
-                    }
-                    std::cout << "Now you can go" << std::endl;
-                }
-            }
-            else if (sourceLane == 4)
-            {
-                if (laneFour.getCounter() == 1)
-                {
-                    std::cout << "You can go ahead" << std::endl;
-                }
-                else
-                {
-                    while (laneFour.getCounter() != 1)
-                    {
-                        std::cout << "You have to wait" << std::endl;
-                        std::this_thread::sleep_for(1s);
-                    }
-                    std::cout << "Now you can go" << std::endl;
-                }
-            }
-            else
-            {
+            case 1:
+                laneObj = &laneOne;
+                break;
+            case 2:
+                laneObj = &laneTwo;
+                break;
+            case 3:
+                laneObj = &laneThree;
+                break;
+            case 4:
+                laneObj = &laneFour;
+                break;
+            default:
                 std::cout << "Invalid lane number" << std::endl;
+                break;
+            }
+
+            if (laneObj != NULL)
+            {
+                if (laneObj->getCounter() == 1)
+                {
+                    std::cout << "You can go ahead" << std::endl;
+                }
+                else
+                {
+                    while (laneObj->getCounter() != 1)
+                    {
+                        std::cout << "You have to wait" << std::endl;
+                        std::this_thread::sleep_for(1s);
+                    }
+                    std::cout << "Now you can go" << std::endl;
+                }
             }
         }
 

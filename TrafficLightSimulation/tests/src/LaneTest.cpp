@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include "lane.h"
-#include "laneOne.h"
 #include "mockTrafficSignal.h"
 
 class LaneTest : public ::testing::Test

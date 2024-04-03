@@ -12,10 +12,3 @@ TEST_F(TrafficSignalTest, WhenSignalSetToGreen_ThenGetSignalReturnGreen)
     signal.setSignal(1);
     EXPECT_EQ(signal.getSignal(), 1);
 }
-
-TEST_F(TrafficSignalTest, WhenSignalSetToGreen_ThenGetSignalReturnGreen)
-{
-    signal.setSignal(1);
-    EXPECT_EQ(signal.getSignal(), 1);
-}
-

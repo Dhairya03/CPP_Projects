@@ -9,7 +9,7 @@ class Lane : public ILane
 public:
     int *counter = 0;
     bool *isLoopStart = 0;
-    ITrafficSignal *iSignal;
+    ITrafficSignal *signal;
 
 public:
     Lane();
@@ -18,6 +18,7 @@ public:
     void setLoopStart(bool);
     int getCounter();
     void setCounter(ITrafficSignal *);
+    void switchLight(sem_t &, sem_t &, int);
     ~Lane();
 };
 

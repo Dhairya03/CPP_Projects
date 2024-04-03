@@ -2,9 +2,14 @@
 #include <iostream>
 Lane::Lane()
 {
+    counter = new int;
+    isLoopStart = new bool;
 }
-Lane::Lane(ITrafficSignal *trafficSignal) : iSignal(trafficSignal)
+
+Lane::Lane(ITrafficSignal *trafficSignal) : signal(trafficSignal)
 {
+    counter = new int;
+    isLoopStart = new bool;
 }
 
 int Lane::getLoopStart()
@@ -29,4 +34,23 @@ void Lane::setCounter(ITrafficSignal *signal)
 
 Lane::~Lane()
 {
+    delete counter;
+    delete isLoopStart;
+}
+
+void Lane::switchLight(sem_t &wait, sem_t &post, int laneNumber)
+{
+    while (getLoopStart())
+    {
+        sem_wait(&wait);
+        signal->setSignal(Green);
+        setCounter(signal);
+        std::cout << "lane " << laneNumber << " is green" << std::endl;
+        std::this_thread::sleep_for(10s);
+        signal->setSignal(Red);
+        setCounter(signal);
+        std::cout << "lane " << laneNumber << " is red" << std::endl;
+        sem_post(&post);
+        std::this_thread::sleep_for(30s);
+    }
 }
