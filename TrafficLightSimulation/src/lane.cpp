@@ -1,7 +1,9 @@
 #include "lane.h"
 #include <iostream>
-
 Lane::Lane()
+{
+}
+Lane::Lane(ITrafficSignal *trafficSignal) : iSignal(trafficSignal)
 {
 }
 
@@ -20,9 +22,9 @@ int Lane::getCounter()
     return *counter;
 }
 
-void Lane::setCounter()
+void Lane::setCounter(ITrafficSignal *signal)
 {
-    *counter = signal.getSignal();
+    *counter = signal->getSignal();
 }
 
 Lane::~Lane()

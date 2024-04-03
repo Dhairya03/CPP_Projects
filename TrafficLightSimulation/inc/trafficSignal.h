@@ -6,6 +6,8 @@
 #include <mutex>
 #include <iostream>
 #include "ITrafficSignal.h"
+#include "constants.h"
+
 using namespace std::chrono;
 
 class TrafficSignal : public ITrafficSignal
@@ -20,10 +22,6 @@ public:
     int getSignal();
 
     void setSignal(int sign);
-
-    void changeSignalGreen();
-
-    void changeSignalRed();
 };
 
 #endif

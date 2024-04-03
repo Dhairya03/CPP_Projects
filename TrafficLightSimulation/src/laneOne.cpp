@@ -1,7 +1,7 @@
 #include "laneOne.h"
 #include <iostream>
 
-LaneOne::LaneOne()
+LaneOne::LaneOne(ITrafficSignal *trafficSignal) : signal(trafficSignal)
 {
     counter = new int;
     isLoopStart = new bool;
@@ -18,11 +18,12 @@ void LaneOne::switchLight()
     while (getLoopStart())
     {
         sem_wait(&laneFourToLaneOne);
-        signal.changeSignalGreen();
-        setCounter();
+        signal->setSignal(Green);
+        setCounter(signal);
+        std::cout << "Lane 1 is green" << std::endl;
         std::this_thread::sleep_for(10s);
-        signal.changeSignalRed();
-        setCounter();
+        signal->setSignal(Red);
+        setCounter(signal);
         std::cout << "Lane 1 is red" << std::endl;
         sem_post(&laneOneToLaneTwo);
         std::this_thread::sleep_for(30s);

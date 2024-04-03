@@ -6,17 +6,18 @@
 
 class Lane : public ILane
 {
-protected:
+public:
     int *counter = 0;
     bool *isLoopStart = 0;
-    TrafficSignal signal;
+    ITrafficSignal *iSignal;
 
 public:
     Lane();
+    Lane(ITrafficSignal *);
     int getLoopStart();
     void setLoopStart(bool);
     int getCounter();
-    void setCounter();
+    void setCounter(ITrafficSignal *);
     ~Lane();
 };
 

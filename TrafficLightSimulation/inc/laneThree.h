@@ -11,24 +11,12 @@ using namespace std::chrono;
 class LaneThree : public Lane
 {
     int laneNumber = 3;
-    // int *counterThree = 0;
-    // TrafficSignal signal;
-    // bool start = false;
+    ITrafficSignal *signal;
 
 public:
-    bool start = false;
-
-    LaneThree();
+    LaneThree(ITrafficSignal*);
 
     ~LaneThree();
-
-    // int getLoopStart();
-
-    // void setLoopStart(int);
-
-    // int getCounter();
-
-    // void setCounter();
 
     void switchLight();
 };

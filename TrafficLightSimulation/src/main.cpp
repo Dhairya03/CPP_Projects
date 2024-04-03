@@ -23,11 +23,11 @@ int main()
 
     int numberOfLanes = 4;
     int sourceLane, destinationLane, choice;
-
-    LaneOne laneOne;
-    LaneTwo laneTwo;
-    LaneThree laneThree;
-    LaneFour laneFour;
+    ITrafficSignal *signal=new TrafficSignal();
+    LaneOne laneOne{signal};
+    LaneTwo laneTwo{signal};
+    LaneThree laneThree{signal};
+    LaneFour laneFour{signal};
 
     std::cout << "Starting the traffic light" << std::endl;
     laneOne.setLoopStart(true);

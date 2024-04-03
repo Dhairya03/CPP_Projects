@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-LaneThree::LaneThree()
+LaneThree::LaneThree(ITrafficSignal *trafficSignal) : signal(trafficSignal)
 {
     counter = new int;
     isLoopStart = new bool;
@@ -19,14 +19,13 @@ void LaneThree::switchLight()
     while (getLoopStart())
     {
         sem_wait(&laneTwoToLaneThree);
-
-        signal.changeSignalGreen();
-        setCounter();
+        signal->setSignal(Green);
+        setCounter(signal);
+        std::cout << "lane 3 is green" << std::endl;
         std::this_thread::sleep_for(10s);
-        signal.changeSignalRed();
-        setCounter();
+        signal->setSignal(Red);
+        setCounter(signal);
         std::cout << "lane 3 is red" << std::endl;
-
         sem_post(&laneThreeToLaneFour);
         std::this_thread::sleep_for(30s);
     }

@@ -19,13 +19,3 @@ void TrafficSignal::setSignal(int sign)
 {
     *signal = sign;
 }
-
-void TrafficSignal::changeSignalGreen()
-{
-    setSignal(1);
-}
-
-void TrafficSignal::changeSignalRed()
-{
-    setSignal(0);
-}

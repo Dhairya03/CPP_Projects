@@ -1,5 +1,6 @@
 #ifndef LANE_TWO_H
 #define LANE_TWO_H
+
 #include "lane.h"
 #include <thread>
 #include <chrono>
@@ -11,22 +12,12 @@ using namespace std::chrono;
 class LaneTwo : public Lane
 {
     int laneNumber = 2;
-    // int *counterTwo = 0;
-    // TrafficSignal signal;
-    // bool start = false;
+    ITrafficSignal *signal;
 
 public:
-    LaneTwo();
+    LaneTwo(ITrafficSignal *);
 
     ~LaneTwo();
-
-    // int getLoopStart();
-
-    // void setLoopStart(int);
-
-    // int getCounter();
-
-    // void setCounter();
 
     void switchLight();
 };
