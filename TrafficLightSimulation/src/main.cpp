@@ -23,17 +23,11 @@ int main()
     InputValidator inputValidator;
 
     ITrafficSignal *signal = new TrafficSignal();
-    if (signal != NULL)
-    {
-        Lane laneOne{signal};
-        Lane laneTwo{signal};
-        Lane laneThree{signal};
-        Lane laneFour{signal};
-    }
-    else
-    {
-        std::cout << "No traffic signal found" << std::endl;
-    }
+
+    Lane laneOne{signal};
+    Lane laneTwo{signal};
+    Lane laneThree{signal};
+    Lane laneFour{signal};
 
     std::cout << "Starting the traffic light" << std::endl;
     laneOne.setLoopStart(true);
@@ -127,7 +121,18 @@ int main()
         }
 
         std::cout << "Want to continue\nEnter 1 to continue.\nEnter -1 to quit" << std::endl;
-        std::cin >> choice;
+        while (true)
+        {
+            std::cin >> choice;
+            if (inputValidator.isValidInput() && inputValidator.isValidChoice(choice))
+            {
+                break;
+            }
+            else
+            {
+                std::cout << "Invalid choice.Please try again" << std::endl;
+            }
+        }
     } while (choice != -1);
 
     std::cout << "Turning Off traffic light" << std::endl;
