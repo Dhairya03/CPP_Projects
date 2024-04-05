@@ -7,14 +7,14 @@ class PlaylistTest : public ::testing::Test
 {
 public:
     Playlist *playlist;
-    Song *song;
+    ISong *song;
     std::string title = "/home/dhairyagupta/songs/guitar.wav";
     std::string name = "testPlay";
     void SetUp()
     {
         playlist = new Playlist(name);
         song = new Song(title);
-        playlist->addSong(*song);
+        playlist->addSong(song);
     }
     void TearDown()
     {
@@ -25,7 +25,7 @@ public:
 
 TEST_F(PlaylistTest, WhenSongIsAdded_ThenReturnTrue)
 {
-    EXPECT_TRUE(playlist->addSong(*song));
+    EXPECT_TRUE(playlist->addSong(song));
 }
 
 TEST_F(PlaylistTest, WhenGetNameIsCalled_ThenReturnPlaylistName)
@@ -54,7 +54,7 @@ TEST_F(PlaylistTest, WhenSongNameIsUpdated_ThenReturnsTrue)
 TEST_F(PlaylistTest, WhenSongIsMovedUpValidIndex_ThenReturnsTrue)
 {
     int index = 1;
-    Song newSong("song.wav");
+    ISong *newSong=new Song("song.wav");
     playlist->addSong(newSong);
     EXPECT_TRUE(playlist->moveSongUp(index));
 }
@@ -62,7 +62,7 @@ TEST_F(PlaylistTest, WhenSongIsMovedUpValidIndex_ThenReturnsTrue)
 TEST_F(PlaylistTest, WhenSongIsMovedUpInValidIndex_ThenReturnsTrue)
 {
     int index = -1;
-    Song newSong("song.wav");
+    ISong *newSong=new Song("song.wav");
     playlist->addSong(newSong);
     EXPECT_FALSE(playlist->moveSongUp(index));
 }
@@ -70,7 +70,7 @@ TEST_F(PlaylistTest, WhenSongIsMovedUpInValidIndex_ThenReturnsTrue)
 TEST_F(PlaylistTest, WhenSongIsMovedUpInsufficientSize_ThenReturnsTrue)
 {
     int index = 2;
-    Song newSong("song.wav");
+    ISong *newSong=new Song("song.wav");
     playlist->addSong(newSong);
     EXPECT_FALSE(playlist->moveSongUp(index));
 }
@@ -78,7 +78,7 @@ TEST_F(PlaylistTest, WhenSongIsMovedUpInsufficientSize_ThenReturnsTrue)
 TEST_F(PlaylistTest, WhenSongIsMovedDownValidIndex_ThenReturnsTrue)
 {
     int index = 0;
-    Song newSong("song.wav");
+    ISong *newSong=new Song("song.wav");
     playlist->addSong(newSong);
     EXPECT_TRUE(playlist->moveSongDown(index));
 }
@@ -86,7 +86,7 @@ TEST_F(PlaylistTest, WhenSongIsMovedDownValidIndex_ThenReturnsTrue)
 TEST_F(PlaylistTest, WhenSongIsMovedDownInValidIndex_ThenReturnsTrue)
 {
     int index = -1;
-    Song newSong("song.wav");
+    ISong *newSong=new Song("song.wav");
     playlist->addSong(newSong);
     EXPECT_FALSE(playlist->moveSongDown(index));
 }
@@ -94,7 +94,7 @@ TEST_F(PlaylistTest, WhenSongIsMovedDownInValidIndex_ThenReturnsTrue)
 TEST_F(PlaylistTest, WhenSongIsMovedDownInsufficientSize_ThenReturnsTrue)
 {
     int index = 2;
-    Song newSong("song.wav");
+    ISong *newSong=new Song("song.wav");
     playlist->addSong(newSong);
     EXPECT_FALSE(playlist->moveSongDown(index));
 }

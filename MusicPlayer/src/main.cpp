@@ -31,12 +31,58 @@ int getPlayerAction()
     return choice;
 }
 
+std::vector<IPlaylist *> &loadPlaylistsFromFile(std::vector<IPlaylist *> &playlists)
+{
+    std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/playlists.txt");
+    if (file.is_open())
+    {
+        std::string line;
+        while (getline(file, line))
+        {
+            IPlaylist *playlist = new Playlist(line);
+            while (getline(file, line) && !line.empty())
+            {
+                ISong *song = new Song(line);
+                playlist->addSong(song);
+            }
+            playlists.push_back(playlist);
+        }
+        file.close();
+    }
+    else
+    {
+        std::cout << "No playlists found." << std::endl;
+    }
+    return playlists;
+}
+
+std::vector<ISong *> &loadSongsFromFile(std::vector<ISong *> &allSongs)
+{
+    std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/songs.txt");
+    if (file.is_open())
+    {
+        std::string line;
+        while (getline(file, line))
+        {
+            ISong *song = new Song(line);
+            allSongs.push_back(song);
+        }
+        file.close();
+    }
+    else
+    {
+        std::cout << "No songs found." << std::endl;
+    }
+    return allSongs;
+}
+
 int main()
 {
     SFMLWrapper music;
-    ILibraryWrapper *wrapper=&music;
-    MusicPlayer player(music);
-    std::vector<Song> playlist;
+    std::vector<IPlaylist *> allPlaylists;
+    std::vector<ISong *> allSongs;
+    MusicPlayer player(music, loadPlaylistsFromFile(allPlaylists), loadSongsFromFile(allSongs));
+    std::vector<ISong *> songPlaylist;
     InputValidator inputValidator;
 
     int option;
@@ -97,6 +143,7 @@ int main()
                     player.replay();
                     break;
                 case PlaylistAction::EXIT:
+                    player.stop();
                     std::cout << "Exiting the player." << std::endl;
                     break;
                 default:
@@ -120,7 +167,7 @@ int main()
                 std::cout << "Available Songs:" << std::endl;
                 for (int i = 0; i < player.allSongs.size(); ++i)
                 {
-                    std::cout << i + 1 << ". " << player.allSongs[i].getTitle() << std::endl;
+                    std::cout << i + 1 << ". " << player.allSongs[i]->getTitle() << std::endl;
                 }
                 std::cout << "Add song: ";
                 while (true)
@@ -134,10 +181,10 @@ int main()
                 getline(std::cin, song);
                 if (choice != -1)
                 {
-                    playlist.push_back(player.allSongs[choice - 1]);
+                    songPlaylist.push_back(player.allSongs[choice - 1]);
                 }
             } while (choice != -1);
-            player.createPlaylist(name, playlist);
+            player.createPlaylist(name, songPlaylist);
 
             break;
         }

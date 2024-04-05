@@ -3,27 +3,20 @@
 #include <algorithm>
 #include <fstream>
 
-MusicPlayer::MusicPlayer(ILibraryWrapper &music) : music(music)
+MusicPlayer::MusicPlayer(ILibraryWrapper &music, std::vector<IPlaylist *> &playlists, std::vector<ISong *> &songs) : music(music), playlists(playlists), allSongs(songs)
 {
-    loadPlaylistsFromFile(playlists);
-    loadSongsFromFile(allSongs);
 }
 
-bool MusicPlayer::getIsPlaying()
-{
-    return isPlaying;
-}
-
-bool MusicPlayer::playSong(const Song &songFile)
+bool MusicPlayer::playSong(const ISong *songFile)
 {
     bool isPlayed = false;
-    if (!music.openFromFile(songFile.getTitle()))
+    if (!music.openFromFile(songFile->getTitle()))
     {
-        std::cerr << "Failed to load " << songFile.getTitle() << std::endl;
+        std::cerr << "Failed to load " << songFile->getTitle() << std::endl;
     }
     else
     {
-        std::cout << "Now playing: " << songFile.getTitle() << std::endl;
+        std::cout << "Now playing: " << songFile->getTitle() << std::endl;
         music.play();
         isPlayed = true;
         isPlaying = true;
@@ -34,7 +27,7 @@ bool MusicPlayer::playSong(const Song &songFile)
 bool MusicPlayer::togglePause()
 {
     bool isPaused = false;
-    if (getIsPlaying())
+    if (isPlaying)
     {
         if (music.pause())
         {
@@ -46,6 +39,8 @@ bool MusicPlayer::togglePause()
     {
         if (music.play())
             isPlaying = true;
+        else
+            isPaused = true;
     }
     return isPaused;
 }
@@ -73,16 +68,24 @@ bool MusicPlayer::replay()
 
 bool MusicPlayer::playNextSong()
 {
+    std::cout << "inside next song" << std::endl;
     bool isNextPlayed = false;
-    if (currentSongIndex < currentPlaylist->getSongs().size() - 1)
+    if (currentPlaylist != NULL)
     {
-        ++currentSongIndex;
-        music.stop();
-        isNextPlayed = playSong(currentPlaylist->getSongs()[currentSongIndex]);
+        if (currentSongIndex < currentPlaylist->getSongs().size() - 1)
+        {
+            ++currentSongIndex;
+            music.stop();
+            isNextPlayed = playSong(currentPlaylist->getSongs()[currentSongIndex]);
+        }
+        else
+        {
+            std::cout << "End of playlist reached." << std::endl;
+        }
     }
     else
     {
-        std::cout << "End of playlist reached." << std::endl;
+        std::cout << "Playlist does not exist" << std::endl;
     }
     return isNextPlayed;
 }
@@ -90,15 +93,22 @@ bool MusicPlayer::playNextSong()
 bool MusicPlayer::playPreviousSong()
 {
     bool isPreviousPlayed = false;
-    if (currentSongIndex > 0)
+    if (currentPlaylist != NULL)
     {
-        --currentSongIndex;
-        music.stop();
-        isPreviousPlayed = playSong(currentPlaylist->getSongs()[currentSongIndex]);
+        if (currentSongIndex > 0)
+        {
+            --currentSongIndex;
+            music.stop();
+            isPreviousPlayed = playSong(currentPlaylist->getSongs()[currentSongIndex]);
+        }
+        else
+        {
+            std::cout << "Beginning of playlist reached." << std::endl;
+        }
     }
     else
     {
-        std::cout << "Beginning of playlist reached." << std::endl;
+        std::cout << "Playlist does not exist" << std::endl;
     }
     return isPreviousPlayed;
 }
@@ -108,8 +118,9 @@ bool MusicPlayer::playPlaylist(int index)
     bool isPlaylistPlayed = false;
     if (index >= 1 && index <= playlists.size())
     {
-        currentPlaylist = &playlists[index - 1];
+        currentPlaylist = playlists[index - 1];
         currentSongIndex = 0;
+        std::cout << "inside play playlist" << std::endl;
         if (playSong(currentPlaylist->getSongs()[currentSongIndex]))
         {
             isPlaylistPlayed = true;
@@ -122,15 +133,15 @@ bool MusicPlayer::playPlaylist(int index)
     return isPlaylistPlayed;
 }
 
-bool MusicPlayer::createPlaylist(std::string name, std::vector<Song> &songs)
+bool MusicPlayer::createPlaylist(std::string name, std::vector<ISong *> &songs)
 {
     bool isPlaylistCreated = false;
-    Playlist playlist(name);
+    IPlaylist *playlist = new Playlist(name);
     if (songs.size() > 0)
     {
         for (int index = 0; index < songs.size(); index++)
         {
-            playlist.addSong(songs[index]);
+            playlist->addSong(songs[index]);
             isPlaylistCreated = true;
         }
 
@@ -166,7 +177,7 @@ bool MusicPlayer::updatePlaylist(int choice, int option)
     bool isUpdated = false;
     if (choice >= 1 && choice <= playlists.size())
     {
-        Playlist &playlist = playlists[choice - 1];
+        IPlaylist *playlist = playlists[choice - 1];
 
         switch (option)
         {
@@ -175,7 +186,7 @@ bool MusicPlayer::updatePlaylist(int choice, int option)
             std::string newName;
             std::cout << "Enter the new name for the playlist: ";
             getline(std::cin, newName);
-            playlist.updatePlaylistName(newName);
+            playlist->updatePlaylistName(newName);
             savePlaylistsToFile(playlists);
             std::cout << "Playlist name updated successfully." << std::endl;
             isUpdated = true;
@@ -188,7 +199,7 @@ bool MusicPlayer::updatePlaylist(int choice, int option)
             std::cin >> songIndex;
             std::cin.ignore();
 
-            playlist.moveSongUp(songIndex);
+            playlist->moveSongUp(songIndex);
             savePlaylistsToFile(playlists);
             isUpdated = true;
         }
@@ -200,7 +211,7 @@ bool MusicPlayer::updatePlaylist(int choice, int option)
             std::cin >> songIndex;
             std::cin.ignore();
 
-            playlist.moveSongDown(songIndex);
+            playlist->moveSongDown(songIndex);
             savePlaylistsToFile(playlists);
             isUpdated = true;
         }
@@ -222,21 +233,21 @@ void MusicPlayer::showPlaylist()
     std::cout << "Available Playlists:" << std::endl;
     for (int i = 0; i < playlists.size(); ++i)
     {
-        std::cout << i + 1 << ". " << playlists[i].getName() << std::endl;
+        std::cout << i + 1 << ". " << playlists[i]->getName() << std::endl;
     }
 }
 
-void MusicPlayer::savePlaylistsToFile(const std::vector<Playlist> &playlists)
+void MusicPlayer::savePlaylistsToFile(const std::vector<IPlaylist *> &playlists)
 {
     std::ofstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/playlists.txt");
     if (file.is_open())
     {
         for (const auto &playlist : playlists)
         {
-            file << playlist.getName() << std::endl;
-            for (const auto &song : playlist.getSongs())
+            file << playlist->getName() << std::endl;
+            for (const auto &song : playlist->getSongs())
             {
-                file << song.getTitle() << std::endl;
+                file << song->getTitle() << std::endl;
             }
             file << std::endl;
         }
@@ -248,44 +259,44 @@ void MusicPlayer::savePlaylistsToFile(const std::vector<Playlist> &playlists)
     }
 }
 
-void MusicPlayer::loadPlaylistsFromFile(std::vector<Playlist> &playlists)
-{
-    std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/playlists.txt");
-    if (file.is_open())
-    {
-        std::string line;
-        while (getline(file, line))
-        {
-            Playlist playlist(line);
-            while (getline(file, line) && !line.empty())
-            {
-                playlist.addSong(line);
-            }
-            playlists.push_back(playlist);
-        }
-        file.close();
-    }
-    else
-    {
-        std::cout << "No playlists found." << std::endl;
-    }
-}
+// void MusicPlayer::loadPlaylistsFromFile(std::vector<IPlaylist *> &playlists)
+// {
+//     std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/playlists.txt");
+//     if (file.is_open())
+//     {
+//         std::string line;
+//         while (getline(file, line))
+//         {
+//             playlist = new Playlist(line);
+//             while (getline(file, line) && !line.empty())
+//             {
+//                 playlist->addSong(line);
+//             }
+//             playlists.push_back(*playlist);
+//         }
+//         file.close();
+//     }
+//     else
+//     {
+//         std::cout << "No playlists found." << std::endl;
+//     }
+// }
 
-void MusicPlayer::loadSongsFromFile(std::vector<Song> &allSongs)
-{
-    std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/songs.txt");
-    if (file.is_open())
-    {
-        std::string line;
-        while (getline(file, line))
-        {
-            Song song(line);
-            allSongs.push_back(song);
-        }
-        file.close();
-    }
-    else
-    {
-        std::cout << "No songs found." << std::endl;
-    }
-}
+// void MusicPlayer::loadSongsFromFile(std::vector<ISong *> &allSongs)
+// {
+//     std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/songs.txt");
+//     if (file.is_open())
+//     {
+//         std::string line;
+//         while (getline(file, line))
+//         {
+//             song = new Song(line);
+//             allSongs.push_back(song);
+//         }
+//         file.close();
+//     }
+//     else
+//     {
+//         std::cout << "No songs found." << std::endl;
+//     }
+// }

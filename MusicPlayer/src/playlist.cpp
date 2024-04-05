@@ -1,9 +1,11 @@
 #include "playlist.h"
 #include <iostream>
 
+Playlist::Playlist() {}
+
 Playlist::Playlist(std::string name) : name(name) {}
 
-bool Playlist::addSong(const Song &song)
+bool Playlist::addSong(ISong *song)
 {
     bool isAdded = false;
     songs.push_back(song);
@@ -16,18 +18,18 @@ void Playlist::displaySongs() const
     std::cout << "Songs in Playlist '" << name << "':" << std::endl;
     for (const auto &song : songs)
     {
-        std::cout << song.getTitle() << std::endl;
+        std::cout << song->getTitle() << std::endl;
     }
 }
 
 bool Playlist::deleteSong(int index)
 {
-    bool isDeleted=false;
+    bool isDeleted = false;
     if (index >= 0 && index < songs.size())
     {
         songs.erase(songs.begin() + index);
         std::cout << "Song deleted successfully." << std::endl;
-        isDeleted=true;
+        isDeleted = true;
     }
     else
     {
@@ -38,21 +40,21 @@ bool Playlist::deleteSong(int index)
 
 bool Playlist::updatePlaylistName(const std::string &newName)
 {
-    bool isNameUpdated=false;
+    bool isNameUpdated = false;
     name = newName;
     std::cout << "Playlist name updated successfully." << std::endl;
-    isNameUpdated=true;
+    isNameUpdated = true;
     return isNameUpdated;
 }
 
 bool Playlist::moveSongUp(int index)
 {
-    bool isSongMovedUp=false;
+    bool isSongMovedUp = false;
     if (index > 0 && index < songs.size())
     {
         std::swap(songs[index], songs[index - 1]);
         std::cout << "Song moved up successfully." << std::endl;
-        isSongMovedUp=true;
+        isSongMovedUp = true;
     }
     else
     {
@@ -63,12 +65,12 @@ bool Playlist::moveSongUp(int index)
 
 bool Playlist::moveSongDown(int index)
 {
-    bool isSongMovedDown=false;
+    bool isSongMovedDown = false;
     if (index >= 0 && index < songs.size() - 1)
     {
         std::swap(songs[index], songs[index + 1]);
         std::cout << "Song moved down successfully." << std::endl;
-        isSongMovedDown=true;
+        isSongMovedDown = true;
     }
     else
     {
@@ -82,7 +84,7 @@ std::string Playlist::getName() const
     return name;
 }
 
-const std::vector<Song> &Playlist::getSongs() const
+const std::vector<ISong *> Playlist::getSongs() const
 {
     return songs;
 }

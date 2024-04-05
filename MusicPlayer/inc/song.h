@@ -10,6 +10,7 @@ private:
     std::string title;
 
 public:
+    Song();
     Song(std::string _title);
     std::string getTitle() const;
 };

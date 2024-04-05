@@ -10,9 +10,10 @@ public:
     Song *song;
     void SetUp()
     {
-        song=new Song(title);
+        song = new Song(title);
     }
-    void TearDown(){
+    void TearDown()
+    {
         delete song;
     }
 };

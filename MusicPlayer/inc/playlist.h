@@ -11,18 +11,19 @@ class Playlist : public IPlaylist
 {
 private:
     std::string name;
-    std::vector<Song> songs;
+    std::vector<ISong *> songs;
 
 public:
+    Playlist();
     Playlist(std::string _name);
-    bool addSong(const Song &song);
+    bool addSong( ISong *song);
     void displaySongs() const;
     bool deleteSong(int index);
     bool updatePlaylistName(const std::string &newName);
     bool moveSongUp(int index);
     bool moveSongDown(int index);
     std::string getName() const;
-    const std::vector<Song> &getSongs() const;
+    const std::vector<ISong *> getSongs() const;
 };
 
 #endif

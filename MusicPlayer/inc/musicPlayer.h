@@ -12,22 +12,23 @@
 class MusicPlayer : public IMusicPlayer
 {
 private:
-    std::vector<Playlist> playlists;
+    std::vector<IPlaylist *> playlists;
     ILibraryWrapper &music;
-    Playlist *currentPlaylist = nullptr;
-    int currentSongIndex;
+    // IPlaylist *playlist;
+    // ISong *song;
+    IPlaylist *currentPlaylist = nullptr;
+    int currentSongIndex=-1;
     bool isPlaying = false;
 
-    bool getIsPlaying();
-    void savePlaylistsToFile(const std::vector<Playlist> &playlists);
-    void loadPlaylistsFromFile(std::vector<Playlist> &playlists);
-    void loadSongsFromFile(std::vector<Song> &allSongs);
-    bool playSong(const Song &songFile);
+    void savePlaylistsToFile(const std::vector<IPlaylist *> &playlists);
+    // void loadPlaylistsFromFile(std::vector<IPlaylist *> &playlists);
+    // void loadSongsFromFile(std::vector<ISong *> &allSongs);
 
 public:
-    std::vector<Song> allSongs;
+    std::vector<ISong *> allSongs;
 
-    MusicPlayer(ILibraryWrapper &);
+    MusicPlayer(ILibraryWrapper &, std::vector<IPlaylist *> &, std::vector<ISong *> &);
+    bool playSong(const ISong *songFile);
     bool togglePause();
     bool stop();
     bool replay();
@@ -35,7 +36,7 @@ public:
     bool playPreviousSong();
     void showPlaylist();
     bool playPlaylist(int);
-    bool createPlaylist(std::string name, std::vector<Song> &);
+    bool createPlaylist(std::string name, std::vector<ISong *> &);
     bool deletePlaylist(int);
     bool updatePlaylist(int, int);
 };
