@@ -157,11 +157,10 @@ int main()
         {
             std::string name;
             std::cout << "Enter the name of the new playlist: ";
-            getline(std::cin, name);
+            std::cin >> name;
 
             std::cout << "Enter songs to add to the playlist (Enter -1 to finish):\n";
             int choice;
-            std::string song;
             do
             {
                 std::cout << "Available Songs:" << std::endl;
@@ -178,14 +177,12 @@ int main()
                     else
                         std::cout << "Enter valid choice";
                 }
-                getline(std::cin, song);
                 if (choice != -1)
                 {
                     songPlaylist.push_back(player.allSongs[choice - 1]);
                 }
             } while (choice != -1);
             player.createPlaylist(name, songPlaylist);
-
             break;
         }
         case 3:
@@ -231,8 +228,37 @@ int main()
 
             int option;
             std::cin >> option;
-            std::cin.ignore();
-            player.updatePlaylist(index, option);
+            switch (option)
+            {
+            case 1:
+            {
+                std::string newName;
+                std::cout << "Enter the new name for the playlist: ";
+                std::cin >> newName;
+                player.updatePlaylistName(index, newName);
+            }
+            break;
+            case 2:
+            {
+                int songIndex;
+                std::cout << "Enter the index of the song to move up: ";
+                std::cin >> songIndex;
+                std::cin.ignore();
+                player.shuffleSong(index, 1, songIndex);
+            }
+            break;
+            case 3:
+            {
+                int songIndex;
+                std::cout << "Enter the index of the song to move down: ";
+                std::cin >> songIndex;
+                std::cin.ignore();
+                player.shuffleSong(index, 2, songIndex);
+            }
+            break;
+            default:
+                std::cerr << "Invalid choice. Please try again." << std::endl;
+            }
             break;
         }
         case 5:

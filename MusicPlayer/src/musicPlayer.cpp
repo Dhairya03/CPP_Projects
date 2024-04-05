@@ -172,6 +172,46 @@ bool MusicPlayer::deletePlaylist(int choice)
     return isDeleted;
 }
 
+bool MusicPlayer::updatePlaylistName(int choice, std::string &newName)
+{
+    bool isUpdated = false;
+    if (choice >= 1 && choice <= playlists.size())
+    {
+        IPlaylist *playlist = playlists[choice - 1];
+
+        playlist->updatePlaylistName(newName);
+        savePlaylistsToFile(playlists);
+        std::cout << "Playlist name updated successfully." << std::endl;
+        isUpdated = true;
+    }
+    return isUpdated;
+}
+
+bool MusicPlayer::shuffleSong(int choice, int option, int songIndex)
+{
+    bool isUpdated = false;
+    if (choice >= 1 && choice <= playlists.size())
+    {
+        IPlaylist *playlist = playlists[choice - 1];
+        if (option == 1)
+        {
+            playlist->moveSongUp(songIndex);
+            isUpdated = true;
+        }
+        else if (option == 2)
+        {
+            playlist->moveSongDown(songIndex);
+            isUpdated = true;
+        }
+        else
+        {
+            std::cerr << "Invalid choice. Please try again." << std::endl;
+        }
+        savePlaylistsToFile(playlists);
+    }
+    return isUpdated;
+}
+
 bool MusicPlayer::updatePlaylist(int choice, int option)
 {
     bool isUpdated = false;
@@ -258,45 +298,3 @@ void MusicPlayer::savePlaylistsToFile(const std::vector<IPlaylist *> &playlists)
         std::cout << "Error: Unable to save playlists to file." << std::endl;
     }
 }
-
-// void MusicPlayer::loadPlaylistsFromFile(std::vector<IPlaylist *> &playlists)
-// {
-//     std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/playlists.txt");
-//     if (file.is_open())
-//     {
-//         std::string line;
-//         while (getline(file, line))
-//         {
-//             playlist = new Playlist(line);
-//             while (getline(file, line) && !line.empty())
-//             {
-//                 playlist->addSong(line);
-//             }
-//             playlists.push_back(*playlist);
-//         }
-//         file.close();
-//     }
-//     else
-//     {
-//         std::cout << "No playlists found." << std::endl;
-//     }
-// }
-
-// void MusicPlayer::loadSongsFromFile(std::vector<ISong *> &allSongs)
-// {
-//     std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/songs.txt");
-//     if (file.is_open())
-//     {
-//         std::string line;
-//         while (getline(file, line))
-//         {
-//             song = new Song(line);
-//             allSongs.push_back(song);
-//         }
-//         file.close();
-//     }
-//     else
-//     {
-//         std::cout << "No songs found." << std::endl;
-//     }
-// }

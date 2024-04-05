@@ -20,7 +20,7 @@ public:
     MockPlaylist *mockPlaylist;
     MockSong *mockSong;
 
-    void addMockSong()
+    void addMockSongToPlaylist()
     {
         mockPlaylist->addSong(mockSong);
     }
@@ -29,16 +29,15 @@ public:
     {
         mockPlaylists.push_back(mockPlaylist);
     }
+
     void SetUp()
     {
         mockSong = new MockSong();
         mockPlaylist = new MockPlaylist();
         playlist = mockPlaylist;
         song = mockSong;
-        // mockPlaylists.push_back(mockPlaylist);
-        // mockPlaylist->addSong(mockSong);
         addMockPlaylist();
-        addMockSong();
+        addMockSongToPlaylist();
         player = new MusicPlayer(mockLibrary, mockPlaylists, mockSongs);
     }
     void TearDown()
@@ -168,7 +167,7 @@ TEST_F(MusicPlayerTest, WhenPlaylistExistsCurrentSongIsLast_ThenNextSongNotPlays
 
 TEST_F(MusicPlayerTest, WhenPlaylistExistsNextSongExists_ThenNextSongPlays)
 {
-    addMockSong();
+    addMockSongToPlaylist();
     EXPECT_CALL(*mockPlaylist, getSongs()).WillOnce(::testing::Return(std::vector<ISong *>(1, mockSong))).WillRepeatedly(::testing::Return(std::vector<ISong *>(2, mockSong)));
     EXPECT_CALL(mockLibrary, openFromFile(::testing::_)).WillRepeatedly(::testing::Return(true));
     EXPECT_CALL(mockLibrary, play()).WillRepeatedly(::testing::Return(true));
@@ -194,7 +193,7 @@ TEST_F(MusicPlayerTest, WhenPlaylistExistsCurrentSongIsFirst_ThenPreviousSongNot
 
 TEST_F(MusicPlayerTest, WhenPlaylistExistsPreviousSongExists_ThenPreviousSongPlays)
 {
-    addMockSong();
+    addMockSongToPlaylist();
     EXPECT_CALL(*mockPlaylist, getSongs()).WillOnce(::testing::Return(std::vector<ISong *>(1, mockSong))).WillRepeatedly(::testing::Return(std::vector<ISong *>(2, mockSong)));
     EXPECT_CALL(mockLibrary, openFromFile(::testing::_)).WillRepeatedly(::testing::Return(true));
     EXPECT_CALL(mockLibrary, play()).WillRepeatedly(::testing::Return(true));
@@ -202,4 +201,76 @@ TEST_F(MusicPlayerTest, WhenPlaylistExistsPreviousSongExists_ThenPreviousSongPla
     player->playPlaylist(1);
     player->playNextSong();
     EXPECT_TRUE(player->playPreviousSong());
+}
+
+TEST_F(MusicPlayerTest, WhenPlaylistHasAtleastOneSong_ThenPlaylistIsCreated)
+{
+    mockSongs.push_back(mockSong);
+    EXPECT_CALL(*mockPlaylist, addSong(mockSong)).WillRepeatedly(::testing::Return(true));
+    EXPECT_TRUE(player->createPlaylist("TestPlay", mockSongs));
+}
+
+TEST_F(MusicPlayerTest, WhenPlaylistIsEmpty_ThenPlaylistIsNotCreated)
+{
+    EXPECT_FALSE(player->createPlaylist("TestPlay", mockSongs));
+}
+
+TEST_F(MusicPlayerTest, WhenChosenPlaylistExists_ThenPlaylistIsDeleted)
+{
+    int playlistNumber = 1;
+    EXPECT_TRUE(player->deletePlaylist(playlistNumber));
+}
+
+TEST_F(MusicPlayerTest, WhenChosenPlaylistIsInvalid_ThenPlaylistIsNotDeleted)
+{
+    int playlistNumber = -1;
+    EXPECT_FALSE(player->deletePlaylist(playlistNumber));
+}
+
+TEST_F(MusicPlayerTest, WhenNoPlaylistExists_ThenNoPlaylistDeleted)
+{
+    int playlistNumber = 1;
+    player->deletePlaylist(playlistNumber);
+    EXPECT_FALSE(player->deletePlaylist(playlistNumber));
+}
+
+TEST_F(MusicPlayerTest, WhenValidPlaylistChoice_ThenPlaylistNameIsUpdated)
+{
+    int choice = 1;
+    std::string newName = "newPlay";
+    EXPECT_CALL(*mockPlaylist, updatePlaylistName(newName)).WillOnce(::testing::Return(true));
+    EXPECT_TRUE(player->updatePlaylistName(choice, newName));
+}
+
+TEST_F(MusicPlayerTest, WhenInValidPlaylistChoice_ThenPlaylistNameIsUpdated)
+{
+    int choice = -1;
+    std::string newName = "newPlay";
+    EXPECT_FALSE(player->updatePlaylistName(choice, newName));
+}
+
+TEST_F(MusicPlayerTest, WhenValidPlaylistChoiceAndShuffleChoiceIsUp_ThenSongMovesUp)
+{
+    int choice = 1;
+    int shuffleChoice = 1;
+    int songIndex = 1;
+    EXPECT_CALL(*mockPlaylist, moveSongUp(songIndex)).WillOnce(::testing::Return(true));
+    EXPECT_TRUE(player->shuffleSong(choice, shuffleChoice, songIndex));
+}
+
+TEST_F(MusicPlayerTest, WhenValidPlaylistChoiceAndShuffleChoiceIsDown_ThenSongMovesDown)
+{
+    int choice = 1;
+    int shuffleChoice = 2;
+    int songIndex = 1;
+    EXPECT_CALL(*mockPlaylist, moveSongDown(songIndex)).WillOnce(::testing::Return(true));
+    EXPECT_TRUE(player->shuffleSong(choice, shuffleChoice, songIndex));
+}
+
+TEST_F(MusicPlayerTest, WhenInValidPlaylistChoiceA_ThenSongNotShuffles)
+{
+    int choice = -1;
+    int shuffleChoice = 1;
+    int songIndex = 1;
+    EXPECT_FALSE(player->shuffleSong(choice, shuffleChoice, songIndex));
 }
