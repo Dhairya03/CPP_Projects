@@ -178,7 +178,6 @@ bool MusicPlayer::updatePlaylistName(int choice, std::string &newName)
     if (choice >= 1 && choice <= playlists.size())
     {
         IPlaylist *playlist = playlists[choice - 1];
-
         playlist->updatePlaylistName(newName);
         savePlaylistsToFile(playlists);
         std::cout << "Playlist name updated successfully." << std::endl;

@@ -61,7 +61,6 @@ int main()
             else
                 std::cout << "Enter valid input" << std::endl;
         }
-
         switch (option)
         {
         case 1:
@@ -109,40 +108,55 @@ int main()
                     break;
                 }
             } while (action != PlaylistAction::EXIT);
-
             break;
         }
         case 2:
         {
+            bool isValidName = false;
             std::string name;
             std::cout << "Enter the name of the new playlist: ";
             std::cin >> name;
-
-            std::cout << "Enter songs to add to the playlist (Enter -1 to finish):\n";
-            int choice;
-            do
+            for (int index = 0; index < allPlaylists.size(); index++)
             {
-                std::cout << "Available Songs:" << std::endl;
-                for (int i = 0; i < player.allSongs.size(); ++i)
+                if (name == allPlaylists[index]->getName())
                 {
-                    std::cout << i + 1 << ". " << player.allSongs[i]->getTitle() << std::endl;
+                    isValidName = false;
+                    std::cout << "Playlist already exists" << std::endl;
+                    break;
                 }
-                std::cout << "Add song: ";
-                while (true)
+                else
                 {
-                    std::cin >> choice;
-                    if (inputValidator.isValidInput() && (player.isValidSongIndex(choice) || choice == -1))
-                        break;
-                    else
-                        std::cout << "Enter valid choice";
+                    isValidName = true;
                 }
-                if (choice != -1)
+            }
+            if (isValidName)
+            {
+                std::cout << "Enter songs to add to the playlist (Enter -1 to finish):\n";
+                int choice;
+                do
                 {
-                    songPlaylist.push_back(player.allSongs[choice - 1]);
-                }
-            } while (choice != -1);
-            player.createPlaylist(name, songPlaylist);
-            songPlaylist.clear();
+                    std::cout << "Available Songs:" << std::endl;
+                    for (int i = 0; i < player.allSongs.size(); ++i)
+                    {
+                        std::cout << i + 1 << ". " << player.allSongs[i]->getTitle() << std::endl;
+                    }
+                    std::cout << "Add song: ";
+                    while (true)
+                    {
+                        std::cin >> choice;
+                        if (inputValidator.isValidInput() && (player.isValidSongIndex(choice) || choice == -1))
+                            break;
+                        else
+                            std::cout << "Enter valid choice";
+                    }
+                    if (choice != -1)
+                    {
+                        songPlaylist.push_back(player.allSongs[choice - 1]);
+                    }
+                } while (choice != -1);
+                player.createPlaylist(name, songPlaylist);
+                songPlaylist.clear();
+            }
 
             break;
         }
@@ -187,7 +201,9 @@ int main()
                           << "1. Update Playlist Name\n"
                           << "2. Move Song Up\n"
                           << "3. Move Song Down\n"
-                          << "4. Exit\n"
+                          << "4. Add Song To Playlist\n"
+                          << "5. Delete Song From Playlist\n"
+                          << "6. Exit\n"
                           << "Enter your choice: \n";
 
                 while (true)
@@ -210,7 +226,7 @@ int main()
                 }
                 case 2:
                 {
-
+                    allPlaylists[index - 1]->displaySongs();
                     int songIndex;
                     std::cout << "Enter the index of the song to move up: ";
                     while (true)
@@ -222,10 +238,12 @@ int main()
                             std::cout << "Enter valid index" << std::endl;
                     }
                     player.shuffleSong(index, 1, songIndex);
+                    allPlaylists[index - 1]->displaySongs();
                     break;
                 }
                 case 3:
                 {
+                    allPlaylists[index - 1]->displaySongs();
                     int songIndex;
                     std::cout << "Enter the index of the song to move down: ";
                     while (true)
@@ -237,16 +255,57 @@ int main()
                             std::cout << "Enter valid index" << std::endl;
                     }
                     player.shuffleSong(index, 2, songIndex);
+                    allPlaylists[index - 1]->displaySongs();
+
                     break;
                 }
                 case 4:
+                {
+                    int songIndex;
+                    std::cout << "Available Songs:" << std::endl;
+                    for (int i = 0; i < player.allSongs.size(); ++i)
+                    {
+                        std::cout << i + 1 << ". " << player.allSongs[i]->getTitle() << std::endl;
+                    }
+                    std::cout << "Enter the index of the song to add: ";
+                    while (true)
+                    {
+                        std::cin >> songIndex;
+                        if (inputValidator.isValidInput() && player.isValidSongIndex(index))
+                            break;
+                        else
+                            std::cout << "Enter valid index" << std::endl;
+                    }
+                    allPlaylists[index - 1]->addSong(allSongs[songIndex - 1]);
+                    allPlaylists[index - 1]->displaySongs();
+                    std::cout << "Song added successfully" << std::endl;
+                    break;
+                }
+                case 5:
+                {
+                    int songIndex;
+                    allPlaylists[index - 1]->displaySongs();
+                    std::cout << "Enter the index of the song to delete: ";
+                    while (true)
+                    {
+                        std::cin >> songIndex;
+                        if (inputValidator.isValidInput() && player.isValidSongIndex(index))
+                            break;
+                        else
+                            std::cout << "Enter valid index" << std::endl;
+                    }
+                    allPlaylists[index - 1]->deleteSong(songIndex - 1);
+                    allPlaylists[index - 1]->displaySongs();
+                    std::cout << "Song deleted successfully" << std::endl;
+                    break;
+                }
+                case 6:
                     break;
                 default:
                     std::cerr << "Invalid choice. Please try again." << std::endl;
                     break;
                 }
-
-            } while (option != 4);
+            } while (option != 6);
             break;
         }
         case 5:

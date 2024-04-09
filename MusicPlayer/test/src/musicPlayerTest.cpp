@@ -4,7 +4,6 @@
 #include "mockSong.h"
 #include "mockPlaylist.h"
 #include "IPlaylist.h"
-
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
