@@ -6,6 +6,7 @@
 #include "SFMLWrapper.h"
 #include "constants.h"
 #include "inputValidator.h"
+#include "MusicLoader.h"
 
 int getPlayerAction()
 {
@@ -31,60 +32,15 @@ int getPlayerAction()
     return choice;
 }
 
-std::vector<IPlaylist *> &loadPlaylistsFromFile(std::vector<IPlaylist *> &playlists)
-{
-    std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/playlists.txt");
-    if (file.is_open())
-    {
-        std::string line;
-        while (getline(file, line))
-        {
-            IPlaylist *playlist = new Playlist(line);
-            while (getline(file, line) && !line.empty())
-            {
-                ISong *song = new Song(line);
-                playlist->addSong(song);
-            }
-            playlists.push_back(playlist);
-        }
-        file.close();
-    }
-    else
-    {
-        std::cout << "No playlists found." << std::endl;
-    }
-    return playlists;
-}
-
-std::vector<ISong *> &loadSongsFromFile(std::vector<ISong *> &allSongs)
-{
-    std::ifstream file("/home/dhairyagupta/training/c-_dhairyagupta/MusicPlayer/src/songs.txt");
-    if (file.is_open())
-    {
-        std::string line;
-        while (getline(file, line))
-        {
-            ISong *song = new Song(line);
-            allSongs.push_back(song);
-        }
-        file.close();
-    }
-    else
-    {
-        std::cout << "No songs found." << std::endl;
-    }
-    return allSongs;
-}
-
 int main()
 {
     SFMLWrapper music;
+    MusicLoader loader;
     std::vector<IPlaylist *> allPlaylists;
     std::vector<ISong *> allSongs;
-    MusicPlayer player(music, loadPlaylistsFromFile(allPlaylists), loadSongsFromFile(allSongs));
+    MusicPlayer player(music, loader.loadPlaylistsFromFile(allPlaylists), loader.loadSongsFromFile(allSongs));
     std::vector<ISong *> songPlaylist;
     InputValidator inputValidator;
-
     int option;
     int index;
     do
@@ -103,7 +59,7 @@ int main()
             if (inputValidator.isValidInput())
                 break;
             else
-                std::cout << "Enter valid choice";
+                std::cout << "Enter valid input" << std::endl;
         }
 
         switch (option)
@@ -111,11 +67,11 @@ int main()
         case 1:
         {
             player.showPlaylist();
+            std::cout << "Enter the number of the playlist to play: ";
             while (true)
             {
-                std::cout << "Enter the number of the playlist to play: ";
                 std::cin >> index;
-                if (inputValidator.isValidInput())
+                if (inputValidator.isValidInput() && player.isValidPlaylistIndex(index))
                     break;
                 else
                     std::cout << "Enter valid choice";
@@ -134,9 +90,11 @@ int main()
                     player.stop();
                     break;
                 case PlaylistAction::NEXT:
+                    music.stop();
                     player.playNextSong();
                     break;
                 case PlaylistAction::PREVIOUS:
+                    music.stop();
                     player.playPreviousSong();
                     break;
                 case PlaylistAction::REPLAY:
@@ -148,6 +106,7 @@ int main()
                     break;
                 default:
                     std::cerr << "Invalid action. Please try again." << std::endl;
+                    break;
                 }
             } while (action != PlaylistAction::EXIT);
 
@@ -172,7 +131,7 @@ int main()
                 while (true)
                 {
                     std::cin >> choice;
-                    if (inputValidator.isValidInput())
+                    if (inputValidator.isValidInput() && (player.isValidSongIndex(choice) || choice == -1))
                         break;
                     else
                         std::cout << "Enter valid choice";
@@ -183,6 +142,8 @@ int main()
                 }
             } while (choice != -1);
             player.createPlaylist(name, songPlaylist);
+            songPlaylist.clear();
+
             break;
         }
         case 3:
@@ -192,7 +153,7 @@ int main()
             while (true)
             {
                 std::cin >> index;
-                if (inputValidator.isValidInput())
+                if (inputValidator.isValidInput() && player.isValidPlaylistIndex(index))
                     break;
                 else
                     std::cout << "Enter valid choice";
@@ -214,51 +175,78 @@ int main()
             while (true)
             {
                 std::cin >> index;
-                if (inputValidator.isValidInput())
+                if (inputValidator.isValidInput() && player.isValidPlaylistIndex(index))
                     break;
                 else
                     std::cout << "Enter valid choice";
             }
-
-            std::cout << "Update Menu:\n"
-                      << "1. Update Playlist Name\n"
-                      << "2. Move Song Up\n"
-                      << "3. Move Song Down\n"
-                      << "Enter your choice: \n";
-
             int option;
-            std::cin >> option;
-            switch (option)
+            do
             {
-            case 1:
-            {
-                std::string newName;
-                std::cout << "Enter the new name for the playlist: ";
-                std::cin >> newName;
-                player.updatePlaylistName(index, newName);
-            }
-            break;
-            case 2:
-            {
-                int songIndex;
-                std::cout << "Enter the index of the song to move up: ";
-                std::cin >> songIndex;
-                std::cin.ignore();
-                player.shuffleSong(index, 1, songIndex);
-            }
-            break;
-            case 3:
-            {
-                int songIndex;
-                std::cout << "Enter the index of the song to move down: ";
-                std::cin >> songIndex;
-                std::cin.ignore();
-                player.shuffleSong(index, 2, songIndex);
-            }
-            break;
-            default:
-                std::cerr << "Invalid choice. Please try again." << std::endl;
-            }
+                std::cout << "Update Menu:\n"
+                          << "1. Update Playlist Name\n"
+                          << "2. Move Song Up\n"
+                          << "3. Move Song Down\n"
+                          << "4. Exit\n"
+                          << "Enter your choice: \n";
+
+                while (true)
+                {
+                    std::cin >> option;
+                    if (inputValidator.isValidInput())
+                        break;
+                    else
+                        std::cout << "Enter valid choice";
+                }
+                switch (option)
+                {
+                case 1:
+                {
+                    std::string newName;
+                    std::cout << "Enter the new name for the playlist: ";
+                    std::cin >> newName;
+                    player.updatePlaylistName(index, newName);
+                    break;
+                }
+                case 2:
+                {
+
+                    int songIndex;
+                    std::cout << "Enter the index of the song to move up: ";
+                    while (true)
+                    {
+                        std::cin >> songIndex;
+                        if (inputValidator.isValidInput() && player.isValidSongIndex(index))
+                            break;
+                        else
+                            std::cout << "Enter valid index" << std::endl;
+                    }
+                    player.shuffleSong(index, 1, songIndex);
+                    break;
+                }
+                case 3:
+                {
+                    int songIndex;
+                    std::cout << "Enter the index of the song to move down: ";
+                    while (true)
+                    {
+                        std::cin >> songIndex;
+                        if (inputValidator.isValidInput() && player.isValidSongIndex(index))
+                            break;
+                        else
+                            std::cout << "Enter valid index" << std::endl;
+                    }
+                    player.shuffleSong(index, 2, songIndex);
+                    break;
+                }
+                case 4:
+                    break;
+                default:
+                    std::cerr << "Invalid choice. Please try again." << std::endl;
+                    break;
+                }
+
+            } while (option != 4);
             break;
         }
         case 5:

@@ -37,6 +37,8 @@ public:
     bool updatePlaylist(int, int);
     bool updatePlaylistName(int, std::string &newName);
     bool shuffleSong(int choice, int option, int songIndex);
+    bool isValidPlaylistIndex(int index);
+    bool isValidSongIndex(int index);
 };
 
 #endif

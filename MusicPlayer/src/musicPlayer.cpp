@@ -49,7 +49,10 @@ bool MusicPlayer::stop()
 {
     bool isStopped = false;
     if (music.stop())
+    {
         isStopped = true;
+        isPlaying = false;
+    }
     return isStopped;
 }
 
@@ -68,14 +71,12 @@ bool MusicPlayer::replay()
 
 bool MusicPlayer::playNextSong()
 {
-    std::cout << "inside next song" << std::endl;
     bool isNextPlayed = false;
     if (currentPlaylist != NULL)
     {
         if (currentSongIndex < currentPlaylist->getSongs().size() - 1)
         {
             ++currentSongIndex;
-            music.stop();
             isNextPlayed = playSong(currentPlaylist->getSongs()[currentSongIndex]);
         }
         else
@@ -98,7 +99,6 @@ bool MusicPlayer::playPreviousSong()
         if (currentSongIndex > 0)
         {
             --currentSongIndex;
-            music.stop();
             isPreviousPlayed = playSong(currentPlaylist->getSongs()[currentSongIndex]);
         }
         else
@@ -270,10 +270,17 @@ bool MusicPlayer::updatePlaylist(int choice, int option)
 
 void MusicPlayer::showPlaylist()
 {
-    std::cout << "Available Playlists:" << std::endl;
-    for (int i = 0; i < playlists.size(); ++i)
+    if (playlists.size() > 0)
     {
-        std::cout << i + 1 << ". " << playlists[i]->getName() << std::endl;
+        std::cout << "Available Playlists:" << std::endl;
+        for (int i = 0; i < playlists.size(); ++i)
+        {
+            std::cout << i + 1 << ". " << playlists[i]->getName() << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "No playlists available" << std::endl;
     }
 }
 
@@ -297,4 +304,14 @@ void MusicPlayer::savePlaylistsToFile(const std::vector<IPlaylist *> &playlists)
     {
         std::cout << "Error: Unable to save playlists to file." << std::endl;
     }
+}
+
+bool MusicPlayer::isValidPlaylistIndex(int index)
+{
+    return (index >= 1 && index <= playlists.size()) ? true : false;
+}
+
+bool MusicPlayer::isValidSongIndex(int index)
+{
+    return (index >= 1 && index <= allSongs.size()) ? true : false;
 }
