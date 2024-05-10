@@ -3,30 +3,36 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <mutex>
 using namespace std::chrono;
 
-Elevator::Elevator(ElevatorDirection direction, int currentFloor) : direction(direction), currentFloor(currentFloor)
+Elevator::Elevator(int id, ElevatorDirection direction, int currentFloor) : liftId(id), direction(direction), currentFloor(currentFloor)
 {
     running = new bool;
 }
 
-bool Elevator::startLift()
+bool Elevator::startLift(std::mutex &mtx, std::condition_variable &cv)
 {
-    std::cout << "Lift started" << std::endl;
+    bool isLiftStarted = false;
+    mtx.lock();
+    std::cout << "Lift " << liftId << " is at " << currentFloor << " floor" << std::endl;
+    mtx.unlock();
     while (*running)
     {
-        std::cout << std::this_thread::get_id() << "Upstops Size " << upStops.size() << "Downstops size" << downStops.size() << std::endl;
-
+        isLiftStarted = true;
         if (upStops.size() != 0 || downStops.size() != 0)
         {
-            processRequest();
+            processRequest(mtx, cv);
         }
         else
         {
-            std::cout << std::this_thread::get_id() << "Waiting for the requests" << std::endl;
+            mtx.lock();
+            std::cout << "Lift " << liftId << " is waiting for the requests" << std::endl;
+            mtx.unlock();
             std::this_thread::sleep_for(1s);
         }
     }
+    return isLiftStarted;
 }
 
 ElevatorDirection Elevator::getCurrentDirection()
@@ -34,18 +40,18 @@ ElevatorDirection Elevator::getCurrentDirection()
     return this->direction;
 }
 
-bool Elevator::addStops(Request &request, bool type)
+bool Elevator::addStops(IRequest *request, bool type)
 {
     bool isAdded = false;
-    if (request.getDirection() == Up)
+    if (request->getDirection() == Up)
     {
-        upStops.push_back(std::make_pair(request.getFloor(), type));
+        upStops.push_back(std::make_pair(request->getFloor(), type));
         sort(upStops.begin(), upStops.end());
         isAdded = true;
     }
-    else if (request.getDirection() == Down)
+    else if (request->getDirection() == Down)
     {
-        downStops.push_back(std::make_pair(request.getFloor(), type));
+        downStops.push_back(std::make_pair(request->getFloor(), type));
         sort(downStops.begin(), downStops.end());
         isAdded = true;
     }
@@ -56,27 +62,37 @@ bool Elevator::addStops(Request &request, bool type)
     return isAdded;
 }
 
-bool Elevator::moveUp()
+bool Elevator::moveUp(std::mutex &mtx)
 {
+    bool isMovedUp = false;
     if (currentFloor < 7)
     {
-        std::cout << "Lift " << std::this_thread::get_id() << "is moving from" << currentFloor << "to" << currentFloor + 1 << std::endl;
+        mtx.lock();
+        std::cout << "Lift " << liftId << " is moving from " << currentFloor << " to " << currentFloor + 1 << std::endl;
+        mtx.unlock();
         currentFloor++;
-        std::this_thread::sleep_for(1s);
+        isMovedUp = true;
+        std::this_thread::sleep_for(10s);
     }
+    return isMovedUp;
 }
 
-bool Elevator::moveDown()
+bool Elevator::moveDown(std::mutex &mtx)
 {
+    bool isMovedDown = false;
     if (currentFloor > -2)
     {
-        std::cout << "Lift " << std::this_thread::get_id() << "is moving from" << currentFloor << "to" << currentFloor - 1 << std::endl;
+        mtx.lock();
+        std::cout << "Lift " << liftId << " is moving from " << currentFloor << " to " << currentFloor - 1 << std::endl;
+        mtx.unlock();
         currentFloor--;
-        std::this_thread::sleep_for(1s);
+        isMovedDown = true;
+        std::this_thread::sleep_for(10s);
     }
+    return isMovedDown;
 }
 
-bool Elevator::processRequest()
+bool Elevator::processRequest(std::mutex &mtx, std::condition_variable &cv)
 {
     int requestFloor;
     bool requestType;
@@ -87,8 +103,6 @@ bool Elevator::processRequest()
         requestType = upStops[0].second;
         isRequestBeingProcessed = true;
         upStops.erase(upStops.begin());
-        std::cout << "direction of lift " << std::this_thread::get_id() << "is Up" << std::endl;
-        std::this_thread::sleep_for(1s);
     }
     else if (direction == LiftDown)
     {
@@ -96,8 +110,6 @@ bool Elevator::processRequest()
         requestType = downStops[0].second;
         isRequestBeingProcessed = true;
         downStops.erase(downStops.begin());
-        std::cout << "direction of lift" << std::this_thread::get_id() << " is down" << std::endl;
-        std::this_thread::sleep_for(1s);
     }
     else
     {
@@ -120,26 +132,29 @@ bool Elevator::processRequest()
         {
             if (requestFloor > currentFloor)
             {
-                moveUp();
+                moveUp(mtx);
             }
             else
             {
-                moveDown();
+                moveDown(mtx);
             }
         }
 
         if (requestFloor == currentFloor)
         {
             stopLift();
-            std::cout << "Lift is stopped at floor" << currentFloor << std::endl;
+            mtx.lock();
+            std::cout << "Lift " << liftId << " arrived at floor " << currentFloor << std::endl;
+            mtx.unlock();
         }
 
         if (requestType == 0)
         {
-            std::cout << "Enter destination floor" << std::endl;
+            mtx.lock();
+            std::cout << "Press destination floor for lift " << liftId << std::endl;
             std::cin >> destinationFloor;
-            std::cout << "DestinationFloor: " << destinationFloor << std::endl;
-            // where to add destination floor ???? in upStops or downStops or current working queue
+            std::cout << "Lift " << liftId << " DestinationFloor: " << destinationFloor << std::endl;
+            mtx.unlock();
             if (destinationFloor > currentFloor)
             {
                 upStops.push_back(std::make_pair(destinationFloor, 1));
@@ -150,11 +165,13 @@ bool Elevator::processRequest()
             }
         }
     }
+    return isRequestBeingProcessed;
 }
 
-bool Elevator::stopLift()
+ElevatorDirection Elevator::stopLift()
 {
     direction = Idle;
+    return direction;
 }
 
 int Elevator::getCurrentFloor()

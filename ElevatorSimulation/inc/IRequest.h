@@ -4,7 +4,7 @@
 class IRequest
 {
 public:
-    virtual int generateRandomFloor() = 0;
+    virtual int generateRandomFloor(int ,int) = 0;
 
     virtual void setDirection(bool direction) = 0;
 

@@ -9,21 +9,11 @@ Request::Request()
     floor = new int;
 }
 
-Request::Request(const Request &request)
-{
-    direction = new bool;
-    floor = new int;
-    *direction = *request.direction;
-    *floor = *request.floor;
-}
-
-int Request::generateRandomFloor()
+int Request::generateRandomFloor(int lower_bound, int upper_bound)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    int lower_bound = -2;
-    int upper_bound = 7;
     std::uniform_int_distribution<> distrib(lower_bound, upper_bound);
     int random_number = distrib(gen);
     return random_number;
@@ -32,13 +22,11 @@ int Request::generateRandomFloor()
 void Request::setDirection(bool requestDirection)
 {
     *direction = requestDirection;
-    // std::cout << "void wala function : " << &direction << std::endl;
-    // std::cout << "Request Direction : " << &requestDirection << std::endl;
 }
 
 void Request::setFloor()
 {
-    *floor = generateRandomFloor();
+    *floor = generateRandomFloor(-2, 7);
 }
 
 int Request::getFloor() const

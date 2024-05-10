@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <mutex>
 #include "constants.h"
 #include "IElevator.h"
 #include "Request.h"
@@ -10,6 +11,7 @@
 class Elevator : public IElevator
 {
     ElevatorDirection direction;
+    int liftId;
     int currentFloor;
     int destinationFloor;
     bool *running;
@@ -17,14 +19,14 @@ class Elevator : public IElevator
     std::vector<std::pair<int, bool>> downStops;
 
 public:
-    Elevator(ElevatorDirection , int);
+    Elevator(int, ElevatorDirection, int);
     ElevatorDirection getCurrentDirection();
-    bool startLift();
-    bool addStops(Request &,bool);
-    bool moveUp();
-    bool moveDown();
-    bool processRequest();
-    bool stopLift();
+    bool startLift(std::mutex &, std::condition_variable &);
+    bool addStops(IRequest *, bool);
+    bool moveUp(std::mutex &mtx);
+    bool moveDown(std::mutex &mtx);
+    bool processRequest(std::mutex &, std::condition_variable &);
+    ElevatorDirection stopLift();
     int getCurrentFloor();
     void setDestinationFloor();
     bool getRunningStatus();

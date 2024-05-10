@@ -8,14 +8,13 @@ class ElevatorSystem
     IElevator *elevator1;
     IElevator *elevator2;
     int minFloor, maxFloor;
-    Request request;
 
 public:
     ElevatorSystem();
     ElevatorSystem(IElevator *, IElevator *);
     void startElevator();
-    int findNearestElevator(Request &);
-    bool addRequest(Request &,bool type);
+    int findNearestElevator(IRequest *);
+    bool addRequest(IRequest *,bool type);
     void move();
 };
 

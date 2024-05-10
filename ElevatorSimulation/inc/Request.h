@@ -2,8 +2,9 @@
 #define REQUEST_H
 
 #include "constants.h"
+#include "IRequest.h"
 
-class Request
+class Request : public IRequest
 {
     bool *direction = 0;
     int *floor = 0;
@@ -11,9 +12,7 @@ class Request
 public:
     Request();
 
-    Request(const Request& request);
-
-    int generateRandomFloor();
+    int generateRandomFloor(int ,int);
 
     void setDirection(bool direction);
 
