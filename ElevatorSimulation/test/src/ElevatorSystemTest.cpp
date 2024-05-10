@@ -22,6 +22,7 @@ public:
         delete mockElevator1;
         delete mockElevator2;
         delete mockRequest;
+        delete fakeSystem;
     }
 };
 
@@ -264,4 +265,33 @@ TEST_F(ElevatorSystemTest, WhenRequestIsDownBothRunningOneAboveRequestOneBelowRe
     int assignedLift = fakeSystem->findNearestElevator(mockRequest);
 
     ASSERT_EQ(assignedLift, 1);
+}
+
+TEST_F(ElevatorSystemTest, WhenRequestIsAddedToLiftOne_ThenItReturnsTrue)
+{
+    EXPECT_CALL(*mockRequest, getDirection()).WillRepeatedly(::testing::Return(Up));
+    EXPECT_CALL(*mockRequest, getFloor()).WillRepeatedly(::testing::Return(1));
+    EXPECT_CALL(*mockElevator1, getCurrentFloor()).WillRepeatedly(::testing::Return(0));
+    EXPECT_CALL(*mockElevator2, getCurrentFloor()).WillRepeatedly(::testing::Return(7));
+    EXPECT_CALL(*mockElevator1, getCurrentDirection()).WillRepeatedly(::testing::Return(Idle));
+    EXPECT_CALL(*mockElevator2, getCurrentDirection()).WillRepeatedly(::testing::Return(Idle));
+    EXPECT_CALL(*mockElevator1, addStops(::testing::_, true)).WillOnce(::testing::Return(true));
+    EXPECT_CALL(*mockElevator2, addStops(::testing::_, ::testing::_)).Times(0);
+
+    EXPECT_TRUE(fakeSystem->addRequest(mockRequest, true));
+}
+
+TEST_F(ElevatorSystemTest, WhenRequestIsAddedToLiftTwo_ThenItReturnsTrue)
+{
+    EXPECT_CALL(*mockRequest, getDirection()).WillRepeatedly(::testing::Return(Down));
+    EXPECT_CALL(*mockRequest, getFloor()).WillRepeatedly(::testing::Return(6));
+    EXPECT_CALL(*mockElevator1, getCurrentFloor()).WillRepeatedly(::testing::Return(0));
+    EXPECT_CALL(*mockElevator2, getCurrentFloor()).WillRepeatedly(::testing::Return(7));
+    EXPECT_CALL(*mockElevator1, getCurrentDirection()).WillRepeatedly(::testing::Return(Idle));
+    EXPECT_CALL(*mockElevator2, getCurrentDirection()).WillRepeatedly(::testing::Return(Idle));
+
+    EXPECT_CALL(*mockElevator1, addStops(::testing::_, ::testing::_)).Times(0);
+    EXPECT_CALL(*mockElevator2, addStops(::testing::_, false)).WillOnce(::testing::Return(true));
+
+    EXPECT_TRUE(fakeSystem->addRequest(mockRequest, false));
 }

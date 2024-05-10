@@ -11,8 +11,7 @@ enum ElevatorDirection
 enum RequestDirection
 {
     Up,
-    Down,
-    None
+    Down
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "Elevator.h"
+#include "InputValidator.h"
 #include <algorithm>
 #include <iostream>
 #include <thread>
@@ -11,24 +12,35 @@ Elevator::Elevator(int id, ElevatorDirection direction, int currentFloor) : lift
     running = new bool;
 }
 
-bool Elevator::startLift(std::mutex &mtx, std::condition_variable &cv)
+bool Elevator::startLift(std::mutex &mutex)
 {
     bool isLiftStarted = false;
-    mtx.lock();
+    mutex.lock();
     std::cout << "Lift " << liftId << " is at " << currentFloor << " floor" << std::endl;
-    mtx.unlock();
+    mutex.unlock();
+    mutex.lock();
+    std::cout << "Lift " << liftId << " is waiting for the requests" << std::endl;
+    mutex.unlock();
+    while (true)
+    {
+        if (upStops.size() != 0 || downStops.size() != 0)
+        {
+            setRunningStatus(true);
+            break;
+        }
+    }
     while (*running)
     {
         isLiftStarted = true;
         if (upStops.size() != 0 || downStops.size() != 0)
         {
-            processRequest(mtx, cv);
+            processRequest(mutex);
         }
         else
         {
-            mtx.lock();
+            mutex.lock();
             std::cout << "Lift " << liftId << " is waiting for the requests" << std::endl;
-            mtx.unlock();
+            mutex.unlock();
             std::this_thread::sleep_for(1s);
         }
     }
@@ -62,14 +74,14 @@ bool Elevator::addStops(IRequest *request, bool type)
     return isAdded;
 }
 
-bool Elevator::moveUp(std::mutex &mtx)
+bool Elevator::moveUp(std::mutex &mutex)
 {
     bool isMovedUp = false;
     if (currentFloor < 7)
     {
-        mtx.lock();
+        mutex.lock();
         std::cout << "Lift " << liftId << " is moving from " << currentFloor << " to " << currentFloor + 1 << std::endl;
-        mtx.unlock();
+        mutex.unlock();
         currentFloor++;
         isMovedUp = true;
         std::this_thread::sleep_for(10s);
@@ -77,14 +89,14 @@ bool Elevator::moveUp(std::mutex &mtx)
     return isMovedUp;
 }
 
-bool Elevator::moveDown(std::mutex &mtx)
+bool Elevator::moveDown(std::mutex &mutex)
 {
     bool isMovedDown = false;
     if (currentFloor > -2)
     {
-        mtx.lock();
+        mutex.lock();
         std::cout << "Lift " << liftId << " is moving from " << currentFloor << " to " << currentFloor - 1 << std::endl;
-        mtx.unlock();
+        mutex.unlock();
         currentFloor--;
         isMovedDown = true;
         std::this_thread::sleep_for(10s);
@@ -92,7 +104,7 @@ bool Elevator::moveDown(std::mutex &mtx)
     return isMovedDown;
 }
 
-bool Elevator::processRequest(std::mutex &mtx, std::condition_variable &cv)
+bool Elevator::processRequest(std::mutex &mutex)
 {
     int requestFloor;
     bool requestType;
@@ -132,29 +144,41 @@ bool Elevator::processRequest(std::mutex &mtx, std::condition_variable &cv)
         {
             if (requestFloor > currentFloor)
             {
-                moveUp(mtx);
+                moveUp(mutex);
             }
             else
             {
-                moveDown(mtx);
+                moveDown(mutex);
             }
         }
 
         if (requestFloor == currentFloor)
         {
             stopLift();
-            mtx.lock();
+            mutex.lock();
             std::cout << "Lift " << liftId << " arrived at floor " << currentFloor << std::endl;
-            mtx.unlock();
+            mutex.unlock();
         }
 
         if (requestType == 0)
         {
-            mtx.lock();
-            std::cout << "Press destination floor for lift " << liftId << std::endl;
-            std::cin >> destinationFloor;
+            mutex.lock();
+            while (true)
+            {
+                std::cout << "Press destination floor for lift " << liftId << std::endl;
+                std::cin >> destinationFloor;
+                if (InputValidator::isValidInput() && isValidDestinationFloor(destinationFloor))
+                {
+                    break;
+                }
+                else
+                {
+                    std::cout << "Invalid Destination Floor" << std::endl;
+                }
+            }
             std::cout << "Lift " << liftId << " DestinationFloor: " << destinationFloor << std::endl;
-            mtx.unlock();
+            mutex.unlock();
+
             if (destinationFloor > currentFloor)
             {
                 upStops.push_back(std::make_pair(destinationFloor, 1));
@@ -179,8 +203,6 @@ int Elevator::getCurrentFloor()
     return currentFloor;
 }
 
-void Elevator::setDestinationFloor() {}
-
 bool Elevator::getRunningStatus()
 {
     return *running;
@@ -189,4 +211,9 @@ bool Elevator::getRunningStatus()
 void Elevator::setRunningStatus(bool status)
 {
     *running = status;
+}
+
+bool Elevator::isValidDestinationFloor(int destinationFloor)
+{
+    return (destinationFloor <= 7 && destinationFloor >= -2) ? true : false;
 }

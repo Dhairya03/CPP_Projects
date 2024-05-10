@@ -21,16 +21,16 @@ class Elevator : public IElevator
 public:
     Elevator(int, ElevatorDirection, int);
     ElevatorDirection getCurrentDirection();
-    bool startLift(std::mutex &, std::condition_variable &);
+    bool startLift(std::mutex &);
     bool addStops(IRequest *, bool);
-    bool moveUp(std::mutex &mtx);
-    bool moveDown(std::mutex &mtx);
-    bool processRequest(std::mutex &, std::condition_variable &);
+    bool moveUp(std::mutex &);
+    bool moveDown(std::mutex &);
+    bool processRequest(std::mutex &);
     ElevatorDirection stopLift();
     int getCurrentFloor();
-    void setDestinationFloor();
     bool getRunningStatus();
     void setRunningStatus(bool);
+    bool isValidDestinationFloor(int);
 };
 
 #endif

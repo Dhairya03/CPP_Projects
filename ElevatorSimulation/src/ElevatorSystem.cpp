@@ -5,11 +5,6 @@ ElevatorSystem::ElevatorSystem(IElevator *lift1, IElevator *lift2) : elevator1(l
 {
 }
 
-void ElevatorSystem::startElevator()
-{
-    std::cout << "Elevator system has started" << std::endl;
-}
-
 int ElevatorSystem::findNearestElevator(IRequest *currentRequest)
 {
     int assignedLift;
@@ -71,7 +66,8 @@ int ElevatorSystem::findNearestElevator(IRequest *currentRequest)
         else if (elevator2->getCurrentDirection() == currentRequest->getDirection())
             assignedLift = 2;
 
-        // assignedLift = (distanceToElevator1 <= distanceToElevator2) ? 1 : 2;
+        else
+            assignedLift = (distanceToElevator1 <= distanceToElevator2) ? 1 : 2;
     }
     std::cout << "Assigned Lift " << assignedLift << std::endl;
     return assignedLift;
@@ -94,9 +90,4 @@ bool ElevatorSystem::addRequest(IRequest *currentRequest, bool type)
     else
         std::cout << "Invalid request" << std::endl;
     return isRequestAdded;
-}
-
-void ElevatorSystem::move()
-{
-    // moveElevator
 }

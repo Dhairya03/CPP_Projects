@@ -8,12 +8,14 @@
 #include "IRequest.h"
 #include <fstream>
 #include <chrono>
-#include <condition_variable>
 using namespace std::chrono;
 
-void readRequestFromFile(std::mutex &mtx, IRequest *request, const std::string &filename, ElevatorSystem &system)
+void readRequestFromFile(std::mutex &mutex, IRequest *request, const std::string &filename, ElevatorSystem &system, int &isLiftStopped)
 {
-    std::fstream file(filename);
+    std::fstream file;
+    file.open(filename, std::ios::out | std::ios::trunc);
+    file.close();
+    file.open(filename);
     if (!file.is_open())
     {
         std::cout << "Error opening file: " << filename << "\n";
@@ -41,15 +43,16 @@ void readRequestFromFile(std::mutex &mtx, IRequest *request, const std::string &
                     request->setDirection(Up);
                 else if (ch == 49)
                     request->setDirection(Down);
-                mtx.lock();
+                mutex.lock();
                 std::cout << "Request recieved is " << request->getDirection() << ", " << request->getFloor() << std::endl;
-                mtx.unlock();
+                mutex.unlock();
                 system.addRequest(request, 0);
             }
         }
         file.clear();
         if (ch == 'q')
         {
+            isLiftStopped = 1;
             file.close();
             break;
         }
@@ -62,25 +65,31 @@ int main()
     int maxFloor = 7;
     std::string filename = "input.txt";
     IRequest *request = new Request;
-    std::mutex mtx;
-    std::condition_variable cv;
+    std::mutex mutex;
+    int isLiftStopped = 0;
 
     IElevator *elevator1 = new Elevator(1, Idle, 0);
-    IElevator *elevator2 = new Elevator(2, Idle, 7);
+    IElevator *elevator2 = new Elevator(2, Idle, maxFloor);
     ElevatorSystem system(elevator1, elevator2);
 
-    std::thread requestInputThread(readRequestFromFile, std::ref(mtx), request, filename, std::ref(system));
+    std::thread requestInputThread(readRequestFromFile, std::ref(mutex), request, filename, std::ref(system), std::ref(isLiftStopped));
 
     std::cout << "File read" << std::endl;
 
-    system.startElevator();
+    std::cout << "Elevator system has started" << std::endl;
 
-    elevator1->setRunningStatus(true);
-    elevator2->setRunningStatus(true);
+    std::thread lift1(&IElevator::startLift, elevator1, std::ref(mutex));
+    std::thread lift2(&IElevator::startLift, elevator2, std::ref(mutex));
 
-    std::thread lift1(&IElevator::startLift, elevator1, std::ref(mtx), std::ref(cv));
-    std::thread lift2(&IElevator::startLift, elevator2, std::ref(mtx), std::ref(cv));
-
+    while (true)
+    {
+        if (isLiftStopped == 1)
+        {
+            elevator1->setRunningStatus(false);
+            elevator2->setRunningStatus(false);
+            break;
+        }
+    }
     requestInputThread.join();
     lift1.join();
     lift2.join();

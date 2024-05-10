@@ -12,10 +12,8 @@ class ElevatorSystem
 public:
     ElevatorSystem();
     ElevatorSystem(IElevator *, IElevator *);
-    void startElevator();
     int findNearestElevator(IRequest *);
     bool addRequest(IRequest *,bool type);
-    void move();
 };
 
 #endif
