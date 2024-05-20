@@ -24,6 +24,15 @@ public:
         memcpy(data, other.data, size);
     }
 
+    String &operator=(const String &other) // copy assignment
+    {
+        std::cout << "Copy Assignment" << std::endl;
+        size = other.size;
+        data = new char[size];
+        memcpy(data, other.data, size);
+        return *this;
+    }
+
     String(String &&other) // move constructor
     {
         std::cout << "Move String" << std::endl;
@@ -34,12 +43,24 @@ public:
         other.data = nullptr;
     }
 
+    String &operator=(String &&other) // move assignment
+    {
+        std::cout << "MoveAssignment" << std::endl;
+        size = other.size;
+        data = other.data;
+
+        other.size = 0;
+        other.data = nullptr;
+        return *this;
+    }
+
     void print()
     {
         for (int i = 0; i < size; i++)
         {
             std::cout << data[i];
         }
+        std::cout << std::endl;
     }
 
     ~String() // destructor
@@ -58,7 +79,7 @@ public:
     Entity(const String &string)
         : newString(string)
     {
-        std::cout << "constrcutor" << std::endl;
+        std::cout << "constructor" << std::endl;
     }
 
     Entity(String &&string)
@@ -79,8 +100,10 @@ public:
 
 int main()
 {
-    String &&string="hello";
-    std::cout<<"...."<<std::endl;
+    // String &&string = "hello";
+    // String &&string2 = "hi";
+    // string2 = string;
+    // string2("abcdf")
     Entity entity("string");
     entity.print();
     return 0;
