@@ -28,10 +28,10 @@ public:
     }
     Unique_Pointer &operator=(Unique_Pointer &&other_ptr)
     {
-        std::cout << "Move assignmnet pointer" << std::endl;
-
+        std::cout << "Move assignment pointer" << std::endl;
         if (this != &other_ptr)
         {
+            delete ptr;
             ptr = other_ptr.ptr;
             other_ptr.ptr = nullptr;
         }
@@ -44,7 +44,6 @@ public:
     {
         return ptr;
     }
-
 };
 class Base
 {
