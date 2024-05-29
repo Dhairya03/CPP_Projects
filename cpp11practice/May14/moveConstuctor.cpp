@@ -79,9 +79,14 @@ public:
 
 int main()
 {
-    String &&string="hello";
-    std::cout<<"...."<<std::endl;
-    Entity entity("string");
-    entity.print();
+    // String &&string="hello";
+    // std::cout<<"...."<<std::endl;
+    // Entity entity("string");
+    // entity.print();
+    // String s1 = "hello";
+    // String s(std::move(s1));
+    String s2("hello");
+    String s3(std::move("hello"));
+
     return 0;
 }

@@ -96,6 +96,34 @@ public:
     {
         return cb->getRefCount();
     }
+
+    T *operator->()
+    {
+        return ptr;
+    }
+
+    T &operator*() const
+    {
+        return *ptr;
+    }
+
+    T *get() const
+    {
+        return ptr;
+    }
+
+    T *release()
+    {
+        T *old_ptr = ptr;
+        ptr = nullptr;
+        return old_ptr;
+    }
+
+    void reset(T *ptr = nullptr)
+    {
+        delete ptr;
+        ptr = ptr;
+    }
 };
 
 class Base

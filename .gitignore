@@ -48,3 +48,10 @@ Thumbs.db
 *.mov
 *.wmv
 
+*.out
+*.txt
+lib/
+Parser/
+testThreading/
+gtest/
+ElevatorSimulation/

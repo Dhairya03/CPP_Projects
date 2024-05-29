@@ -44,7 +44,31 @@ public:
     {
         return ptr;
     }
+
+    T &operator*() const
+    {
+        return *ptr;
+    }
+
+    T *get() const
+    {
+        return ptr;
+    }
+
+    T *release()
+    {
+        T *old_ptr = ptr;
+        ptr = nullptr;
+        return old_ptr;
+    }
+
+    void reset(T *ptr = nullptr)
+    {
+        delete ptr;
+        ptr = ptr;
+    }
 };
+
 class Base
 {
 
@@ -71,6 +95,8 @@ int main()
     p2->value = 4;
 
     std::cout << p2->value << std::endl;
+    Base *p10 = &(*p2);
+    std::cout << p10->value << std::endl;
 
     Unique_Pointer<Base> p3(std::move(p2));
     // std::cout << p2->value << std::endl;
