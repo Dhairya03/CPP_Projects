@@ -1,0 +1,24 @@
+#ifndef COMMAND_CONTROLLER_H
+#define COMMAND_CONTROLLER_H
+
+#include <ICommandController.h>
+#include <iostream>
+#include <FileSystem.h>
+
+class CommandController : public ICommandController
+{
+    std::string command;
+    std::string argument1;
+    std::string argument2;
+    std::string response;
+    FileSystem *fs;
+
+public:
+    CommandController(std::string, std::string, std::string);
+    bool isValidCommand(std::string);
+    bool isValidArgument(std::string);
+    void executeCommand();
+    void setResponse(std::string);
+};
+
+#endif
