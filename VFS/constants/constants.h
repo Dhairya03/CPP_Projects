@@ -2,7 +2,7 @@
 #define CONSTANTS_H
 
 #include <map>
-enum Commands
+enum class Commands
 {
     mkdir = 1,
     rmdir = 2,
@@ -18,8 +18,17 @@ enum Commands
     cd_nested = 12
 };
 
-std::map<Commands, std::string> commandsToString = {{mkdir, "mkdir"},
-                                    {rmdir, "rmdir"},
-                                    {ls, "ls"},{cat,"cat"},{cd_nested,"cd_nested"},{cd,"cd"},{touch,"touch"},{rm,"rm"},{find,"find"},{exit,"exit"},{mv,"mv"},{vi,"vi"}};
+const std::map<Commands, std::string> commandsToString = {{Commands::mkdir, "mkdir"},
+                                                          {Commands::rmdir, "rmdir"},
+                                                          {Commands::ls, "ls"},
+                                                          {Commands::cat, "cat"},
+                                                          {Commands::cd_nested, "cd_nested"},
+                                                          {Commands::cd, "cd"},
+                                                          {Commands::touch, "touch"},
+                                                          {Commands::rm, "rm"},
+                                                          {Commands::find, "find"},
+                                                          {Commands::exit, "exit"},
+                                                          {Commands::mv, "mv"},
+                                                          {Commands::vi, "vi"}};
 
 #endif

@@ -3,7 +3,7 @@
 
 int main()
 {
-    CommandParser *parser=new CommandParser();
+    CommandParser *parser = new CommandParser();
     std::string request;
     do
     {
@@ -14,6 +14,7 @@ int main()
         {
             if (parser->validateCommand(request))
             {
+                // std::cout << parser->getResponse() << std::endl;
             }
             else
             {
@@ -24,6 +25,6 @@ int main()
         {
             continue;
         }
-    } while (request != "quit");
+    } while (request != "exit");
     return 0;
 }

@@ -5,6 +5,13 @@
 
 class FileSystemComponent : public IFileSystemComponent
 {
+    std::string componentName;
+    std::string componentPath;
+    FileSystemComponent *parent;
+
+public:
+    std::string getName() const;
+    std::string getPath() const;
 };
 
 #endif

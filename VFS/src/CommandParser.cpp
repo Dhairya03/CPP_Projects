@@ -15,11 +15,11 @@ bool CommandParser::parseRequest(std::string request)
 
     std::cout << command << std::endl;
     std::cout << argument1 << " " << argument2 << std::endl;
+    controller = new CommandController(command, argument1, argument2);
 }
 
 bool CommandParser::validateCommand(std::string request)
 {
-    controller = new CommandController(command, argument1, argument2);
     if (controller->isValidCommand())
     {
         if (controller->isValidArgument())

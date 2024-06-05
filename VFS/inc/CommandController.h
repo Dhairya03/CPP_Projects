@@ -15,8 +15,8 @@ class CommandController : public ICommandController
 
 public:
     CommandController(std::string, std::string, std::string);
-    bool isValidCommand(std::string);
-    bool isValidArgument(std::string);
+    bool isValidCommand();
+    bool isValidArgument();
     void executeCommand();
     void setResponse(std::string);
 };

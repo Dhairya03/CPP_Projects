@@ -9,9 +9,17 @@ bool CommandController::isValidCommand()
 {
     for (auto cmd : commandsToString)
     {
-        if (command == commandsToString[cmd])
+        if (command == cmd.second)
         {
-            std::cout << "valid command" << command << " " << commandsToString[cmd] << std::endl;
+            std::cout << "valid command" << command << " " << cmd.second << std::endl;
         }
     }
+}
+
+bool CommandController::isValidArgument(){
+
+}
+
+void CommandController::executeCommand(){
+    
 }

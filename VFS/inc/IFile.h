@@ -5,6 +5,9 @@
 
 class IFile : public FileSystemComponent
 {
+public:
+    virtual std::string getContent() const = 0;
+    virtual void setContent(const std::string) = 0;
 };
 
 #endif

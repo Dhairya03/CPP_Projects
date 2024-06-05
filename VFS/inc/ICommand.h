@@ -1,6 +1,8 @@
 #ifndef I_COMMAND_H
 #define I_COMMAND_H
 
+#include <iostream>
+
 class ICommand
 {
 public:

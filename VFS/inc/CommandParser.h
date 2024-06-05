@@ -8,11 +8,11 @@
 class CommandParser : public ICommandParser
 {
     std::string request;
-    CommandController* controller;
+    CommandController *controller;
 
 public:
-    bool parseRequest(std::string);
-    bool validateCommand(std::string);
+    bool parseRequest(std::string) override;
+    bool validateCommand(std::string) override;
 };
 
 #endif

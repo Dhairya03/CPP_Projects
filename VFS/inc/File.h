@@ -5,5 +5,10 @@
 
 class File : public IFile
 {
+    std::string content;
+
+public:
+    void setContent(const std::string) override;
+    std::string getContent() const override;
 };
 #endif
