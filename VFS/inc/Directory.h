@@ -3,16 +3,23 @@
 
 #include <IDirectory.h>
 #include <list>
+#include <vector>
 
 class Directory : public IDirectory
 {
-    std::list<FileSystemComponent *> components;
+private:
+    std::vector<std::shared_ptr<FileSystemComponent>> components;
 
 public:
-    void addComponent() override;
-    void removeComponent() override;
-    void findComponent() override;
-    void listComponent() override;
+    Directory(const std::string &name);
+    std::string getName() const override;
+    std::string getType() const override;
+    std::string getPath() const override;
+    void addComponent(std::shared_ptr<FileSystemComponent> component);
+    void removeComponent(std::shared_ptr<FileSystemComponent> component);
+    std::shared_ptr<FileSystemComponent> findComponent(const std::string &name);
+    std::vector<std::shared_ptr<FileSystemComponent>> listComponents() const;
+    ~Directory();
 };
 
 #endif

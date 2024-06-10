@@ -3,7 +3,9 @@
 
 int main()
 {
-    CommandParser *parser = new CommandParser();
+    FileSystem *fs = new FileSystem();
+    CommandParser *parser = new CommandParser(fs);
+
     std::string request;
     do
     {

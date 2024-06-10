@@ -9,8 +9,10 @@ class CommandParser : public ICommandParser
 {
     std::string request;
     CommandController *controller;
+    FileSystem *fs;
 
 public:
+    CommandParser(FileSystem *);
     bool parseRequest(std::string) override;
     bool validateCommand(std::string) override;
 };

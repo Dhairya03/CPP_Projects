@@ -14,15 +14,13 @@ enum class Commands
     exit = 8,
     mv = 9,
     vi = 10,
-    cat = 11,
-    cd_nested = 12
+    cat = 11
 };
 
 const std::map<Commands, std::string> commandsToString = {{Commands::mkdir, "mkdir"},
                                                           {Commands::rmdir, "rmdir"},
                                                           {Commands::ls, "ls"},
                                                           {Commands::cat, "cat"},
-                                                          {Commands::cd_nested, "cd_nested"},
                                                           {Commands::cd, "cd"},
                                                           {Commands::touch, "touch"},
                                                           {Commands::rm, "rm"},

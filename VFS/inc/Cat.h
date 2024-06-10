@@ -1,17 +1,16 @@
-#ifndef CD_H
-#define CD_H
+#ifndef CAT_H
+#define CAT_H
 
 #include <ICommand.h>
 #include <FileSystem.h>
 
-class Cd : public ICommand
+class Cat : public ICommand
 {
     std::string path;
+
 public:
-    Cd(const std::string &);
+    Cat(const std::string &);
     void execute(std::shared_ptr<Directory> currentDirectory) override;
 };
 
 #endif
-
-// enter into one of children of the current directory

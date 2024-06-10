@@ -3,6 +3,10 @@
 #include <vector>
 #include <constants.h>
 
+CommandParser::CommandParser(FileSystem *fs) : fs(fs)
+{
+}
+
 bool CommandParser::parseRequest(std::string request)
 {
     std::string command;
@@ -15,15 +19,19 @@ bool CommandParser::parseRequest(std::string request)
 
     std::cout << command << std::endl;
     std::cout << argument1 << " " << argument2 << std::endl;
-    controller = new CommandController(command, argument1, argument2);
+
+    controller = new CommandController(fs,command, argument1, argument2);
+    return true;
 }
 
 bool CommandParser::validateCommand(std::string request)
 {
+    bool isValidCommand = false;
     if (controller->isValidCommand())
     {
         if (controller->isValidArgument())
         {
+            isValidCommand = true;
             controller->executeCommand();
         }
         else
@@ -35,4 +43,5 @@ bool CommandParser::validateCommand(std::string request)
     {
         std::cout << "command not found" << std::endl;
     }
+    return isValidCommand;
 }

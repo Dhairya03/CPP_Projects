@@ -7,14 +7,17 @@
 
 class FileSystem : public IFileSystem
 {
-    Directory *root;
-    Directory *currentDirectory;
+    std::shared_ptr<Directory> root;
+    std::shared_ptr<Directory> currentDirectory;
     FileSystemComponent *component;
-    ICommand *command;
+    std::unique_ptr<ICommand> command;
 
 public:
-    void setCommand();
-    Directory *getCurrentDirectory();
+    FileSystem();
+    std::shared_ptr<Directory> getCurrentDirectory() const;
+    void setCurrentDirectory(std::shared_ptr<Directory> directory);
+    void executeCommand();
+    void setCommand(const std::string &, const std::string &, const std::string &);
 };
 
 #endif
