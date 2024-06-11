@@ -27,6 +27,7 @@ void FileSystem::setCurrentDirectory(std::shared_ptr<Directory> directory)
 {
     currentDirectory = directory;
 }
+
 void FileSystem::setCommand(const std::string &comm, const std::string &path, const std::string &dest)
 {
     std::string src = path;

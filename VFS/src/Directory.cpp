@@ -25,11 +25,7 @@ void Directory::addComponent(std::shared_ptr<FileSystemComponent> component)
         std::cout << "components" << c << std::endl;
     }
     components.push_back(component);
-    std::cout << "addCompoennt" << &components << std::endl;
-    // for (auto c : components)
-    // {
-    //     std::cout << c << std::endl;
-    // }
+    std::cout << "addComponent" << &components << std::endl;
 }
 
 void Directory::removeComponent(std::shared_ptr<FileSystemComponent> component)
