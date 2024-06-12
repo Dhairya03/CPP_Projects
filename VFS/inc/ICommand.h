@@ -2,15 +2,12 @@
 #define I_COMMAND_H
 
 #include <iostream>
-#include <FileSystemComponent.h>
-#include <Directory.h>
+class FileSystem;
 
 class ICommand
 {
-    // FileSystemComponent *component;
-
 public:
-    virtual void execute(std::shared_ptr<Directory> currentDirectory) = 0;
+    virtual void execute(FileSystem &) = 0;
 };
 
 #endif

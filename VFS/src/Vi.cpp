@@ -1,11 +1,13 @@
 #include <Vi.h>
 #include <memory>
 #include <File.h>
+#include <FileSystem.h>
 
 Vi::Vi(const std::string &path) : path(path) {}
 
-void Vi::execute(std::shared_ptr<Directory> currentDir)
+void Vi::execute(FileSystem &fs)
 {
+    auto currentDir = fs.getCurrentDirectory();
     std::string data;
     std::cout << "Enter data for file " << path << ": ";
     std::getline(std::cin, data);

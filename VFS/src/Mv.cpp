@@ -1,10 +1,11 @@
 #include <Mv.h>
+#include <FileSystem.h>
 
 Mv::Mv(const std::string &src, const std::string &dest) : src(src), dest(dest) {}
 
-void Mv::execute(std::shared_ptr<Directory> currentDir)
+void Mv::execute(FileSystem &fs)
 {
-    // auto currentDir = fs.getCurrentDirectory();
+    auto currentDir = fs.getCurrentDirectory();
     auto file = currentDir->findComponent(src);
     if (file)
     {

@@ -1,11 +1,13 @@
 #include "Rmdir.h"
+#include <FileSystem.h>
 
 Rmdir::Rmdir(const std::string &path) : path(path)
 {
 }
 
-void Rmdir::execute(std::shared_ptr<Directory> currentDirectory)
+void Rmdir::execute(FileSystem &fs)
 {
+    auto currentDirectory = fs.getCurrentDirectory();
     auto component = currentDirectory->findComponent(path);
     if (!component)
     {

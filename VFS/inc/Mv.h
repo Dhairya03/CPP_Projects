@@ -2,6 +2,7 @@
 #define MV_H
 
 #include <ICommand.h>
+class FileSystem;
 
 class Mv : public ICommand
 {
@@ -11,7 +12,7 @@ private:
 
 public:
     Mv(const std::string &, const std::string &);
-    void execute(std::shared_ptr<Directory> currentDirectoryfs) override;
+    void execute(FileSystem &) override;
 };
 
 #endif

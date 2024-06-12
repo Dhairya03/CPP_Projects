@@ -2,6 +2,7 @@
 #define RMDIR_H
 
 #include <ICommand.h>
+class FileSystem;
 
 class Rmdir : public ICommand
 {
@@ -9,9 +10,6 @@ class Rmdir : public ICommand
 
 public:
     Rmdir(const std::string &);
-    void execute(std::shared_ptr<Directory> currentDirectory) override;
+    void execute(FileSystem &) override;
 };
 #endif
-
-// make its parent null and remove it from vector(erase).
-// free the memory

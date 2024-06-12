@@ -14,7 +14,7 @@ class CommandController : public ICommandController
     FileSystem *fs;
 
 public:
-    CommandController(FileSystem*,std::string, std::string, std::string);
+    CommandController(FileSystem *, std::string, std::string, std::string);
     bool isValidCommand();
     bool isValidArgument();
     void executeCommand();

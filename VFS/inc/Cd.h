@@ -2,16 +2,15 @@
 #define CD_H
 
 #include <ICommand.h>
-#include <FileSystem.h>
+class FileSystem;
 
 class Cd : public ICommand
 {
     std::string path;
+
 public:
     Cd(const std::string &);
-    void execute(std::shared_ptr<Directory> currentDirectory) override;
+    void execute(FileSystem &fs) override;
 };
 
 #endif
-
-// enter into one of children of the current directory

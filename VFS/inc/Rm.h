@@ -2,14 +2,15 @@
 #define RM_H
 
 #include <ICommand.h>
-#include <FileSystem.h>
+class FileSystem;
 
 class Rm : public ICommand
 {
-        std::string path;
+    std::string path;
+
 public:
     Rm(const std::string &);
-    void execute(std::shared_ptr<Directory> currentDirectory) override;
+    void execute(FileSystem &) override;
 };
 
 #endif

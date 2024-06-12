@@ -9,7 +9,6 @@ class FileSystemComponent : public IFileSystemComponent
 protected:
     std::string name;
     std::string path;
-    std::shared_ptr<FileSystemComponent> parent;
 
 public:
     FileSystemComponent(const std::string &);

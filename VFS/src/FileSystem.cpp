@@ -12,10 +12,10 @@
 
 FileSystem::FileSystem()
 {
-    root = std::make_shared<Directory>("/");
-    std::cout <<"Root "<< root << std::endl;
+    root = std::make_shared<Directory>("/",nullptr);
+    // std::cout <<"Root "<< root << std::endl;
     currentDirectory = root;
-    std::cout <<"currentDir "<< currentDirectory << std::endl;
+    // std::cout <<"currentDir "<< currentDirectory << std::endl;
 }
 
 std::shared_ptr<Directory> FileSystem::getCurrentDirectory() const
@@ -84,5 +84,5 @@ void FileSystem::setCommand(const std::string &comm, const std::string &path, co
 
 void FileSystem::executeCommand()
 {
-    command->execute(currentDirectory);
+    command->execute(*this);
 }

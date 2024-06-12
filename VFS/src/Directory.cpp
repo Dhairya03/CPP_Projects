@@ -1,7 +1,9 @@
 #include "Directory.h"
 #include <algorithm>
 
-Directory::Directory(const std::string &name) : IDirectory(name) {}
+Directory::Directory(const std::string &name, std::shared_ptr<Directory> parent) : IDirectory(name), parent(parent)
+{
+}
 
 std::string Directory::getName() const
 {
@@ -20,12 +22,7 @@ std::string Directory::getPath() const
 
 void Directory::addComponent(std::shared_ptr<FileSystemComponent> component)
 {
-    for (auto c : components)
-    {
-        std::cout << "components" << c << std::endl;
-    }
     components.push_back(component);
-    std::cout << "addComponent" << &components << std::endl;
 }
 
 void Directory::removeComponent(std::shared_ptr<FileSystemComponent> component)
@@ -47,15 +44,14 @@ std::shared_ptr<FileSystemComponent> Directory::findComponent(const std::string 
 
 std::vector<std::shared_ptr<FileSystemComponent>> Directory::listComponents() const
 {
-    std::cout << "list";
-    std::cout << "insidelistcompoennts" << &components << std::endl;
-    for (auto c : components)
-    {
-        std::cout << c << std::endl;
-    }
     return components;
 }
 
 Directory::~Directory()
 {
+}
+
+std::shared_ptr<Directory> Directory::getParent()
+{
+    return parent;
 }

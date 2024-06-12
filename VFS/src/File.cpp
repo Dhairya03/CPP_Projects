@@ -11,3 +11,8 @@ std::string File::getContent() const
 {
     return content;
 }
+
+std::shared_ptr<Directory> File::getParent()
+{
+    return parent;
+}

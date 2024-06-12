@@ -2,6 +2,7 @@
 #define VI_H
 
 #include <ICommand.h>
+class FileSystem;
 
 class Vi : public ICommand
 {
@@ -9,7 +10,7 @@ class Vi : public ICommand
 
 public:
     Vi(const std::string &);
-    void execute(std::shared_ptr<Directory> currentDirectory) override;
+    void execute(FileSystem &) override;
 };
 
 #endif

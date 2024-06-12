@@ -2,14 +2,12 @@
 #define LS_H
 
 #include <ICommand.h>
+class FileSystem;
 
 class Ls : public ICommand
 {
 public:
-    void execute(std::shared_ptr<Directory> currentDirectory) override;
+    void execute(FileSystem &) override;
 };
 
 #endif
-
-
-//list the children of current directory 

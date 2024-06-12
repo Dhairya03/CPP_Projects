@@ -1,12 +1,14 @@
 #include <Rm.h>
+#include <FileSystem.h>
 
 Rm::Rm(const std::string &path) : path(path) {}
 
-void Rm::execute(std::shared_ptr<Directory> currentDir)
+void Rm::execute(FileSystem &fs)
 {
-    // auto currentDir = fs.getCurrentDirectory();
+    auto currentDir = fs.getCurrentDirectory();
     auto file = currentDir->findComponent(path);
-    if (file && file->getType() == "File")
+    // && file->getType() == "File"
+    if (file )
     {
         currentDir->removeComponent(file);
         std::cout << "File removed: " << path << std::endl;

@@ -1,9 +1,9 @@
 #include <Ls.h>
+#include <FileSystem.h>
 
-void Ls::execute(std::shared_ptr<Directory> currentDir)
+void Ls::execute(FileSystem &fs)
 {
-    // auto currentDir = fs.getCurrentDirectory();
-    std::cout << "LsCuurent" << currentDir << std::endl;
+    auto currentDir = fs.getCurrentDirectory();
     auto components = currentDir->listComponents();
     for (const auto &component : components)
     {
