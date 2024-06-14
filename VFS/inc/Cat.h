@@ -2,7 +2,7 @@
 #define CAT_H
 
 #include <ICommand.h>
-class FileSystem;
+class IFileSystem;
 
 class Cat : public ICommand
 {
@@ -10,7 +10,7 @@ class Cat : public ICommand
 
 public:
     Cat(const std::string &);
-    void execute(FileSystem &) override;
+    std::string execute(IFileSystem &) override;
 };
 
 #endif

@@ -1,17 +1,17 @@
 #include <CommandController.h>
 #include <constants.h>
 
-CommandController::CommandController(FileSystem *fs, std::string command, std::string argument1, std::string argument2) : fs(fs), command(command), argument1(argument1), argument2(argument2)
+CommandController::CommandController(IFileSystem *fs) : fs(fs)
 {
-    // fs = new FileSystem();
 }
 
-bool CommandController::isValidCommand()
+bool CommandController::isValidCommand(const std::string &command)
 {
     bool isCommandValid = false;
+    this->command = command;
     for (auto cmd : commandsToString)
     {
-        if (command == cmd.second)
+        if (this->command == cmd.second)
         {
             isCommandValid = true;
             std::cout << "valid command" << std::endl;
@@ -20,29 +20,64 @@ bool CommandController::isValidCommand()
     return isCommandValid;
 }
 
-bool CommandController::isValidArgument()
+bool CommandController::isValidArgument(const std::string &argument1, const std::string &argument2)
 {
-    // need to be a valid string
-    if (argument1 != argument2)
+    bool isValidArgument = false;
+    if (command == "ls" || command == "exit")
     {
-        return true;
+        if (argument1 == "" && argument2 == "")
+            isValidArgument = true;
+    }
+    else if (command == "mv")
+    {
+        if (argument1 == "" || argument2 == "")
+            isValidArgument = false;
+        else
+            isValidArgument = true;
+    }
+    else if (command == "vi")
+    {
+        if (argument1 != "" || argument2 == "")
+        {
+            isValidArgument = true;
+            std::string data;
+            std::cout << "Enter data for file " << argument1 << ": ";
+            std::getline(std::cin, data);
+            this->argument2 = data;
+        }
+        else
+        {
+            isValidArgument = false;
+        }
     }
     else
     {
-        return false;
+        if (argument1 != "" && argument2 == "")
+            isValidArgument = true;
+        else
+            isValidArgument = false;
     }
+    if (isValidArgument == true)
+    {
+        this->argument1 = argument1;
+        if (command != "vi")
+            this->argument2 = argument2;
+    }
+    return isValidArgument;
 }
 
 void CommandController::executeCommand()
 {
-    // fs->setCommand();
-    // fs->command->execute();
-    // fs->executeCommand(command);
     fs->setCommand(command, argument1, argument2);
-    fs->executeCommand();
+    setResponse(fs->executeCommand());
 }
 
 void CommandController::setResponse(std::string res)
 {
     response = res;
+}
+
+std::string CommandController::getResponse()
+{
+    return response;
 }

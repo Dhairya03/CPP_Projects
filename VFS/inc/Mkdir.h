@@ -2,7 +2,7 @@
 #define MKDIR_H
 
 #include <ICommand.h>
-class FileSystem;
+class IFileSystem;
 
 class Mkdir : public ICommand
 {
@@ -10,6 +10,6 @@ class Mkdir : public ICommand
 
 public:
     Mkdir(const std::string &);
-    void execute(FileSystem &) override;
+    std::string execute(IFileSystem &) override;
 };
 #endif

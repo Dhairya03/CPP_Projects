@@ -2,7 +2,7 @@
 #define MV_H
 
 #include <ICommand.h>
-class FileSystem;
+class IFileSystem;
 
 class Mv : public ICommand
 {
@@ -12,7 +12,7 @@ private:
 
 public:
     Mv(const std::string &, const std::string &);
-    void execute(FileSystem &) override;
+    std::string execute(IFileSystem &) override;
 };
 
 #endif

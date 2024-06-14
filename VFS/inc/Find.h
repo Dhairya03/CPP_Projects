@@ -2,7 +2,7 @@
 #define FIND_H
 
 #include <ICommand.h>
-class FileSystem;
+class IFileSystem;
 
 class Find : public ICommand
 {
@@ -10,6 +10,6 @@ class Find : public ICommand
 
 public:
     Find(const std::string &);
-    void execute(FileSystem &) override;
+    std::string execute(IFileSystem &) override;
 };
 #endif

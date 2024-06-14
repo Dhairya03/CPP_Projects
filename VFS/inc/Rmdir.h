@@ -2,7 +2,7 @@
 #define RMDIR_H
 
 #include <ICommand.h>
-class FileSystem;
+class IFileSystem;
 
 class Rmdir : public ICommand
 {
@@ -10,6 +10,6 @@ class Rmdir : public ICommand
 
 public:
     Rmdir(const std::string &);
-    void execute(FileSystem &) override;
+    std::string execute(IFileSystem &) override;
 };
 #endif

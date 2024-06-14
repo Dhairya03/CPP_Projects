@@ -19,18 +19,19 @@ std::vector<std::string> splitPath(const std::string &path)
 
 Cd::Cd(const std::string &path) : path(path) {}
 
-void Cd::execute(FileSystem &fs)
+std::string Cd::execute(IFileSystem &fs)
 {
+    std::string response = "";
     auto currentDir = fs.getCurrentDirectory();
 
     if (path.empty())
     {
-        std::cout << "Invalid path" << std::endl;
-        return;
+        response = "Invalid path\n";
+        return response;
     }
 
     std::vector<std::string> parts = splitPath(path);
-    std::shared_ptr<Directory> targetDirectory = currentDir;
+    std::shared_ptr<IDirectory> targetDirectory = currentDir;
 
     for (const auto &part : parts)
     {
@@ -42,45 +43,28 @@ void Cd::execute(FileSystem &fs)
             }
             else
             {
-                std::cout << "Already at the root directory" << std::endl;
-                return;
+                response = "Already at the root directory\n";
+                return response;
             }
         }
         else if (part == ".")
         {
-            continue; // Current directory, no action needed
+            continue;
         }
         else
         {
             auto component = targetDirectory->findComponent(part);
             if (!component || component->getType() != "Directory")
             {
-                std::cout << "Directory not found: " << part << std::endl;
-                return;
+                response = "Directory not found: " + part + "\n";
+                return response;
             }
-            targetDirectory = std::dynamic_pointer_cast<Directory>(component);
+            targetDirectory = std::dynamic_pointer_cast<IDirectory>(component);
         }
     }
 
-    // Assuming there's a global file system object to set the current directory
     fs.setCurrentDirectory(targetDirectory);
-    std::cout << "Changed to directory: " << targetDirectory->getName() << std::endl;
+    response = "Changed to directory: " + targetDirectory->getName() + "\n";
 
-    // if (path == "..")
-    // {
-
-    // }
-    // else
-    // {
-    //     auto dir = std::dynamic_pointer_cast<Directory>(currentDir->findComponent(path));
-    //     if (dir)
-    //     {
-    //         fs.setCurrentDirectory(dir);
-    //         std::cout << "Directory  found: " << path << std::endl;
-    //     }
-    //     else
-    //     {
-    //         std::cout << "Directory not found: " << path << std::endl;
-    //     }
-    // }
+    return response;
 }

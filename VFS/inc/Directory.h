@@ -8,19 +8,18 @@
 class Directory : public IDirectory
 {
 private:
-    std::vector<std::shared_ptr<FileSystemComponent>> components;
-    std::shared_ptr<Directory> parent;
+    std::vector<std::shared_ptr<IFileSystemComponent>> components;
+    std::shared_ptr<IDirectory> parent;
 
 public:
-    Directory(const std::string &name,std::shared_ptr<Directory>);
+    Directory(const std::string &name, std::shared_ptr<IDirectory>);
     std::string getName() const override;
     std::string getType() const override;
-    std::string getPath() const override;
-    std::shared_ptr<Directory> getParent();
-    void addComponent(std::shared_ptr<FileSystemComponent> component);
-    void removeComponent(std::shared_ptr<FileSystemComponent> component);
-    std::shared_ptr<FileSystemComponent> findComponent(const std::string &name);
-    std::vector<std::shared_ptr<FileSystemComponent>> listComponents() const;
+    std::shared_ptr<IDirectory> getParent() override;
+    void addComponent(std::shared_ptr<IFileSystemComponent> component);
+    void removeComponent(std::shared_ptr<IFileSystemComponent> component);
+    std::shared_ptr<IFileSystemComponent> findComponent(const std::string &name);
+    std::vector<std::shared_ptr<IFileSystemComponent>> listComponents() const;
     ~Directory();
 };
 

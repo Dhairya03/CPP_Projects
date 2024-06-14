@@ -2,7 +2,7 @@
 #define TOUCH_H
 
 #include <ICommand.h>
-class FileSystem;
+class IFileSystem;
 
 class Touch : public ICommand
 {
@@ -10,6 +10,6 @@ class Touch : public ICommand
 
 public:
     Touch(const std::string &);
-    void execute(FileSystem &) override;
+    std::string execute(IFileSystem &) override;
 };
 #endif

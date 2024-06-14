@@ -2,12 +2,12 @@
 #define I_COMMAND_H
 
 #include <iostream>
-class FileSystem;
+class IFileSystem;
 
 class ICommand
 {
 public:
-    virtual void execute(FileSystem &) = 0;
+    virtual std::string execute(IFileSystem &) = 0;
 };
 
 #endif

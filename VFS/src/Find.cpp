@@ -5,14 +5,22 @@ Find::Find(const std::string &name) : name(name)
 {
 }
 
-void Find::execute(FileSystem &fs)
+std::string Find::execute(IFileSystem &fs)
 {
+    std::string response = "";
+    bool isFound = false;
     auto currentDirectory = fs.getCurrentDirectory();
     for (const auto &component : currentDirectory->listComponents())
     {
         if (component->getName() == name)
         {
-            std::cout << "Found: " << component->getName() << " in " << currentDirectory->getName() << std::endl;
+            isFound = true;
+            response = "Found: " + component->getName() + " in " + currentDirectory->getName() + "\n";
         }
     }
+    if (!isFound)
+    {
+        response = name + "not found.\n";
+    }
+    return response;
 }

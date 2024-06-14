@@ -9,12 +9,12 @@ class File : public IFile
 {
     std::string name;
     std::string content;
-    std::shared_ptr<Directory> parent;
+    std::shared_ptr<IDirectory> parent;
 
 public:
     File(const std::string &name);
     void setContent(const std::string) override;
     std::string getContent() const override;
-    std::shared_ptr<Directory> getParent();
+    std::shared_ptr<IDirectory> getParent();
 };
 #endif

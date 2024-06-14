@@ -3,18 +3,20 @@
 
 Rm::Rm(const std::string &path) : path(path) {}
 
-void Rm::execute(FileSystem &fs)
+std::string Rm::execute(IFileSystem &fs)
 {
+    std::string response = "";
     auto currentDir = fs.getCurrentDirectory();
     auto file = currentDir->findComponent(path);
-    // && file->getType() == "File"
-    if (file )
+
+    if (file && file->getType() == "File")
     {
         currentDir->removeComponent(file);
-        std::cout << "File removed: " << path << std::endl;
+        response = "File removed: " + path + "\n";
     }
     else
     {
-        std::cout << "File not found: " << path << std::endl;
+        response = "File not found: " + path + "\n";
     }
+    return response;
 }

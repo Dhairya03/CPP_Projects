@@ -2,12 +2,12 @@
 #define LS_H
 
 #include <ICommand.h>
-class FileSystem;
+class IFileSystem;
 
 class Ls : public ICommand
 {
 public:
-    void execute(FileSystem &) override;
+    std::string execute(IFileSystem &) override;
 };
 
 #endif

@@ -3,33 +3,44 @@
 #include <vector>
 #include <constants.h>
 
-CommandParser::CommandParser(FileSystem *fs) : fs(fs)
+CommandParser::CommandParser(ICommandController *controller) : controller(controller)
 {
 }
 
-bool CommandParser::parseRequest(std::string request)
+std::vector<std::string> splitString(const std::string &input, char delimiter = ' ')
 {
-    std::string command;
-    std::string argument1, argument2;
-
-    command = request.substr(0, request.find(" "));
-    argument1 = request.substr(request.find(" ") + 1);
-    argument2 = argument1.substr(argument1.find(" ") + 1);
-    argument1 = argument1.substr(0, argument1.find(" "));
-
-    std::cout << command << std::endl;
-    std::cout << argument1 << " " << argument2 << std::endl;
-
-    controller = new CommandController(fs,command, argument1, argument2);
-    return true;
+    std::vector<std::string> parts;
+    std::stringstream ss(input);
+    std::string part;
+    while (std::getline(ss, part, delimiter))
+    {
+        if (!part.empty())
+        {
+            parts.push_back(part);
+        }
+    }
+    return parts;
 }
 
-bool CommandParser::validateCommand(std::string request)
+std::vector<std::string> CommandParser::parseRequest(const std::string &request)
+{
+    auto requestTokens = splitString(request);
+    return requestTokens;
+}
+
+bool CommandParser::validateCommand(std::vector<std::string> requestTokens)
 {
     bool isValidCommand = false;
-    if (controller->isValidCommand())
+    std::string argument1 = "", argument2 = "";
+    if (requestTokens.size() > 1)
+        argument1 = requestTokens[1];
+
+    if (requestTokens.size() > 2)
+        argument2 = requestTokens[2];
+
+    if (controller->isValidCommand(requestTokens[0]))
     {
-        if (controller->isValidArgument())
+        if (requestTokens.size() < 3 && controller->isValidArgument(argument1, argument2))
         {
             isValidCommand = true;
             controller->executeCommand();
@@ -44,4 +55,9 @@ bool CommandParser::validateCommand(std::string request)
         std::cout << "command not found" << std::endl;
     }
     return isValidCommand;
+}
+
+std::string CommandParser::getResponse()
+{
+    return controller->getResponse();
 }

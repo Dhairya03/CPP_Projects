@@ -3,14 +3,12 @@
 #include <File.h>
 #include <FileSystem.h>
 
-Vi::Vi(const std::string &path) : path(path) {}
+Vi::Vi(const std::string &path, const std::string &data) : path(path), data(data) {}
 
-void Vi::execute(FileSystem &fs)
+std::string Vi::execute(IFileSystem &fs)
 {
+    std::string response;
     auto currentDir = fs.getCurrentDirectory();
-    std::string data;
-    std::cout << "Enter data for file " << path << ": ";
-    std::getline(std::cin, data);
     if (data != "q")
     {
         auto file = std::dynamic_pointer_cast<File>(currentDir->findComponent(path));
@@ -18,13 +16,14 @@ void Vi::execute(FileSystem &fs)
         {
             file = std::make_shared<File>(path);
             currentDir->addComponent(file);
-            std::cout << "New file created: " << path << std::endl;
+            response = "New file created: " + path + "\n";
         }
         file->setContent(data);
-        std::cout << "Data saved to file: " << path << std::endl;
+        response += "Data saved to file: " + path + "\n";
     }
     else
     {
-        std::cout << "File not created" << std::endl;
+        response = "File not created \n";
     }
+    return response;
 }

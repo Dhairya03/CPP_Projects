@@ -3,17 +3,19 @@
 
 Mkdir::Mkdir(const std::string &path) : path(path) {}
 
-void Mkdir::execute(FileSystem &fs)
+std::string Mkdir::execute(IFileSystem &fs)
 {
-    // std::cout << "Mkdir current"<<currentDir << std::endl;
+    std::string response = "";
     auto currentDir = fs.getCurrentDirectory();
     if (currentDir->findComponent(path))
     {
-        std::cout << "Directory already exists: " << path << std::endl;
+        response = "Directory already exists: " + path + "\n";
     }
     else
     {
-        currentDir->addComponent(std::make_shared<Directory>(path,fs.getCurrentDirectory()));
-        std::cout << "Directory created: " << path << std::endl;
+        currentDir->addComponent(std::make_shared<Directory>(path, fs.getCurrentDirectory()));
+        response = "Directory created: " + path + "\n";
     }
+    std::cout << response<<path;
+    return response;
 }

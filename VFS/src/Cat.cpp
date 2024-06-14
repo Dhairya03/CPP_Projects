@@ -4,16 +4,18 @@
 
 Cat::Cat(const std::string &path) : path(path) {}
 
-void Cat::execute(FileSystem &fs)
+std::string Cat::execute(IFileSystem &fs)
 {
+    std::string response = "";
     auto currentDir = fs.getCurrentDirectory();
     auto file = std::dynamic_pointer_cast<File>(currentDir->findComponent(path));
     if (file)
     {
-        std::cout << "File contents of " << path << ": " << file->getContent() << std::endl;
+        response = "File contents of " + path + ": " + file->getContent() + "\n";
     }
     else
     {
-        std::cout << "File not found: " << path << std::endl;
+        response = "File not found: " + path + "\n";
     }
+    return response;
 }

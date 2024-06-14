@@ -7,18 +7,19 @@
 
 class CommandController : public ICommandController
 {
-    std::string command;
-    std::string argument1;
-    std::string argument2;
-    std::string response;
-    FileSystem *fs;
+    std::string command = "";
+    std::string argument1 = "";
+    std::string argument2 = "";
+    std::string response = "";
+    IFileSystem *fs = nullptr;
 
 public:
-    CommandController(FileSystem *, std::string, std::string, std::string);
-    bool isValidCommand();
-    bool isValidArgument();
+    CommandController(IFileSystem *);
+    bool isValidCommand(const std::string &);
+    bool isValidArgument(const std::string &, const std::string &);
     void executeCommand();
     void setResponse(std::string);
+    std::string getResponse();
 };
 
 #endif

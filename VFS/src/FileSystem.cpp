@@ -10,20 +10,17 @@
 #include "Cd.h"
 #include "Vi.h"
 
-FileSystem::FileSystem()
+FileSystem::FileSystem(std::shared_ptr<IDirectory> root):root(root)
 {
-    root = std::make_shared<Directory>("/",nullptr);
-    // std::cout <<"Root "<< root << std::endl;
     currentDirectory = root;
-    // std::cout <<"currentDir "<< currentDirectory << std::endl;
 }
 
-std::shared_ptr<Directory> FileSystem::getCurrentDirectory() const
+std::shared_ptr<IDirectory> FileSystem::getCurrentDirectory() const
 {
     return currentDirectory;
 }
 
-void FileSystem::setCurrentDirectory(std::shared_ptr<Directory> directory)
+void FileSystem::setCurrentDirectory(std::shared_ptr<IDirectory> directory)
 {
     currentDirectory = directory;
 }
@@ -49,7 +46,7 @@ void FileSystem::setCommand(const std::string &comm, const std::string &path, co
     }
     else if (comm == "vi")
     {
-        this->command = std::make_unique<Vi>(path);
+        this->command = std::make_unique<Vi>(path, dest);
     }
     else if (comm == "cd")
     {
@@ -71,10 +68,6 @@ void FileSystem::setCommand(const std::string &comm, const std::string &path, co
     {
         this->command = std::make_unique<Mv>(src, dest);
     }
-    // else if (command == "exit")
-    // {
-    //     this->command = std::make_unique<Exit>();
-    // }
     else
     {
         std::cout << "Unknown command: " << comm << std::endl;
@@ -82,7 +75,7 @@ void FileSystem::setCommand(const std::string &comm, const std::string &path, co
     }
 }
 
-void FileSystem::executeCommand()
+std::string FileSystem::executeCommand()
 {
-    command->execute(*this);
+    return command->execute(*this);
 }

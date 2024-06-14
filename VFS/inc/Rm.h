@@ -2,7 +2,7 @@
 #define RM_H
 
 #include <ICommand.h>
-class FileSystem;
+class IFileSystem;
 
 class Rm : public ICommand
 {
@@ -10,7 +10,7 @@ class Rm : public ICommand
 
 public:
     Rm(const std::string &);
-    void execute(FileSystem &) override;
+    std::string execute(IFileSystem &) override;
 };
 
 #endif

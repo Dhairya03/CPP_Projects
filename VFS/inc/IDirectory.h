@@ -8,11 +8,13 @@ class IDirectory : public FileSystemComponent
 {
 public:
     virtual ~IDirectory();
-    IDirectory(const std::string& name);
-    virtual void addComponent(std::shared_ptr<FileSystemComponent> component) = 0;
-    virtual void removeComponent(std::shared_ptr<FileSystemComponent> component) = 0;
-    virtual std::shared_ptr<FileSystemComponent> findComponent(const std::string &name) = 0;
-    virtual std::vector<std::shared_ptr<FileSystemComponent>> listComponents() const = 0;
+    IDirectory();
+    IDirectory(const std::string &name);
+    virtual std::shared_ptr<IDirectory> getParent() = 0;
+    virtual void addComponent(std::shared_ptr<IFileSystemComponent> component) = 0;
+    virtual void removeComponent(std::shared_ptr<IFileSystemComponent> component) = 0;
+    virtual std::shared_ptr<IFileSystemComponent> findComponent(const std::string &name) = 0;
+    virtual std::vector<std::shared_ptr<IFileSystemComponent>> listComponents() const = 0;
 };
 
 #endif

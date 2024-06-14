@@ -9,7 +9,8 @@ public:
     void SetUp()
     {
         std::string name = "Dir1";
-        directory = new Directory(name);
+        std::shared_ptr<Directory> parent = nullptr;
+        directory = new Directory(name, parent);
     }
 
     void TearDown()
@@ -32,8 +33,8 @@ TEST_F(DirectoryTest, WhenGetNameIsCalled_ThenDifferentNameIsReturned)
 
 TEST_F(DirectoryTest, WhenAddComponentIsCalled_ThenComponentIsAddedToTheDirectory)
 {
-    auto dir1 = std::make_shared<Directory>("dir1.txt");
-    auto dir2 = std::make_shared<Directory>("dir2.txt");
+    auto dir1 = std::make_shared<Directory>("dir1.txt",directory->getParent());
+    auto dir2 = std::make_shared<Directory>("dir2.txt",directory->getParent());
 
     directory->addComponent(dir1);
     directory->addComponent(dir2);
@@ -46,8 +47,8 @@ TEST_F(DirectoryTest, WhenAddComponentIsCalled_ThenComponentIsAddedToTheDirector
 
 TEST_F(DirectoryTest, WhenRemoveComponentIsCalled_ThenComponentIsRemovedFromTheDirectory)
 {
-    auto dir1 = std::make_shared<Directory>("dir1.txt");
-    auto dir2 = std::make_shared<Directory>("dir2.txt");
+    auto dir1 = std::make_shared<Directory>("dir1.txt",directory->getParent());
+    auto dir2 = std::make_shared<Directory>("dir2.txt",directory->getParent());
 
     directory->addComponent(dir1);
     directory->addComponent(dir2);
@@ -59,8 +60,8 @@ TEST_F(DirectoryTest, WhenRemoveComponentIsCalled_ThenComponentIsRemovedFromTheD
 
 TEST_F(DirectoryTest, WhenFindComponentIsCalled_ThenComponentIsFoundFromTheDirectory)
 {
-    auto dir1 = std::make_shared<Directory>("dir1.txt");
-    auto dir2 = std::make_shared<Directory>("dir2.txt");
+    auto dir1 = std::make_shared<Directory>("dir1.txt",directory->getParent());
+    auto dir2 = std::make_shared<Directory>("dir2.txt",directory->getParent());
 
     directory->addComponent(dir1);
     directory->addComponent(dir2);
@@ -70,12 +71,11 @@ TEST_F(DirectoryTest, WhenFindComponentIsCalled_ThenComponentIsFoundFromTheDirec
 
 TEST_F(DirectoryTest, WhenListComponentsIsCalled_ThenComponenetsAreReturnedFromTheDirectory)
 {
-    auto dir1 = std::make_shared<Directory>("dir1.txt");
-    auto dir2 = std::make_shared<Directory>("dir2.txt");
+    auto dir1 = std::make_shared<Directory>("dir1.txt",directory->getParent());
+    auto dir2 = std::make_shared<Directory>("dir2.txt",directory->getParent());
     directory->addComponent(dir1);
     directory->addComponent(dir2);
 
     auto components = directory->listComponents();
     EXPECT_EQ(components, directory->listComponents());
 }
-

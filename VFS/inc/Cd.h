@@ -2,7 +2,7 @@
 #define CD_H
 
 #include <ICommand.h>
-class FileSystem;
+class IFileSystem;
 
 class Cd : public ICommand
 {
@@ -10,7 +10,7 @@ class Cd : public ICommand
 
 public:
     Cd(const std::string &);
-    void execute(FileSystem &fs) override;
+    std::string execute(IFileSystem &fs) override;
 };
 
 #endif

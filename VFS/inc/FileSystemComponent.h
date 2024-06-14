@@ -8,12 +8,11 @@ class FileSystemComponent : public IFileSystemComponent
 {
 protected:
     std::string name;
-    std::string path;
 
 public:
+    FileSystemComponent();
     FileSystemComponent(const std::string &);
     std::string getName() const;
-    std::string getPath() const;
     std::string getType() const;
 };
 

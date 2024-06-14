@@ -3,13 +3,14 @@
 
 Mv::Mv(const std::string &src, const std::string &dest) : src(src), dest(dest) {}
 
-void Mv::execute(FileSystem &fs)
+std::string Mv::execute(IFileSystem &fs)
 {
+    std::string response = "";
     auto currentDir = fs.getCurrentDirectory();
     auto file = currentDir->findComponent(src);
     if (file)
     {
-        file->getPath() = dest;
+        file->getName() = dest;
         currentDir->removeComponent(file);
         auto newDir = std::dynamic_pointer_cast<Directory>(currentDir->findComponent(dest));
         if (newDir)
@@ -20,10 +21,11 @@ void Mv::execute(FileSystem &fs)
         {
             currentDir->addComponent(file);
         }
-        std::cout << "Moved " << src << " to " << dest << std::endl;
+        response = "Moved " + src + " to " + dest + "\n";
     }
     else
     {
-        std::cout << "File/Directory not found: " << src << std::endl;
+        response = "File/Directory not found: " + src + "\n";
     }
+    return response;
 }

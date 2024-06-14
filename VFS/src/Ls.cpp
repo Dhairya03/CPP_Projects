@@ -1,13 +1,15 @@
 #include <Ls.h>
 #include <FileSystem.h>
 
-void Ls::execute(FileSystem &fs)
+std::string Ls::execute(IFileSystem &fs)
 {
+    std::string response = "";
     auto currentDir = fs.getCurrentDirectory();
     auto components = currentDir->listComponents();
     for (const auto &component : components)
     {
-        std::cout << component->getName() << " ";
+        response += component->getName() + " ";
     }
-    std::cout << std::endl;
+    response += "\n";
+    return response;
 }

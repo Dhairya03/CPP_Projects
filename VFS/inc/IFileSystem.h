@@ -8,11 +8,11 @@
 class IFileSystem
 {
 public:
-    virtual std::shared_ptr<Directory> getCurrentDirectory() const = 0;
-    virtual void setCurrentDirectory(std::shared_ptr<Directory>) = 0;
+    virtual std::shared_ptr<IDirectory> getCurrentDirectory() const = 0;
+    virtual void setCurrentDirectory(std::shared_ptr<IDirectory>) = 0;
     virtual void setCommand(const std::string &, const std::string &, const std::string &) = 0;
-    virtual void executeCommand() = 0;
-    virtual ~IFileSystem() ;
+    virtual std::string executeCommand() = 0;
+    virtual ~IFileSystem();
 };
 
 #endif
