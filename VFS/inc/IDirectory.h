@@ -1,7 +1,7 @@
 #ifndef I_DIRECTORY_H
 #define I_DIRECTORY_H
 
-#include <FileSystemComponent.h>
+#include "FileSystemComponent.h"
 #include <vector>
 
 class IDirectory : public FileSystemComponent

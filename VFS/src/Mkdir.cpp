@@ -1,5 +1,5 @@
-#include <Mkdir.h>
-#include <FileSystem.h>
+#include "Mkdir.h"
+#include "FileSystem.h"
 
 Mkdir::Mkdir(const std::string &path) : path(path) {}
 
@@ -16,6 +16,5 @@ std::string Mkdir::execute(IFileSystem &fs)
         currentDir->addComponent(std::make_shared<Directory>(path, fs.getCurrentDirectory()));
         response = "Directory created: " + path + "\n";
     }
-    std::cout << response<<path;
     return response;
 }

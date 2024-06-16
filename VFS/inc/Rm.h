@@ -1,7 +1,7 @@
 #ifndef RM_H
 #define RM_H
 
-#include <ICommand.h>
+#include "ICommand.h"
 class IFileSystem;
 
 class Rm : public ICommand

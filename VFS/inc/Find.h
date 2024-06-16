@@ -1,7 +1,7 @@
 #ifndef FIND_H
 #define FIND_H
 
-#include <ICommand.h>
+#include "ICommand.h"
 class IFileSystem;
 
 class Find : public ICommand

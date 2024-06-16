@@ -2,7 +2,7 @@
 #define MOCK_COMMAND_CONTROLLER_H
 
 #include <gmock/gmock.h>
-#include <ICommandController.h>
+#include "ICommandController.h"
 
 class MockCommandController : public ICommandController
 {

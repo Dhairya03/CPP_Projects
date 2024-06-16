@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Vi.h>
-#include <mockFileSystem.h>
-#include <mockFile.h>
-#include <mockDirectory.h>
+#include "Vi.h"
+#include "mockFileSystem.h"
+#include "mockFile.h"
+#include "mockDirectory.h"
 
 class ViTest : public ::testing::Test
 {
@@ -38,6 +38,7 @@ TEST_F(ViTest, WhenNewFileIsCreated_ThenTheDataIsSetToFileCOntent)
 TEST_F(ViTest, WhenExitWithoutCreatingFile_ThenFileIsNotCreated)
 {
     vi = new Vi("test.txt", "q");
+    EXPECT_CALL(*mockFileSystem, getCurrentDirectory()).WillOnce(::testing::Return(nullptr));
     std::string expectedResponse = "File not created \n";
     EXPECT_EQ(vi->execute(*mockFileSystem), expectedResponse);
 }

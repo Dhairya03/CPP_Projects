@@ -2,7 +2,7 @@
 #define MOCK_FILE_SYSTEM_COMPONENT_H
 
 #include <gmock/gmock.h>
-#include <IFileSystemComponent.h>
+#include "IFileSystemComponent.h"
 
 class MockFileSystemComponent : public IFileSystemComponent
 {

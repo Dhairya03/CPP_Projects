@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Directory.h>
+#include "Directory.h"
 
 class DirectoryTest : public ::testing::Test
 {
@@ -33,8 +33,8 @@ TEST_F(DirectoryTest, WhenGetNameIsCalled_ThenDifferentNameIsReturned)
 
 TEST_F(DirectoryTest, WhenAddComponentIsCalled_ThenComponentIsAddedToTheDirectory)
 {
-    auto dir1 = std::make_shared<Directory>("dir1.txt",directory->getParent());
-    auto dir2 = std::make_shared<Directory>("dir2.txt",directory->getParent());
+    auto dir1 = std::make_shared<Directory>("dir1.txt", directory->getParent());
+    auto dir2 = std::make_shared<Directory>("dir2.txt", directory->getParent());
 
     directory->addComponent(dir1);
     directory->addComponent(dir2);
@@ -47,8 +47,8 @@ TEST_F(DirectoryTest, WhenAddComponentIsCalled_ThenComponentIsAddedToTheDirector
 
 TEST_F(DirectoryTest, WhenRemoveComponentIsCalled_ThenComponentIsRemovedFromTheDirectory)
 {
-    auto dir1 = std::make_shared<Directory>("dir1.txt",directory->getParent());
-    auto dir2 = std::make_shared<Directory>("dir2.txt",directory->getParent());
+    auto dir1 = std::make_shared<Directory>("dir1.txt", directory->getParent());
+    auto dir2 = std::make_shared<Directory>("dir2.txt", directory->getParent());
 
     directory->addComponent(dir1);
     directory->addComponent(dir2);
@@ -60,8 +60,8 @@ TEST_F(DirectoryTest, WhenRemoveComponentIsCalled_ThenComponentIsRemovedFromTheD
 
 TEST_F(DirectoryTest, WhenFindComponentIsCalled_ThenComponentIsFoundFromTheDirectory)
 {
-    auto dir1 = std::make_shared<Directory>("dir1.txt",directory->getParent());
-    auto dir2 = std::make_shared<Directory>("dir2.txt",directory->getParent());
+    auto dir1 = std::make_shared<Directory>("dir1.txt", directory->getParent());
+    auto dir2 = std::make_shared<Directory>("dir2.txt", directory->getParent());
 
     directory->addComponent(dir1);
     directory->addComponent(dir2);
@@ -71,8 +71,8 @@ TEST_F(DirectoryTest, WhenFindComponentIsCalled_ThenComponentIsFoundFromTheDirec
 
 TEST_F(DirectoryTest, WhenListComponentsIsCalled_ThenComponenetsAreReturnedFromTheDirectory)
 {
-    auto dir1 = std::make_shared<Directory>("dir1.txt",directory->getParent());
-    auto dir2 = std::make_shared<Directory>("dir2.txt",directory->getParent());
+    auto dir1 = std::make_shared<Directory>("dir1.txt", directory->getParent());
+    auto dir2 = std::make_shared<Directory>("dir2.txt", directory->getParent());
     directory->addComponent(dir1);
     directory->addComponent(dir2);
 

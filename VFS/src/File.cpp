@@ -1,6 +1,11 @@
-#include <File.h>
+#include "File.h"
 
 File::File(const std::string &name) : IFile(name) {}
+
+std::string File::getType() const
+{
+    return "File";
+}
 
 void File::setContent(const std::string data)
 {

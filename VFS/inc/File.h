@@ -1,8 +1,8 @@
 #ifndef FILE_H
 #define FILE_H
 
-#include <IFile.h>
-#include <Directory.h>
+#include "IFile.h"
+#include "Directory.h"
 #include <sstream>
 
 class File : public IFile
@@ -13,6 +13,7 @@ class File : public IFile
 
 public:
     File(const std::string &name);
+    std::string getType() const override;
     void setContent(const std::string) override;
     std::string getContent() const override;
     std::shared_ptr<IDirectory> getParent();

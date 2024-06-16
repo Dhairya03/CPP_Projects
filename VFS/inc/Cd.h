@@ -1,7 +1,7 @@
 #ifndef CD_H
 #define CD_H
 
-#include <ICommand.h>
+#include "ICommand.h"
 class IFileSystem;
 
 class Cd : public ICommand

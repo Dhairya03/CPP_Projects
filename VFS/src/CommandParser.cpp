@@ -1,7 +1,7 @@
-#include <CommandParser.h>
+#include "CommandParser.h"
 #include <sstream>
 #include <vector>
-#include <constants.h>
+#include "constants.h"
 
 CommandParser::CommandParser(ICommandController *controller) : controller(controller)
 {
@@ -40,7 +40,7 @@ bool CommandParser::validateCommand(std::vector<std::string> requestTokens)
 
     if (controller->isValidCommand(requestTokens[0]))
     {
-        if (requestTokens.size() < 3 && controller->isValidArgument(argument1, argument2))
+        if (requestTokens.size() <= 3 && controller->isValidArgument(argument1, argument2))
         {
             isValidCommand = true;
             controller->executeCommand();

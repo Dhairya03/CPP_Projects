@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Mkdir.h>
-#include <mockFileSystem.h>
-#include <mockDirectory.h>
+#include "Mkdir.h"
+#include "mockFileSystem.h"
+#include "mockDirectory.h"
 
 class MkdirTest : public ::testing::Test
 {
@@ -33,9 +33,8 @@ TEST_F(MkdirTest, WhenExecuteIsCalled_ThenDirectoryIsCreated)
     auto rootDirectory = std::make_shared<MockDirectory>("root");
     EXPECT_CALL(*mockFileSystem, getCurrentDirectory()).WillRepeatedly(::testing::Return(rootDirectory));
     EXPECT_CALL(*rootDirectory, findComponent(name)).WillOnce(::testing::Return(nullptr));
-    std::string response = mkdir->execute(*mockFileSystem);
     std::string expectedResponse = "Directory created: " + name + "\n";
-    EXPECT_EQ(response, expectedResponse);
+    EXPECT_EQ(mkdir->execute(*mockFileSystem), expectedResponse);
 }
 
 TEST_F(MkdirTest, WhenExecuteIsCalledAndDirectoryExists_ThenItReturnDirectoryAlreadyExists)
@@ -46,7 +45,6 @@ TEST_F(MkdirTest, WhenExecuteIsCalledAndDirectoryExists_ThenItReturnDirectoryAlr
     auto existingDirectory = std::make_shared<MockDirectory>(name);
     EXPECT_CALL(*mockFileSystem, getCurrentDirectory()).WillOnce(::testing::Return(rootDirectory));
     EXPECT_CALL(*rootDirectory, findComponent(name)).WillOnce(::testing::Return(existingDirectory));
-    std::string response = mkdir->execute(*mockFileSystem);
     std::string expectedResponse = "Directory already exists: " + name + "\n";
-    EXPECT_EQ(response, expectedResponse);
+    EXPECT_EQ(mkdir->execute(*mockFileSystem), expectedResponse);
 }

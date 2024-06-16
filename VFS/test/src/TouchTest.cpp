@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Touch.h>
-#include <mockFileSystem.h>
-#include <mockFile.h>
-#include <mockDirectory.h>
+#include "Touch.h"
+#include "mockFileSystem.h"
+#include "mockFile.h"
+#include "mockDirectory.h"
 
 class TouchTest : public ::testing::Test
 {

@@ -1,7 +1,7 @@
-#include <Vi.h>
+#include "Vi.h"
+#include "File.h"
+#include "FileSystem.h"
 #include <memory>
-#include <File.h>
-#include <FileSystem.h>
 
 Vi::Vi(const std::string &path, const std::string &data) : path(path), data(data) {}
 
@@ -11,7 +11,7 @@ std::string Vi::execute(IFileSystem &fs)
     auto currentDir = fs.getCurrentDirectory();
     if (data != "q")
     {
-        auto file = std::dynamic_pointer_cast<File>(currentDir->findComponent(path));
+        auto file = std::dynamic_pointer_cast<IFile>(currentDir->findComponent(path));
         if (!file)
         {
             file = std::make_shared<File>(path);

@@ -1,7 +1,7 @@
 #ifndef CAT_H
 #define CAT_H
 
-#include <ICommand.h>
+#include "ICommand.h"
 class IFileSystem;
 
 class Cat : public ICommand

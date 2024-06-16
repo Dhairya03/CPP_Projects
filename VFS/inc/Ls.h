@@ -1,7 +1,7 @@
 #ifndef LS_H
 #define LS_H
 
-#include <ICommand.h>
+#include "ICommand.h"
 class IFileSystem;
 
 class Ls : public ICommand

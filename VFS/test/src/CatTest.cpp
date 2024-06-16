@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Cat.h>
-#include <mockFileSystem.h>
-#include <mockFile.h>
-#include <mockDirectory.h>
+#include "Cat.h"
+#include "mockFileSystem.h"
+#include "mockFile.h"
+#include "mockDirectory.h"
 
 class CatTest : public ::testing::Test
 {
@@ -25,7 +25,7 @@ public:
 
 TEST_F(CatTest, WhenReadingExistingFile_ThenItReturnsTheContentofFile)
 {
-    auto mockFile = std::make_shared<MockFile>();
+    auto mockFile = std::make_shared<MockFile>("test.txt");
     auto mockDirectory = std::make_shared<MockDirectory>("mock");
     EXPECT_CALL(*mockFileSystem, getCurrentDirectory()).WillOnce(::testing::Return(mockDirectory));
     EXPECT_CALL(*mockDirectory, findComponent("test.txt")).WillOnce(::testing::Return(mockFile));

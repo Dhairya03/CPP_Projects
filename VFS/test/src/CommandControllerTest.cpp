@@ -43,7 +43,7 @@ TEST_F(CommandControllerTest, WhenInalidArgumentArePassed_ThenItReturnsFalse)
     EXPECT_FALSE(commandController->isValidArgument("", ""));
 }
 
-TEST_F(CommandControllerTest, ExecuteCommandTest)
+TEST_F(CommandControllerTest, WhenValidCommandIsPassed_ThenCommandIsExecuted)
 {
     std::string command = "mkdir";
     std::string argument1 = "newDir";

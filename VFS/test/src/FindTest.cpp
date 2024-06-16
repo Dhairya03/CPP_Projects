@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Find.h>
-#include <Ls.h>
-#include <Mkdir.h>
-#include <mockFileSystem.h>
-#include <mockDirectory.h>
-#include <mockFileSystemComponent.h>
+#include "Find.h"
+#include "Ls.h"
+#include "Mkdir.h"
+#include "mockFileSystem.h"
+#include "mockDirectory.h"
+#include "mockFileSystemComponent.h"
 
 class FindTest : public ::testing::Test
 {
@@ -47,9 +47,8 @@ TEST_F(FindTest, WhenExecuteIsCalledAndFileExists_ThenItReturndsFound)
     EXPECT_CALL(*rootDirectory, listComponents()).WillOnce(::testing::Return(components));
     EXPECT_CALL(*mockFile1, getName()).WillRepeatedly(::testing::Return(name));
     EXPECT_CALL(*rootDirectory, getName()).WillRepeatedly(::testing::Return("root"));
-    std::string response = find->execute(*mockFileSystem);
     std::string expectedResponse = "Found: " + name + " in " + "root" + "\n";
-    EXPECT_EQ(response, expectedResponse);
+    EXPECT_EQ(find->execute(*mockFileSystem), expectedResponse);
 }
 
 TEST_F(FindTest, WhenExecuteIsCalledAndFileDoesNotExist_ThenItReturnsNotFound)
@@ -65,7 +64,6 @@ TEST_F(FindTest, WhenExecuteIsCalledAndFileDoesNotExist_ThenItReturnsNotFound)
     EXPECT_CALL(*rootDirectory, listComponents()).WillOnce(::testing::Return(components));
     EXPECT_CALL(*mockFile1, getName()).WillRepeatedly(::testing::Return(name));
     EXPECT_CALL(*rootDirectory, getName()).WillRepeatedly(::testing::Return("root"));
-    std::string response = find->execute(*mockFileSystem);
     std::string expectedResponse = nonExistingFileName + "not found.\n";
-    EXPECT_EQ(response, expectedResponse);
+    EXPECT_EQ(find->execute(*mockFileSystem), expectedResponse);
 }

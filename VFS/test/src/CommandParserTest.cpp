@@ -30,9 +30,9 @@ TEST_F(CommandParserTest, WhenValidCommandAndArgumentsArePassed_ThenItReturnsTru
     EXPECT_TRUE(parser->validateCommand(tokens));
 }
 
-TEST_F(CommandParserTest, WhenInvalidCommandIsPasses_ThenItReturnFalse)
+TEST_F(CommandParserTest, WhenInvalidCommandIsPassed_ThenItReturnFalse)
 {
-    std::string input = "invalid_command";
+    std::string input = "invalidCommand";
     auto tokens = parser->parseRequest(input);
     EXPECT_CALL(*mockController, isValidCommand(tokens[0])).WillOnce(::testing::Return(false));
     EXPECT_CALL(*mockController, isValidArgument(::testing::_, ::testing::_)).Times(0);
@@ -42,7 +42,7 @@ TEST_F(CommandParserTest, WhenInvalidCommandIsPasses_ThenItReturnFalse)
 
 TEST_F(CommandParserTest, WhenInvalidArgumentsArePassed_ThenItReturnFalse)
 {
-    std::string input = "command invalid_arg1 invalid_arg2";
+    std::string input = "command invalidArg1 invalidArg2";
     auto tokens = parser->parseRequest(input);
     EXPECT_CALL(*mockController, isValidCommand(tokens[0])).WillOnce(::testing::Return(true));
     EXPECT_CALL(*mockController, isValidArgument(tokens[1], tokens[2])).WillOnce(::testing::Return(false));

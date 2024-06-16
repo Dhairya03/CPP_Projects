@@ -1,8 +1,8 @@
 #ifndef MOCK_COMMAND_H
 #define MOCK_COMMAND_H
 
-#include <ICommand.h>
 #include <gmock/gmock.h>
+#include "ICommand.h"
 
 class MockCommand : public ICommand
 {

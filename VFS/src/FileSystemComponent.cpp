@@ -1,6 +1,4 @@
-#include <FileSystemComponent.h>
-
-FileSystemComponent::FileSystemComponent() {}
+#include "FileSystemComponent.h"
 
 FileSystemComponent::FileSystemComponent(const std::string &name) : name(name)
 {

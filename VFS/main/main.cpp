@@ -1,8 +1,8 @@
 #include <iostream>
-#include <CommandParser.h>
-#include <CommandController.h>
-#include <FileSystem.h>
-#include <Directory.h>
+#include "CommandParser.h"
+#include "CommandController.h"
+#include "FileSystem.h"
+#include "Directory.h"
 
 int main()
 {
@@ -17,16 +17,11 @@ int main()
         std::cout << "Enter the command " << std::endl;
         std::cout << fs->getCurrentDirectory()->getName() << ">";
         getline(std::cin, request);
-        std::cout << "Request entered is : " << request << std::endl;
         auto requestTokens = parser->parseRequest(request);
 
         if (parser->validateCommand(requestTokens))
         {
             std::cout << parser->getResponse() << std::endl;
-        }
-        else
-        {
-            std::cout << "command not found" << std::endl;
         }
 
     } while (request != "exit");

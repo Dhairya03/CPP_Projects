@@ -1,7 +1,7 @@
 #ifndef VI_H
 #define VI_H
 
-#include <ICommand.h>
+#include "ICommand.h"
 class IFileSystem;
 
 class Vi : public ICommand

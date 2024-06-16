@@ -1,5 +1,5 @@
-#include <CommandController.h>
-#include <constants.h>
+#include "CommandController.h"
+#include "constants.h"
 
 CommandController::CommandController(IFileSystem *fs) : fs(fs)
 {
@@ -14,7 +14,6 @@ bool CommandController::isValidCommand(const std::string &command)
         if (this->command == cmd.second)
         {
             isCommandValid = true;
-            std::cout << "valid command" << std::endl;
         }
     }
     return isCommandValid;
@@ -68,8 +67,15 @@ bool CommandController::isValidArgument(const std::string &argument1, const std:
 
 void CommandController::executeCommand()
 {
-    fs->setCommand(command, argument1, argument2);
-    setResponse(fs->executeCommand());
+    if (command != "exit")
+    {
+        fs->setCommand(command, argument1, argument2);
+        setResponse(fs->executeCommand());
+    }
+    else
+    {
+        setResponse("Exiting from file system");
+    }
 }
 
 void CommandController::setResponse(std::string res)

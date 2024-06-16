@@ -1,24 +1,20 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <FileSystem.h>
-#include <mockDirectory.h>
-#include <mockCommand.h>
+#include "FileSystem.h"
+#include "mockDirectory.h"
 
 class FileSystemTest : public ::testing::Test
 {
 public:
     FileSystem *fileSystem;
-    MockCommand *mockCommand;
     void SetUp()
     {
         auto rootDirectory = std::make_shared<MockDirectory>("root");
         fileSystem = new FileSystem(rootDirectory);
-        mockCommand = new MockCommand();
     }
 
     void TearDown()
     {
-        delete mockCommand;
         delete fileSystem;
     }
 };

@@ -1,8 +1,8 @@
 #ifndef I_FILE_H
 #define I_FILE_H
 
-#include <FileSystemComponent.h>
-#include <IDirectory.h>
+#include "FileSystemComponent.h"
+#include "IDirectory.h"
 
 class IFile : public FileSystemComponent
 {

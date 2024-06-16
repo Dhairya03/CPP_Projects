@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <Ls.h>
-#include <Mkdir.h>
-#include <mockFileSystem.h>
-#include <mockDirectory.h>
-#include <mockFileSystemComponent.h>
+#include "Ls.h"
+#include "Mkdir.h"
+#include "mockFileSystem.h"
+#include "mockDirectory.h"
+#include "mockFileSystemComponent.h"
 
 class LsTest : public ::testing::Test
 {
@@ -43,7 +43,6 @@ TEST_F(LsTest, WhenExecuteIsCalled_ThenAllTheComponentsAreListed)
     mkdir->execute(*mockFileSystem);
     EXPECT_CALL(*rootDirectory, listComponents()).WillOnce(::testing::Return(components));
     EXPECT_CALL(*mockFile1, getName()).WillOnce(::testing::Return(name));
-    std::string response = ls->execute(*mockFileSystem);
     std::string expectedResponse = name + " \n";
-    EXPECT_EQ(response, expectedResponse);
+    EXPECT_EQ(ls->execute(*mockFileSystem), expectedResponse);
 }

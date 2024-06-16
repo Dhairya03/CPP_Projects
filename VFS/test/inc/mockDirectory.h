@@ -2,7 +2,7 @@
 #define MOCK_DIRECTORY_H
 
 #include <gmock/gmock.h>
-#include <IDirectory.h>
+#include "IDirectory.h"
 
 class MockDirectory : public IDirectory
 {

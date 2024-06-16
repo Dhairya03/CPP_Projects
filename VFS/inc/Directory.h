@@ -1,7 +1,7 @@
 #ifndef DIRECTORY_H
 #define DIRECTORY_H
 
-#include <IDirectory.h>
+#include "IDirectory.h"
 #include <list>
 #include <vector>
 
