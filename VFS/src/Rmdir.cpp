@@ -13,23 +13,23 @@ std::string Rmdir::execute(IFileSystem &fs)
     if (!component)
     {
         response = "Directory not found: " + path + "\n";
-        return response;
     }
-
-    auto dir = std::dynamic_pointer_cast<IDirectory>(component);
-    if (!dir)
+    else
     {
-        response = "Path is not a directory: " + path + "\n";
-        return response;
+        auto dir = std::dynamic_pointer_cast<IDirectory>(component);
+        if (!dir)
+        {
+            response = "Path is not a directory: " + path + "\n";
+        }
+        else if (!dir->listComponents().empty())
+        {
+            response = "Directory is not empty: " + path + "\n";
+        }
+        else
+        {
+            currentDirectory->removeComponent(component);
+            response = "Directory removed: " + path + "\n";
+        }
     }
-
-    if (!dir->listComponents().empty())
-    {
-        response = "Directory is not empty: " + path + "\n";
-        return response;
-    }
-
-    currentDirectory->removeComponent(component);
-    response = "Directory removed: " + path + "\n";
     return response;
 }

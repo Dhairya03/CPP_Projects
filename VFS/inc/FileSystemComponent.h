@@ -10,7 +10,6 @@ protected:
     std::string name;
 
 public:
-    FileSystemComponent();
     FileSystemComponent(const std::string &);
     std::string getName() const;
     std::string getType() const;

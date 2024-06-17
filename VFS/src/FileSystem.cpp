@@ -10,7 +10,7 @@
 #include "Cd.h"
 #include "Vi.h"
 
-FileSystem::FileSystem(std::shared_ptr<IDirectory> root):root(root)
+FileSystem::FileSystem(std::shared_ptr<IDirectory> root) : root(root)
 {
     currentDirectory = root;
 }
@@ -25,52 +25,52 @@ void FileSystem::setCurrentDirectory(std::shared_ptr<IDirectory> directory)
     currentDirectory = directory;
 }
 
-void FileSystem::setCommand(const std::string &comm, const std::string &path, const std::string &dest)
+void FileSystem::setCommand(const std::string &command, const std::string &path, const std::string &dest)
 {
     std::string src = path;
-    if (comm == "mkdir")
+    if (command == "mkdir")
     {
         this->command = std::make_unique<Mkdir>(path);
     }
-    else if (comm == "ls")
+    else if (command == "ls")
     {
         this->command = std::make_unique<Ls>();
     }
-    else if (comm == "cat")
+    else if (command == "cat")
     {
         this->command = std::make_unique<Cat>(path);
     }
-    else if (comm == "rmdir")
+    else if (command == "rmdir")
     {
         this->command = std::make_unique<Rmdir>(path);
     }
-    else if (comm == "vi")
+    else if (command == "vi")
     {
         this->command = std::make_unique<Vi>(path, dest);
     }
-    else if (comm == "cd")
+    else if (command == "cd")
     {
         this->command = std::make_unique<Cd>(path);
     }
-    else if (comm == "rm")
+    else if (command == "rm")
     {
         this->command = std::make_unique<Rm>(path);
     }
-    else if (comm == "touch")
+    else if (command == "touch")
     {
         this->command = std::make_unique<Touch>(path);
     }
-    else if (comm == "find")
+    else if (command == "find")
     {
         this->command = std::make_unique<Find>(path);
     }
-    else if (comm == "mv")
+    else if (command == "mv")
     {
         this->command = std::make_unique<Mv>(src, dest);
     }
     else
     {
-        std::cout << "Unknown command: " << comm << std::endl;
+        std::cout << "Unknown command: " << command << std::endl;
         this->command = nullptr;
     }
 }

@@ -8,7 +8,6 @@ class IDirectory : public FileSystemComponent
 {
 public:
     virtual ~IDirectory();
-    IDirectory();
     IDirectory(const std::string &name);
     virtual std::shared_ptr<IDirectory> getParent() = 0;
     virtual void addComponent(std::shared_ptr<IFileSystemComponent> component) = 0;
