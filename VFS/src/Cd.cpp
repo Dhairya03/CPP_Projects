@@ -27,46 +27,44 @@ std::string Cd::execute(IFileSystem &fs)
     if (path.empty())
     {
         response = "Invalid path\n";
+        return response;
     }
-    else
-    {
-        std::vector<std::string> parts = splitPath(path);
-        std::shared_ptr<IDirectory> targetDirectory = currentDir;
 
-        for (const auto &part : parts)
+    std::vector<std::string> parts = splitPath(path);
+    std::shared_ptr<IDirectory> targetDirectory = currentDir;
+
+    for (const auto &part : parts)
+    {
+        if (part == "..")
         {
-            if (part == "..")
+            if (auto parent = targetDirectory->getParent())
             {
-                if (auto parent = targetDirectory->getParent())
-                {
-                    targetDirectory = parent;
-                }
-                else
-                {
-                    response = "Already at the root directory\n";
-                }
-            }
-            else if (part == ".")
-            {
-                continue;
+                targetDirectory = parent;
             }
             else
             {
-                auto component = targetDirectory->findComponent(part);
-                if (!component || component->getType() != "Directory")
-                {
-                    response = "Directory not found: " + part + "\n";
-                }
-                else
-                {
-                    targetDirectory = std::dynamic_pointer_cast<IDirectory>(component);
-                }
+                response = "Already at the root directory\n";
+                return response;
             }
         }
-
-        fs.setCurrentDirectory(targetDirectory);
-        response = "Changed to directory: " + targetDirectory->getName() + "\n";
+        else if (part == ".")
+        {
+            continue;
+        }
+        else
+        {
+            auto component = targetDirectory->findComponent(part);
+            if (!component || component->getType() != "Directory")
+            {
+                response = "Directory not found: " + part + "\n";
+                return response;
+            }
+            targetDirectory = std::dynamic_pointer_cast<IDirectory>(component);
+        }
     }
+
+    fs.setCurrentDirectory(targetDirectory);
+    response = "Changed to directory: " + targetDirectory->getName() + "\n";
 
     return response;
 }
