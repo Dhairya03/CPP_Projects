@@ -49,6 +49,14 @@ Thumbs.db
 *.wmv
 
 *.out
+lib/
+SDL/
+Parser/
+MusicPlayer/
+gtest/
+*.txt
+testThreading/
+*.out
 Parser/
 *.txt
 MusicPlayer/
