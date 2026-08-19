@@ -48,6 +48,9 @@ Thumbs.db
 *.mov
 *.wmv
 
+lib/
+files/
+*.out
 *.out
 lib/
 SDL/
